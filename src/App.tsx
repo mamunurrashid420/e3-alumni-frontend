@@ -21,7 +21,7 @@ function App() {
       <div className="p-4 bg-blue-500 text-white rounded-lg mb-4">
         Tailwind CSS is working! 🎉
       </div>
-      <div className="card">
+      <div className="bg-white border border-gray-400 rounded-2xl shadow-[0px_0px_16px_rgba(0,0,0,0.4)] p-8">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>

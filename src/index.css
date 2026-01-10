@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./styles/globals.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -42,6 +43,28 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Custom colors from globals.css */
+  --color-primary-custom: #3B60C9;
+  --color-primary-dark: #003C66;
+  --color-primary-darker: #000864;
+  --color-primary-darkest: #103499;
+  --color-primary-accent: #2348B2;
+  --color-primary-light: #5481FF;
+  --color-primary-lighter: #83A0F2;
+  --color-secondary-custom: #7166F5;
+  --color-secondary-light: #525FE1;
+  --color-secondary-lighter: #D0CCFF;
+  --color-dark: #231F40;
+  --color-dark-light: #161F37;
+  --color-dark-lighter: #021E40;
+  --color-dark-lightest: #211F38;
+  --color-success: #2ACA55;
+  --color-warning: #F86F03;
+  --color-warning-light: #F1D87C;
+  --color-warning-lighter: #EBB04B;
+  --color-warning-dark: #C6A02F;
+  --color-warning-darker: #E1A051;
 }
 
 :root {
