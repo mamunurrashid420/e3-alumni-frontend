@@ -13,14 +13,31 @@ export function CommunitySection() {
       <div className="flex items-center gap-[90px]">
         {/* Left Side - Image */}
         <div className="relative w-[503px] h-[587px] flex-shrink-0">
-          <div 
-            className="absolute left-[3.42%] top-[8.24%] w-[56.97%] h-[91.76%] rounded-t-[265px] border-[5px]"
-            style={{ borderColor: '#F86F03' }}
-          />
+          {/* SVG Border Shape - positioned at origin, extends beyond image */}
+          <svg 
+            className="absolute left-0 top-0"
+            width="464" 
+            height="540" 
+            viewBox="0 0 464 540" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ zIndex: 0 }}
+          >
+            <path 
+              d="M231.972 2.5C358.705 2.50016 461.442 105.238 461.442 231.972V534.572C461.442 535.953 460.323 537.072 458.942 537.072H5C3.61946 537.072 2.50026 535.953 2.5 534.572V231.971C2.50021 105.237 105.238 2.5 231.972 2.5Z" 
+              stroke="#F86F03" 
+              strokeWidth="5"
+            />
+          </svg>
           <img 
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=478&h=567&fit=crop"
             alt="Community"
-            className="absolute left-0 top-0 w-[478px] h-[567px] rounded-t-[265px] object-cover"
+            className="absolute w-[478px] h-[567px] rounded-t-[265px] object-cover"
+            style={{ 
+              zIndex: 1,
+              top: '-60px',
+              left: '-40px'
+            }}
           />
         </div>
 

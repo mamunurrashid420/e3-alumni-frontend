@@ -12,66 +12,74 @@ const healthServices = [
 export function HealthSection() {
   return (
     <section 
-      className="w-full py-20"
+      className="w-full py-20 px-4 lg:px-0"
       style={{
-        paddingLeft: 'calc(50% - 625px)',
-        paddingRight: 'calc(50% - 625px)',
+        paddingLeft: 'max(16px, calc(50% - 625px))',
+        paddingRight: 'max(16px, calc(50% - 625px))',
       }}
     >
-      <div className="flex items-center gap-[62px]">
+      <div className="flex flex-col lg:flex-row items-center gap-[62px]">
         {/* Left Side - Image Collage with Stats */}
-        <div className="relative w-[683px] h-[762px] flex-shrink-0">
-          {/* Main Image */}
+        <div 
+          className="relative shrink-0 w-full lg:w-[684px]"
+          style={{
+            height: '760px',
+            flex: 'none',
+            order: 0,
+            flexGrow: 0
+          }}
+        >
+          {/* Main Image - Top Left (Classroom Scene) */}
           <img 
-            src="https://images.unsplash.com/photo-1576091160550-2173dba999e8?w=536&h=488&fit=crop"
-            alt="Students"
+            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=536&h=488&fit=crop&q=80"
+            alt="Classroom with students and teacher"
             className="absolute left-[43px] top-0 w-[536px] h-[488px] rounded-[40px]"
-            style={{ transform: 'rotate(10deg)', objectFit: 'cover' }}
+            style={{ 
+              transform: 'rotate(5deg)', 
+              objectFit: 'cover',
+              borderRadius: '40px 40px 40px 0'
+            }}
+            onError={(e) => {
+              // Fallback to placeholder if image fails
+              e.currentTarget.src = 'https://via.placeholder.com/536x488/7166F5/FFFFFF?text=Classroom+Scene'
+            }}
           />
           
-          {/* Overlapping Image */}
+          {/* Overlapping Image - Bottom Right (Collaborative Group) */}
           <img 
-            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=364&h=352&fit=crop"
-            alt="Students"
-            className="absolute right-[0px] bottom-[58px] w-[364px] h-[352px] rounded-[40px]"
-            style={{ transform: 'rotate(10deg)', objectFit: 'cover' }}
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=364&h=352&fit=crop&q=80"
+            alt="Collaborative group discussion"
+            className="absolute right-0 bottom-[58px] w-[364px] h-[352px] rounded-[40px] z-10"
+            style={{ 
+              transform: 'rotate(5deg)', 
+              objectFit: 'cover',
+              borderRadius: '40px 40px 40px 40px'
+            }}
+            onError={(e) => {
+              // Fallback to placeholder if image fails
+              e.currentTarget.src = 'https://via.placeholder.com/364x352/7166F5/FFFFFF?text=Collaboration'
+            }}
           />
 
-          {/* Stats Box */}
+          {/* Stats Box - Bottom Left (Purple Box) */}
           <div 
-            className="absolute left-0 bottom-[60px] w-[200px] h-[200px] rounded-[20px]"
+            className="absolute left-0 bottom-[60px] rounded-[20px] flex items-center justify-center z-20"
             style={{ 
+              width: '300px',
+              height: '200px',
               background: '#7166F5',
-              transform: 'matrix(0.98, 0.17, -0.17, 0.98, 0, 0)'
+              transform: 'rotate(5deg)'
             }}
           >
-            <div className="flex flex-col items-center justify-center h-full">
+            <div className="flex flex-col items-center justify-center h-full px-4 text-center">
               <div 
-                className="text-[40px] font-extrabold leading-[44px]"
+                className="text-[48px] font-extrabold leading-[52px] mb-2"
                 style={{ color: '#FFFFFF' }}
               >
-                +3
-              </div>
-              <div 
-                className="text-[40px] font-extrabold leading-[44px]"
-                style={{ color: '#FFFFFF' }}
-              >
-                +4
-              </div>
-              <div 
-                className="text-[40px] font-extrabold leading-[44px]"
-                style={{ color: '#FFFFFF' }}
-              >
-                +9
-              </div>
-              <div 
-                className="text-[40px] font-extrabold leading-[44px]"
-                style={{ color: '#FFFFFF' }}
-              >
-                +0
+                40+
               </div>
               <p 
-                className="text-xl font-extrabold leading-[26px] mt-2"
+                className="text-xl font-extrabold leading-[26px]"
                 style={{ color: '#D0CCFF' }}
               >
                 Alumni students
@@ -87,8 +95,18 @@ export function HealthSection() {
         </div>
 
         {/* Right Side - Content */}
-        <div className="flex-1 max-w-[500px]">
-          <div className="flex flex-col gap-10">
+        <div 
+          className="w-full lg:w-[500px] flex flex-col items-start"
+          style={{
+            padding: '0px',
+            gap: '40px',
+            flex: 'none',
+            order: 1,
+            flexGrow: 0,
+            height: 'auto',
+            minHeight: '711px'
+          }}
+        >
             {/* Header */}
             <div className="flex flex-col gap-4">
               <h2 
@@ -106,9 +124,9 @@ export function HealthSection() {
             </div>
 
             {/* Feature Blocks */}
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col sm:flex-row gap-8">
               {/* Fast & Easy Process */}
-              <div className="w-[250px]">
+              <div className="w-full sm:w-[250px]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-11 h-11">
                     <Clock className="w-full h-full" style={{ color: '#7166F5' }} />
@@ -129,7 +147,7 @@ export function HealthSection() {
               </div>
 
               {/* Control Over Policy */}
-              <div className="w-[250px] ml-8">
+              <div className="w-full sm:w-[250px]">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-11 h-11">
                     <Wifi className="w-full h-full" style={{ color: '#7166F5' }} />
@@ -160,7 +178,7 @@ export function HealthSection() {
               <div className="flex flex-col gap-4">
                 {healthServices.map((service, index) => (
                   <div key={index} className="flex items-center gap-4">
-                    <div className="w-[18px] h-[18px] flex-shrink-0">
+                    <div className="w-[18px] h-[18px] shrink-0">
                       <Check className="w-full h-full" style={{ color: '#7166F5' }} />
                     </div>
                     <p 
@@ -184,7 +202,6 @@ export function HealthSection() {
             >
               Discover More
             </Button>
-          </div>
         </div>
       </div>
     </section>

@@ -1,23 +1,21 @@
 import { Button } from '@/components/ui/button'
+import scholarshipBg from '@/assets/scholarship-background.png'
 
 export function ScholarshipSection() {
   return (
     <section 
       className="w-full py-20 relative flex flex-col items-center gap-20"
       style={{
-        background: '#F5F7F9',
+        backgroundImage: `url(${scholarshipBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         paddingLeft: '40px',
         paddingRight: '40px',
       }}
     >
-      {/* Decorative Background Elements */}
-      <div className="absolute left-[40px] top-[87px] w-[320px] h-[320px] opacity-50">
-        <img 
-          src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=320&q=80"
-          alt="Decorative"
-          className="w-full h-full object-contain"
-        />
-      </div>
+      {/* Optional overlay for better text readability */}
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-[0.5px]"></div>
 
       <div className="flex flex-col items-center gap-11 max-w-[1039px] relative z-10">
         <div className="flex flex-col items-center gap-11">
@@ -25,7 +23,8 @@ export function ScholarshipSection() {
             className="text-[40px] font-medium leading-[52px] text-center"
             style={{ color: '#000000' }}
           >
-            We Provide Scholarship For Talented Students!
+            We Provide Scholarship For <br />
+            <span style={{ color: '#3B60C9' }}>Talented Students!</span>
           </h2>
           <p 
             className="text-xl leading-[23px] text-center max-w-[1097px]"
@@ -45,16 +44,6 @@ export function ScholarshipSection() {
         >
           Apply Now
         </Button>
-      </div>
-
-      {/* Right Side Decorative Elements */}
-      <div className="absolute right-[0.86%] top-[34.8%] w-[320px] h-[305px] opacity-30">
-        <img 
-          src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=320&q=80"
-          alt="Decorative"
-          className="w-full h-full object-contain"
-          style={{ transform: 'scaleX(-1)' }}
-        />
       </div>
     </section>
   )

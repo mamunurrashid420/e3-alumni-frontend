@@ -15,12 +15,15 @@ export function AboutUsSection() {
           {/* Background SVG Shape */}
           <div 
             className="absolute left-0 top-0 w-[228px] h-[179px]"
-            style={{ background: '#3B60C9' }}
+            style={{ 
+              background: '#3B60C9',
+              clipPath: 'polygon(0 0, 0 100%, 100% 0)'
+            }}
           />
           
           {/* Main Image */}
           <img 
-            src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=403&q=80"
+            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=403&q=80"
             alt="Students learning"
             className="absolute left-[35px] top-[35px] w-[403px] h-[433px] rounded"
             style={{ objectFit: 'cover' }}

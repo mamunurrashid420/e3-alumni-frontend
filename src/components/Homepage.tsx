@@ -23,7 +23,7 @@ export function Homepage() {
       <OurResponsibilitySection />
       <StatisticsSection />
       <RecentJobsSection />
-      <ProgramsSection />
+      {/* <ProgramsSection /> */}
       <GallerySection />
       <ScholarshipSection />
       <CommunitySection />
