@@ -4,20 +4,15 @@ import { Button } from '@/components/ui/button'
 export function CommunitySection() {
   return (
     <section 
-      className="w-full py-20 relative"
-      style={{
-        paddingLeft: '368px',
-        paddingRight: '368px',
-      }}
+      className="w-full py-12 md:py-16 lg:py-20 relative"
     >
-      <div className="flex items-center gap-[90px]">
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[368px] box-border">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 lg:gap-[90px]">
         {/* Left Side - Image */}
-        <div className="relative w-[503px] h-[587px] flex-shrink-0">
+        <div className="relative w-full lg:w-[503px] h-[400px] md:h-[500px] lg:h-[587px] flex-shrink-0 max-w-[503px] mx-auto lg:mx-0">
           {/* SVG Border Shape - positioned at origin, extends beyond image */}
           <svg 
-            className="absolute left-0 top-0"
-            width="464" 
-            height="540" 
+            className="absolute left-0 top-0 w-[232px] md:w-[350px] lg:w-[464px] h-[270px] md:h-[400px] lg:h-[540px]"
             viewBox="0 0 464 540" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
@@ -32,28 +27,28 @@ export function CommunitySection() {
           <img 
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=478&h=567&fit=crop"
             alt="Community"
-            className="absolute w-[478px] h-[567px] rounded-t-[265px] object-cover"
+            className="absolute w-[calc(100%-40px)] md:w-[calc(100%-60px)] lg:w-[478px] h-[calc(100%-40px)] md:h-[calc(100%-60px)] lg:h-[567px] rounded-t-[132px] md:rounded-t-[200px] lg:rounded-t-[265px] object-cover"
             style={{ 
               zIndex: 1,
-              top: '-60px',
-              left: '-40px'
+              top: '-30px',
+              left: '-20px'
             }}
           />
         </div>
 
         {/* Right Side - Content */}
-        <div className="flex-1 max-w-[576px]">
-          <div className="flex flex-col gap-[70px]">
-            <div className="flex flex-col gap-11">
+        <div className="flex-1 max-w-[576px] w-full">
+          <div className="flex flex-col gap-8 md:gap-12 lg:gap-[70px]">
+            <div className="flex flex-col gap-6 md:gap-8 lg:gap-11">
               <div className="flex flex-col gap-2">
                 <p 
-                  className="text-base font-extrabold uppercase tracking-wider"
+                  className="text-xs md:text-sm lg:text-base font-extrabold uppercase tracking-wider"
                   style={{ color: '#525FE1', letterSpacing: '1.6px' }}
                 >
                   Give Back. Change a Future.
                 </p>
                 <h2 
-                  className="text-[40px] font-extrabold leading-[56px]"
+                  className="text-2xl md:text-3xl lg:text-[40px] font-extrabold leading-tight md:leading-[44px] lg:leading-[56px]"
                   style={{ color: '#231F40' }}
                 >
                   Creating A Community Of Life Long Learners
@@ -61,7 +56,7 @@ export function CommunitySection() {
               </div>
 
               <p 
-                className="text-base font-medium leading-[28px]"
+                className="text-sm md:text-base font-medium leading-relaxed md:leading-[28px]"
                 style={{ color: '#6F6B80' }}
               >
                 As alumni, we share a common journey—and the power to make a lasting difference. Your donation to the Alumni Support Fund helps students who are facing financial challenges continue their education with confidence and dignity.
@@ -69,18 +64,18 @@ export function CommunitySection() {
             </div>
 
             {/* Bullet Points */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4 md:gap-5">
               {[
                 'Flexible training programs',
                 'Friendly environment for you',
                 'Learn from approved experts'
               ].map((item, index) => (
                 <div key={index} className="flex items-start gap-3">
-                  <div className="w-6 h-6 flex-shrink-0 mt-0.5">
+                  <div className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 mt-0.5">
                     <Check className="w-full h-full" style={{ color: '#F86F03' }} />
                   </div>
                   <p 
-                    className="text-base font-semibold leading-[26px]"
+                    className="text-sm md:text-base font-semibold leading-relaxed md:leading-[26px]"
                     style={{ color: '#231F40' }}
                   >
                     {item}
@@ -92,7 +87,7 @@ export function CommunitySection() {
             {/* CTA Button */}
             <div className="relative">
               <Button
-                className="w-[216px] h-[60px] text-lg font-bold rounded-[5px] flex items-center gap-2"
+                className="w-full sm:w-[216px] h-[50px] md:h-[60px] text-base md:text-lg font-bold rounded-[5px] flex items-center justify-center gap-2"
                 style={{ 
                   background: '#525FE1',
                   color: '#FFFFFF'
@@ -117,6 +112,7 @@ export function CommunitySection() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   )

@@ -4,7 +4,6 @@ import { AboutUsSection } from '@/components/ui/homepage/AboutUsSection'
 import { OurResponsibilitySection } from '@/components/ui/homepage/OurResponsibilitySection'
 import { StatisticsSection } from '@/components/ui/homepage/StatisticsSection'
 import { RecentJobsSection } from '@/components/ui/homepage/RecentJobsSection'
-import { ProgramsSection } from '@/components/ui/homepage/ProgramsSection'
 import { GallerySection } from '@/components/ui/homepage/GallerySection'
 import { ScholarshipSection } from '@/components/ui/homepage/ScholarshipSection'
 import { CommunitySection } from '@/components/ui/homepage/CommunitySection'
@@ -14,11 +13,11 @@ import { UpcomingEventsSection } from '@/components/ui/homepage/UpcomingEventsSe
 
 export function Homepage() {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full overflow-x-hidden">
       <HeroSection />
       <GetTogetherBanner />
-      {/* Spacer to account for absolutely positioned HeroSection and GetTogetherBanner */}
-      <div style={{ height: '1000px' }} />
+      {/* Spacer to account for overlapping GetTogetherBanner */}
+      {/* <div className="h-[200px] md:h-[250px] lg:h-[300px]" /> */}
       <AboutUsSection />
       <OurResponsibilitySection />
       <StatisticsSection />

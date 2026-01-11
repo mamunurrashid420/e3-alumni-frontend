@@ -3,18 +3,15 @@ import { Button } from '@/components/ui/button'
 export function AboutUsSection() {
   return (
     <section 
-      className="w-full py-20 relative z-10"
-      style={{
-        paddingLeft: '320px',
-        paddingRight: '320px',
-      }}
+      className="w-full py-12 md:py-16 lg:py-20 relative z-10"
     >
-      <div className="flex items-center gap-24">
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px]">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 lg:gap-24">
         {/* Left Side - Image Collage */}
-        <div className="relative w-[494px] h-[520px] flex-shrink-0">
+        <div className="relative w-full lg:w-[494px] h-[400px] md:h-[450px] lg:h-[520px] flex-shrink-0 max-w-[494px] mx-auto lg:mx-0">
           {/* Background SVG Shape */}
           <div 
-            className="absolute left-0 top-0 w-[228px] h-[179px]"
+            className="absolute left-0 top-0 w-[114px] md:w-[180px] lg:w-[228px] h-[90px] md:h-[140px] lg:h-[179px]"
             style={{ 
               background: '#3B60C9',
               clipPath: 'polygon(0 0, 0 100%, 100% 0)'
@@ -25,55 +22,53 @@ export function AboutUsSection() {
           <img 
             src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=403&q=80"
             alt="Students learning"
-            className="absolute left-[35px] top-[35px] w-[403px] h-[433px] rounded"
-            style={{ objectFit: 'cover' }}
+            className="absolute left-[18px] md:left-[28px] lg:left-[35px] top-[18px] md:top-[28px] lg:top-[35px] w-[calc(100%-36px)] md:w-[calc(100%-56px)] lg:w-[403px] h-[calc(100%-36px)] md:h-[calc(100%-56px)] lg:h-[433px] rounded object-cover"
           />
           
           {/* Overlapping Image */}
           <img 
             src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=227&q=80"
             alt="Students studying"
-            className="absolute right-0 bottom-[0px] w-[227px] h-[312px] rounded shadow-lg"
+            className="absolute right-0 bottom-0 w-[40%] md:w-[45%] lg:w-[227px] h-[60%] md:h-[65%] lg:h-[312px] rounded shadow-lg object-cover"
             style={{ 
-              objectFit: 'cover',
               boxShadow: '0px 0px 94.47px rgba(0, 0, 0, 0.24)'
             }}
           />
         </div>
 
         {/* Right Side - Content */}
-        <div className="flex-1 max-w-[686px]">
-          <div className="flex flex-col gap-11">
+        <div className="flex-1 max-w-[686px] w-full">
+          <div className="flex flex-col gap-6 md:gap-8 lg:gap-11">
             <div className="flex flex-col gap-2">
               <p 
-                className="text-base font-semibold"
+                className="text-sm md:text-base font-semibold"
                 style={{ color: '#999898' }}
               >
                 About Us
               </p>
               <h2 
-                className="text-5xl font-semibold leading-[72px]"
+                className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px]"
                 style={{ color: '#021E40' }}
               >
                 Welcome to The University
               </h2>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4 md:gap-6">
               <p 
-                className="text-base leading-[26px]"
+                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
                 style={{ color: '#696868' }}
               >
                 Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris.
               </p>
               <p 
-                className="text-base leading-[26px]"
+                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
                 style={{ color: '#696868' }}
               >
                 Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris.
               </p>
               <p 
-                className="text-base leading-[26px]"
+                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
                 style={{ color: '#696868' }}
               >
                 Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris.
@@ -81,13 +76,14 @@ export function AboutUsSection() {
             </div>
 
             <Button 
-              className="w-[184px] h-[50px] text-base font-semibold rounded"
+              className="w-full sm:w-[184px] h-[45px] md:h-[50px] text-sm md:text-base font-semibold rounded"
               style={{ background: '#3B60C9', color: '#FFFFFF' }}
             >
               Explore More
             </Button>
           </div>
         </div>
+      </div>
       </div>
     </section>
   )

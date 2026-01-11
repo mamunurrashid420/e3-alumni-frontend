@@ -4,13 +4,8 @@ import { Button } from '@/components/ui/button'
 export function HeroSection() {
   return (
     <section 
-      className="hero-section"
+      className="relative w-full min-h-[500px] md:min-h-[650px] lg:min-h-[810px]"
       style={{
-        position: 'absolute',
-        width: '1920px',
-        height: '810px',
-        left: 'calc(50% - 1920px/2)',
-        top: '0',
         background: '#FFFFFF',
       }}
     >
@@ -26,7 +21,7 @@ export function HeroSection() {
       </div>
 
       {/* Social Media Icons - Left Side */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-10 ml-4">
+      <div className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 md:gap-4 z-10">
         <a 
           href="https://linkedin.com" 
           target="_blank" 
@@ -66,26 +61,26 @@ export function HeroSection() {
       </div>
 
       {/* Main Content - Centered */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="text-center text-white max-w-4xl px-8">
-          <h1 className="text-6xl md:text-7xl font-bold mb-4">
+      <div className="relative z-10 flex items-center justify-center min-h-[500px] md:min-h-[650px] lg:min-h-[810px] py-12 md:py-16 lg:py-20">
+        <div className="text-center text-white max-w-4xl px-4 md:px-8">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 md:mb-4">
             We Are Proud
           </h1>
-          <h2 className="text-3xl md:text-4xl font-semibold mb-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 md:mb-6 px-4">
             Students Of Jahapur Secondary School
           </h2>
-          <p className="text-lg md:text-xl mb-8 leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 md:mb-8 leading-relaxed px-4">
             Alumni Needs Enables You To Harness The Power Of Your Alumni Network. Whatever May Be The Need (Academic, Relocation, Career, Projects, Mentorship, Etc. You Can Ask The Community And Get Responses In Three.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
             <Button 
-              className="bg-[#3B60C9] hover:bg-[#2d4fa8] text-white px-8 py-6 text-lg"
+              className="bg-[#3B60C9] hover:bg-[#2d4fa8] text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg w-full sm:w-auto"
             >
               Our Mission
             </Button>
             <Button 
               variant="outline"
-              className="bg-white/10 border-white text-white hover:bg-white/20 px-8 py-6 text-lg"
+              className="bg-white/10 border-white text-white hover:bg-white/20 px-6 md:px-8 py-4 md:py-6 text-base md:text-lg w-full sm:w-auto"
             >
               Our Story
             </Button>

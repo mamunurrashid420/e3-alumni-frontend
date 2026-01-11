@@ -22,113 +22,111 @@ export function GallerySection() {
 
   return (
     <section 
-      className="w-full py-16 flex flex-col items-center gap-9"
-      style={{
-        paddingLeft: '336px',
-        paddingRight: '336px',
-      }}
+      className="w-full py-12 md:py-16 flex flex-col items-center gap-6 md:gap-8 lg:gap-9"
     >
-      <h2 
-        className="text-5xl font-semibold leading-[72px] text-center"
-        style={{ color: '#021E40' }}
-      >
-        Our Gallery
-      </h2>
-
-      {/* Filter Tabs */}
-      <div 
-        className="flex items-center gap-6 px-1.5 py-2 rounded-xl"
-        style={{ background: '#F9F9F9' }}
-      >
-        {galleryFilters.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => setActiveFilter(filter)}
-            className="px-5 py-2 rounded-md text-base font-medium transition-colors"
-            style={{
-              background: activeFilter === filter ? '#3B60C9' : 'transparent',
-              color: activeFilter === filter ? '#FFFFFF' : '#3B60C9',
-              boxShadow: activeFilter === filter ? '0px 0px 16px rgba(42, 42, 42, 0.25)' : 'none',
-            }}
-          >
-            {filter}
-          </button>
-        ))}
-      </div>
-
-      {/* Image Grid */}
-      <div className="flex flex-row items-center gap-6 w-full">
-        {/* Large Image */}
-        <img 
-          src={galleryImages[0].url}
-          alt="Gallery"
-          className="w-[228px] h-[260px] rounded-2xl object-cover"
-        />
-
-        {/* Middle Column */}
-        <div className="flex flex-col gap-6">
-          <img 
-            src={galleryImages[1].url}
-            alt="Gallery"
-            className="w-[200px] h-[248px] rounded-2xl object-cover"
-          />
-          <img 
-            src={galleryImages[2].url}
-            alt="Gallery"
-            className="w-[200px] h-[248px] rounded-2xl object-cover"
-          />
-        </div>
-
-        {/* Large Center Image */}
-        <img 
-          src={galleryImages[3].url}
-          alt="Gallery"
-          className="w-[296px] h-[520px] rounded-2xl object-cover"
-        />
-
-        {/* Right Column */}
-        <div className="flex flex-col gap-6">
-          <img 
-            src={galleryImages[4].url}
-            alt="Gallery"
-            className="w-[200px] h-[248px] rounded-2xl object-cover"
-          />
-          <img 
-            src={galleryImages[5].url}
-            alt="Gallery"
-            className="w-[200px] h-[248px] rounded-2xl object-cover"
-          />
-        </div>
-
-        {/* Last Image */}
-        <img 
-          src={galleryImages[6].url}
-          alt="Gallery"
-          className="w-[228px] h-[260px] rounded-2xl object-cover"
-        />
-      </div>
-
-      {/* Pagination Dots */}
-      <div className="flex items-center gap-4">
-        <div 
-          className="w-[24px] h-[24px] rounded-full border-2 flex items-center justify-center"
-          style={{ borderColor: '#525FE1' }}
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[336px] box-border">
+        <h2 
+          className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
+          style={{ color: '#021E40' }}
         >
-          <div 
-            className="w-[10px] h-[10px] rounded-full"
-            style={{ background: '#525FE1' }}
+          Our Gallery
+        </h2>
+
+        {/* Filter Tabs */}
+        <div 
+          className="flex flex-wrap items-center justify-center gap-3 md:gap-6 px-1.5 py-2 rounded-xl mt-6 md:mt-8"
+          style={{ background: '#F9F9F9' }}
+        >
+          {galleryFilters.map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className="px-3 md:px-5 py-2 rounded-md text-sm md:text-base font-medium transition-colors"
+              style={{
+                background: activeFilter === filter ? '#3B60C9' : 'transparent',
+                color: activeFilter === filter ? '#FFFFFF' : '#3B60C9',
+                boxShadow: activeFilter === filter ? '0px 0px 16px rgba(42, 42, 42, 0.25)' : 'none',
+              }}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        {/* Image Grid */}
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 md:gap-6 w-full mt-6 md:mt-8">
+          {/* Large Image */}
+          <img 
+            src={galleryImages[0].url}
+            alt="Gallery"
+            className="w-full max-w-[228px] h-[200px] md:h-[240px] lg:h-[260px] rounded-2xl object-cover"
+          />
+
+          {/* Middle Column */}
+          <div className="flex flex-row lg:flex-col gap-4 md:gap-6">
+            <img 
+              src={galleryImages[1].url}
+              alt="Gallery"
+              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+            />
+            <img 
+              src={galleryImages[2].url}
+              alt="Gallery"
+              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+            />
+          </div>
+
+          {/* Large Center Image */}
+          <img 
+            src={galleryImages[3].url}
+            alt="Gallery"
+            className="w-full max-w-[296px] h-[300px] md:h-[400px] lg:h-[520px] rounded-2xl object-cover"
+          />
+
+          {/* Right Column */}
+          <div className="flex flex-row lg:flex-col gap-4 md:gap-6">
+            <img 
+              src={galleryImages[4].url}
+              alt="Gallery"
+              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+            />
+            <img 
+              src={galleryImages[5].url}
+              alt="Gallery"
+              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+            />
+          </div>
+
+          {/* Last Image */}
+          <img 
+            src={galleryImages[6].url}
+            alt="Gallery"
+            className="w-full max-w-[228px] h-[200px] md:h-[240px] lg:h-[260px] rounded-2xl object-cover"
           />
         </div>
-        <div className="flex gap-2">
-          {[1, 2].map((page) => (
-            <div
-              key={page}
+
+        {/* Pagination Dots */}
+        <div className="flex items-center gap-4 mt-6 md:mt-8">
+          <div 
+            className="w-[24px] h-[24px] rounded-full border-2 flex items-center justify-center"
+            style={{ borderColor: '#525FE1' }}
+          >
+            <div 
               className="w-[10px] h-[10px] rounded-full"
-              style={{ 
-                background: page === currentPage + 1 ? '#525FE1' : 'rgba(82, 95, 225, 0.5)'
-              }}
+              style={{ background: '#525FE1' }}
             />
-          ))}
+          </div>
+          <div className="flex gap-2">
+            {[1, 2].map((page) => (
+              <div
+                key={page}
+                className="w-[10px] h-[10px] rounded-full"
+                style={{ 
+                  background: page === currentPage + 1 ? '#525FE1' : 'rgba(82, 95, 225, 0.5)'
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

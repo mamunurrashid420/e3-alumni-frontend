@@ -10,14 +10,13 @@ interface JobCardProps {
 function JobCard({ logo, title, description, status }: JobCardProps) {
   return (
     <div 
-      className="flex flex-col items-center p-8 gap-8 rounded-2xl"
+      className="flex flex-col items-center p-6 md:p-8 gap-6 md:gap-8 rounded-2xl w-full max-w-[416px]"
       style={{
-        width: '416px',
         border: '1px solid #EFEFEF',
         boxShadow: '0px 0px 16px rgba(0, 0, 0, 0.4)',
       }}
     >
-      <div className="w-[100px] h-[100px] flex items-center justify-center">
+      <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] flex items-center justify-center">
         <img 
           src={logo}
           alt="Company logo"
@@ -25,7 +24,7 @@ function JobCard({ logo, title, description, status }: JobCardProps) {
         />
       </div>
 
-      <div className="flex flex-col items-center gap-6 w-[368px]">
+      <div className="flex flex-col items-center gap-4 md:gap-6 w-full max-w-[368px]">
         <h3 
           className="text-xl font-semibold text-center leading-[23px]"
           style={{ color: '#121212', letterSpacing: '0.01em' }}
@@ -95,31 +94,29 @@ export function RecentJobsSection() {
 
   return (
     <section 
-      className="w-full py-16 flex flex-col items-center gap-8"
-      style={{
-        paddingLeft: '320px',
-        paddingRight: '320px',
-      }}
+      className="w-full py-12 md:py-16 flex flex-col items-center gap-6 md:gap-8"
     >
-      <h2 
-        className="text-5xl font-semibold leading-[72px] text-center"
-        style={{ color: '#021E40' }}
-      >
-        Recent Jobs
-      </h2>
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px] box-border">
+        <h2 
+          className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
+          style={{ color: '#021E40' }}
+        >
+          Recent Jobs
+        </h2>
 
-      <div className="flex flex-col gap-6 w-full">
-        {/* First Row */}
-        <div className="flex flex-row gap-4">
-          {jobs.slice(0, 3).map((job, index) => (
-            <JobCard key={index} {...job} />
-          ))}
-        </div>
-        {/* Second Row */}
-        <div className="flex flex-row gap-4">
-          {jobs.slice(3, 6).map((job, index) => (
-            <JobCard key={index + 3} {...job} />
-          ))}
+        <div className="flex flex-col gap-4 md:gap-6 w-full mt-6 md:mt-8">
+          {/* First Row */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center sm:items-stretch">
+            {jobs.slice(0, 3).map((job, index) => (
+              <JobCard key={index} {...job} />
+            ))}
+          </div>
+          {/* Second Row */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center sm:items-stretch">
+            {jobs.slice(3, 6).map((job, index) => (
+              <JobCard key={index + 3} {...job} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
