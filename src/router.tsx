@@ -52,6 +52,7 @@ const registerRoute = createRoute({
 import { Dashboard } from '@/components/Dashboard'
 import { Profile } from '@/components/Profile'
 import { Payment } from '@/components/Payment'
+import { MakePayment } from '@/components/MakePayment'
 
 // Dashboard route
 const dashboardRoute = createRoute({
@@ -82,6 +83,17 @@ const paymentRoute = createRoute({
   component: () => (
     <UserSpaceLayout title="Payment List" subtitle="Payment Information And Details">
       <Payment />
+    </UserSpaceLayout>
+  ),
+})
+
+// Make Payment route
+const makePaymentRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/make-payment',
+  component: () => (
+    <UserSpaceLayout title="Payment Page" subtitle="Select your purpose and make your payment">
+      <MakePayment />
     </UserSpaceLayout>
   ),
 })
@@ -155,6 +167,7 @@ const routeTree = rootRoute.addChildren([
   dashboardRoute,
   profileRoute,
   paymentRoute,
+  makePaymentRoute,
 ])
 
 // Create router

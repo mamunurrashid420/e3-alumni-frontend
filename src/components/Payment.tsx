@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -114,9 +115,11 @@ export function Payment() {
         </div>
 
         {/* Make Payment Button */}
-        <Button className="bg-[#3B60C9] hover:bg-[#3B60C9]/90 text-white">
-          Make payment
-        </Button>
+        <Link to="/make-payment">
+          <Button className="bg-[#3B60C9] hover:bg-[#3B60C9]/90 text-white">
+            Make payment
+          </Button>
+        </Link>
       </div>
 
       {/* Payment Table */}
