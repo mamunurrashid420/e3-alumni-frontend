@@ -1,8 +1,9 @@
 import { createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router'
 import { HomepageLayout } from '@/layouts/HomepageLayout'
 import { UserSpaceLayout } from '@/layouts/UserSpaceLayout'
-import { AuthLayout } from '@/layouts/AuthLayout'
 import { Homepage } from '@/components/Homepage'
+import { Registration } from '@/components/Registration'
+import { Login } from '@/components/Login'
 
 // Root route
 const rootRoute = createRootRoute({
@@ -38,97 +39,14 @@ const aboutRoute = createRoute({
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/login',
-  component: () => (
-    <AuthLayout>
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-center mb-6 text-[#3B60C9]">Log In</h1>
-        <form className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B60C9]"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B60C9]"
-              placeholder="Enter your password"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-[#3B60C9] hover:bg-[#2d4fa8] text-white py-2 px-4 rounded-md transition-colors"
-          >
-            Log In
-          </button>
-        </form>
-      </div>
-    </AuthLayout>
-  ),
+  component: () => <Login />,
 })
 
 // Register route
 const registerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/register',
-  component: () => (
-    <AuthLayout>
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-center mb-6 text-[#3B60C9]">Register</h1>
-        <form className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B60C9]"
-              placeholder="Enter your full name"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B60C9]"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3B60C9]"
-              placeholder="Create a password"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-[#3B60C9] hover:bg-[#2d4fa8] text-white py-2 px-4 rounded-md transition-colors"
-          >
-            Register
-          </button>
-        </form>
-      </div>
-    </AuthLayout>
-  ),
+  component: () => <Registration />,
 })
 
 // Dashboard route
