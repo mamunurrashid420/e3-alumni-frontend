@@ -51,6 +51,7 @@ const registerRoute = createRoute({
 
 import { Dashboard } from '@/components/Dashboard'
 import { Profile } from '@/components/Profile'
+import { Payment } from '@/components/Payment'
 
 // Dashboard route
 const dashboardRoute = createRoute({
@@ -70,6 +71,17 @@ const profileRoute = createRoute({
   component: () => (
     <UserSpaceLayout title="User Profile" subtitle="User Information And Details">
       <Profile />
+    </UserSpaceLayout>
+  ),
+})
+
+// Payment route
+const paymentRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/payment',
+  component: () => (
+    <UserSpaceLayout title="Payment List" subtitle="Payment Information And Details">
+      <Payment />
     </UserSpaceLayout>
   ),
 })
@@ -142,6 +154,7 @@ const routeTree = rootRoute.addChildren([
   registerRoute,
   dashboardRoute,
   profileRoute,
+  paymentRoute,
 ])
 
 // Create router
