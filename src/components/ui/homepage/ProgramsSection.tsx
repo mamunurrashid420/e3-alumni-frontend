@@ -1,5 +1,5 @@
 import { useState, useId } from 'react'
-import { ChevronLeft, ChevronRight, GraduationCap, FileText, Heart, BookOpen, Phone } from 'lucide-react'
+import { ChevronLeft, ChevronRight, GraduationCap, Heart, BookOpen, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface ProgramCardProps {
@@ -13,7 +13,7 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
   const uniqueId = useId().replace(/:/g, '_')
   return (
     <div 
-      className="relative flex-shrink-0 rounded-[10px] overflow-hidden"
+      className="relative shrink-0 rounded-[10px] overflow-hidden"
       style={{
         width: '370px',
         height: '393px',
@@ -54,7 +54,7 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
       
       {/* Line aligned with icon bottom */}
       <div 
-        className="absolute left-[134px] w-[212px] h-[1px]"
+        className="absolute left-[134px] w-[212px] h-px"
         style={{ 
           background: '#D0CCFF',
           top: '249px'
@@ -115,7 +115,11 @@ export function ProgramsSection() {
     },
     {
       image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=370&q=80',
-      icon: <FileText className="w-full h-full" />,
+      icon: (
+        <div className="w-full h-full flex items-center justify-center text-white font-bold text-2xl">
+          A+
+        </div>
+      ),
       title: 'Model Tests',
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     },
@@ -162,20 +166,30 @@ export function ProgramsSection() {
         {/* Header */}
         <div className="flex flex-row justify-between items-start">
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-1">
-              <div className="w-[14px] h-[14px]" style={{ color: '#7166F5' }} />
-              <span 
-                className="text-base font-bold"
-                style={{ color: '#737092' }}
-              >
-                Services
-              </span>
-            </div>
-            <h2 
-              className="text-[40px] font-extrabold leading-[48px]"
-              style={{ color: '#211F38' }}
-            >
-              We're Offering the Best Programs for Students
+            <h2 className="text-[40px] leading-[48px]">
+              <div>
+                <span 
+                  className="font-normal"
+                  style={{ color: '#737092' }}
+                >
+                  We're Offering the Best
+                </span>
+              </div>
+              <div className="relative inline-block">
+                <span 
+                  className="font-extrabold"
+                  style={{ color: '#211F38' }}
+                >
+                  Programs for Students
+                </span>
+                <div 
+                  className="absolute bottom-[-8px] left-0 h-[2px]"
+                  style={{ 
+                    background: '#7166F5',
+                    width: '200px'
+                  }}
+                />
+              </div>
             </h2>
           </div>
 
@@ -183,15 +197,21 @@ export function ProgramsSection() {
           <div className="flex gap-2">
             <button
               onClick={prevSlide}
-              className="w-[52px] h-[52px] rounded-full bg-white flex items-center justify-center"
-              style={{ color: '#211F38' }}
+              className="w-[52px] h-[52px] rounded-full bg-white flex items-center justify-center border"
+              style={{ 
+                color: '#211F38',
+                borderColor: '#E5E5E5'
+              }}
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={nextSlide}
-              className="w-[52px] h-[52px] rounded-full bg-white flex items-center justify-center"
-              style={{ color: '#211F38' }}
+              className="w-[52px] h-[52px] rounded-full bg-white flex items-center justify-center border"
+              style={{ 
+                color: '#211F38',
+                borderColor: '#E5E5E5'
+              }}
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -214,9 +234,11 @@ export function ProgramsSection() {
         </div>
 
         {/* CTA Banner */}
-        <div 
+        {/* <div 
           className="w-full h-[169px] rounded-[10px] relative overflow-hidden"
-          style={{ background: '#7166F5' }}
+          style={{ 
+            background: 'linear-gradient(90deg, #7166F5 0%, #525FE1 100%)'
+          }}
         >
           <div className="absolute left-[58px] top-[-40px] w-[258px] h-[185px]">
             <img 
@@ -228,29 +250,30 @@ export function ProgramsSection() {
           <div className="flex items-center justify-between h-full px-[419px]">
             <div className="flex flex-col gap-1">
               <p 
-                className="text-sm font-bold"
+                className="text-sm font-semibold"
                 style={{ color: '#D0CCFF' }}
               >
-                Be Happy to Get Insurance
+                Helpful services for students
               </p>
               <h3 
                 className="text-[30px] font-extrabold leading-[40px]"
                 style={{ color: '#FFFFFF' }}
               >
-                Start Tracking Your Claims
+                Claim Your Service & Programs
               </h3>
             </div>
             <Button
               className="w-[193px] h-[56px] rounded-[10px] text-base font-bold"
               style={{ 
                 background: '#FFFFFF',
-                color: '#211F38'
+                color: '#211F38',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)'
               }}
             >
               Discover More
             </Button>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   )

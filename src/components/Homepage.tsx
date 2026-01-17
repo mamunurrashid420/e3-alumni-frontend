@@ -10,6 +10,7 @@ import { CommunitySection } from '@/components/ui/homepage/CommunitySection'
 import { HealthSection } from '@/components/ui/homepage/HealthSection'
 import { RecentNewsSection } from '@/components/ui/homepage/RecentNewsSection'
 import { UpcomingEventsSection } from '@/components/ui/homepage/UpcomingEventsSection'
+import { ProgramsSection } from '@/components/ui/homepage/ProgramsSection'
 
 export function Homepage() {
   return (
@@ -22,7 +23,7 @@ export function Homepage() {
       <OurResponsibilitySection />
       <StatisticsSection />
       <RecentJobsSection />
-      {/* <ProgramsSection /> */}
+      <ProgramsSection />
       <GallerySection />
       <ScholarshipSection />
       <CommunitySection />
