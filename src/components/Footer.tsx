@@ -138,7 +138,7 @@ export function Footer() {
 
       {/* Copyright Bar */}
       <div className="bg-[#3B60C9] py-4 px-[320px] text-center w-full max-[1920px]:px-8 max-[1536px]:px-6 max-[1280px]:px-6 max-md:py-3 max-md:px-4 max-md:text-sm max-[640px]:py-2 max-[640px]:px-3">
-        <p className="font-['Roboto'] font-normal text-base leading-6 text-white m-0 max-md:text-sm max-[640px]:text-xs">Copyright 2025 | Ahnaf Ayon. All Rights Reserved</p>
+        <p className="font-['Roboto'] font-normal text-base leading-6 text-white m-0 max-md:text-sm max-[640px]:text-xs">Copyright 2026 | Design & Development by E3 Innovations Ltd.</p>
       </div>
     </footer>
   )
