@@ -9,7 +9,7 @@ export function Header() {
 
   const navItems = [
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/about', hasDropdown: true },
+    // { label: 'About', href: '/about', hasDropdown: true },
     { label: 'Scholarship', href: '/scholarship' },
     { label: 'News & Events', href: '/news-events' },
     { label: 'Board Members', href: '/membership' },
@@ -33,9 +33,9 @@ export function Header() {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="min-h-[80px] sm:h-[100px] lg:h-[100px] bg-white shadow-lg w-full flex items-center justify-between px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80 gap-4 sm:gap-6 lg:gap-10">
+      <div className="min-h-[80px] sm:h-[100px] lg:h-[100px] bg-white shadow-lg w-full flex items-center justify-between px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80 gap-4 sm:gap-6 lg:gap-10 overflow-hidden">
         {/* Logo and School Name */}
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0 min-w-0">
           <Link to="/" className="shrink-0">
             <img 
               src={logo} 
@@ -43,24 +43,24 @@ export function Header() {
               className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain"
             />
           </Link>
-          <div className="hidden sm:block">
-            <h1 className="text-[#3B60C9] font-bold text-xs sm:text-sm md:text-base lg:text-lg leading-tight">
+          <div className="hidden sm:block lg:hidden xl:block min-w-0">
+            <h1 className="text-[#3B60C9] font-bold text-xs sm:text-sm md:text-base lg:text-lg leading-tight truncate">
               Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B)
             </h1>
           </div>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
+        <nav className="hidden lg:flex items-center gap-2 xl:gap-4 2xl:gap-6 shrink-0 min-w-0">
           {navItems.map((item) => (
             <Link
               key={item.href}
               to={item.href}
-              className="text-[#3B60C9] font-medium hover:underline flex items-center gap-1 text-sm xl:text-base whitespace-nowrap"
+              className="text-[#3B60C9] font-medium hover:underline flex items-center gap-1 text-xs lg:text-sm xl:text-sm 2xl:text-base whitespace-nowrap shrink-0"
             >
               {item.label}
               {item.hasDropdown && (
-                <ChevronDown className="w-3 h-3 xl:w-4 xl:h-4" />
+                <ChevronDown className="w-3 h-3 xl:w-3.5 2xl:w-4 shrink-0" />
               )}
             </Link>
           ))}

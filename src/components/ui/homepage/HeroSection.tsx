@@ -64,7 +64,7 @@ export function HeroSection() {
       <div className="relative z-10 flex items-center justify-center min-h-[500px] md:min-h-[650px] lg:min-h-[810px] py-12 md:py-16 lg:py-20">
         <div className="text-center text-white max-w-4xl px-4 md:px-8">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 md:mb-4">
-            We Are Proud
+            We Are Delighted 
           </h1>
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 md:mb-6 px-4">
             Students Of Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B)
