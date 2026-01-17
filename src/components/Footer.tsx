@@ -117,19 +117,19 @@ export function Footer() {
           <ul className="list-none p-0 m-0 flex flex-col gap-5 max-md:gap-4 max-[640px]:gap-4">
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <MapPin className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">275 Quadra Street Victoria Road, New York</span>
+              <span className="flex-1">Jahapur Secondary School Campus (Building-2),  Jahapur, Babuganj, Barishal</span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Phone className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">+1 (237) 382-2839</span>
+              <span className="flex-1">01686787972, 01832133397, 01707431497</span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Phone className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">+1 (237) 382-2840</span>
+              <span className="flex-1">+880-1686787972</span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Mail className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">yourmailaddress@example.com</span>
+              <span className="flex-1"> jssaa2025@gmail.com & info@jssalumni.org</span>
             </li>
           </ul>
         </div>
@@ -137,7 +137,7 @@ export function Footer() {
 
       {/* Copyright Bar */}
       <div className="bg-[#3B60C9] py-4 px-[320px] text-center w-full max-[1920px]:px-8 max-[1536px]:px-6 max-[1280px]:px-6 max-md:py-3 max-md:px-4 max-md:text-sm max-[640px]:py-2 max-[640px]:px-3">
-        <p className="font-['Roboto'] font-normal text-base leading-6 text-white m-0 max-md:text-sm max-[640px]:text-xs">Copyright 2025 | Ahnaf Ayon. All Rights Reserved</p>
+        <p className="font-['Roboto'] font-normal text-base leading-6 text-white m-0 max-md:text-sm max-[640px]:text-xs">Copyright 2026 | Design & Development by E3 Innovations Ltd.</p>
       </div>
     </footer>
   )
