@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import jobBanner from '@/assets/static/job_banner.png'
 
 interface JobCardProps {
   logo: string
@@ -97,6 +98,15 @@ export function RecentJobsSection() {
       className="w-full py-12 md:py-16 flex flex-col items-center gap-6 md:gap-8"
     >
       <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px] box-border">
+        {/* Job Banner */}
+        <div className="w-full mb-6 md:mb-8">
+          <img 
+            src={jobBanner} 
+            alt="Job opportunity banner" 
+            className="w-full h-auto object-contain rounded-lg"
+          />
+        </div>
+
         <h2 
           className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
           style={{ color: '#021E40' }}

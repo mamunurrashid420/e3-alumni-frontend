@@ -1,4 +1,5 @@
 import { GetTogetherSection } from './GetTogetherSection'
+import event1 from '@/assets/static/event1.png'
 
 export function GetTogetherBanner() {
   return (
@@ -14,8 +15,8 @@ export function GetTogetherBanner() {
         {/* Left Side - Image */}
         <div className="w-full md:w-[40%] h-[200px] md:h-full overflow-hidden rounded-t-[4px] md:rounded-l-[4px] md:rounded-t-none">
           <img 
-            src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=512&q=80"
-            alt="People socializing at an event"
+            src={event1}
+            alt="BUNNON 2026 - Ex. Student Association Event"
             className="w-full h-full object-cover"
           />
         </div>

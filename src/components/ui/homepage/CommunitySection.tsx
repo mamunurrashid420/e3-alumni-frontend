@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/static/event1.png'
 
 export function CommunitySection() {
   return (
@@ -25,7 +26,7 @@ export function CommunitySection() {
             />
           </svg>
           <img 
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=478&h=567&fit=crop"
+            src={event1}
             alt="Community"
             className="absolute w-[calc(100%-40px)] md:w-[calc(100%-60px)] lg:w-[478px] h-[calc(100%-40px)] md:h-[calc(100%-60px)] lg:h-[567px] rounded-t-[132px] md:rounded-t-[200px] lg:rounded-t-[265px] object-cover"
             style={{ 

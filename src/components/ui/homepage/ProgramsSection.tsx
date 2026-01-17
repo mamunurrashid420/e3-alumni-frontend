@@ -1,6 +1,9 @@
 import { useState, useId } from 'react'
 import { ChevronLeft, ChevronRight, GraduationCap, Heart, BookOpen, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/static/event1.png'
+import event2 from '@/assets/static/event2.png'
+import event3 from '@/assets/static/event3.png'
 
 interface ProgramCardProps {
   image: string
@@ -108,13 +111,13 @@ export function ProgramsSection() {
 
   const programs = [
     {
-      image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=370&q=80',
+      image: event1,
       icon: <GraduationCap className="w-full h-full" />,
       title: 'Academic Coaching',
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     },
     {
-      image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=370&q=80',
+      image: event2,
       icon: (
         <div className="w-full h-full flex items-center justify-center text-white font-bold text-2xl">
           A+
@@ -124,7 +127,7 @@ export function ProgramsSection() {
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     },
     {
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=370&q=80',
+      image: event3,
       icon: <Heart className="w-full h-full" />,
       title: 'Special Care',
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'

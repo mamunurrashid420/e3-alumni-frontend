@@ -1,5 +1,7 @@
 import { Clock, Wifi, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/static/event1.png'
+import event2 from '@/assets/static/event2.png'
 
 const healthServices = [
   'Blood Group Database',
@@ -30,7 +32,7 @@ export function HealthSection() {
         >
           {/* Main Image - Top Left (Classroom Scene) */}
           <img 
-            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=536&h=488&fit=crop&q=80"
+            src={event1}
             alt="Classroom with students and teacher"
             className="absolute left-[22px] md:left-[32px] lg:left-[43px] top-0 w-[calc(100%-44px)] md:w-[calc(100%-64px)] lg:w-[536px] h-[calc(50%-20px)] md:h-[calc(55%-30px)] lg:h-[488px] rounded-[20px] md:rounded-[30px] lg:rounded-[40px] object-cover"
             style={{ 
@@ -45,7 +47,7 @@ export function HealthSection() {
           
           {/* Overlapping Image - Bottom Right (Collaborative Group) */}
           <img 
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=364&h=352&fit=crop&q=80"
+            src={event2}
             alt="Collaborative group discussion"
             className="absolute right-0 bottom-[29px] md:bottom-[44px] lg:bottom-[58px] w-[45%] md:w-[50%] lg:w-[364px] h-[calc(45%-20px)] md:h-[calc(50%-30px)] lg:h-[352px] rounded-[20px] md:rounded-[30px] lg:rounded-[40px] z-10 object-cover"
             style={{ 

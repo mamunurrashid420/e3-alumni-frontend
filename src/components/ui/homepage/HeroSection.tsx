@@ -67,10 +67,13 @@ export function HeroSection() {
             We Are Proud
           </h1>
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 md:mb-6 px-4">
-            Students Of Jahapur Secondary School
+            Students Of Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B)
           </h2>
           <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 md:mb-8 leading-relaxed px-4">
-            Alumni Needs Enables You To Harness The Power Of Your Alumni Network. Whatever May Be The Need (Academic, Relocation, Career, Projects, Mentorship, Etc. You Can Ask The Community And Get Responses In Three.
+          An organization which is
+          dedicated to the Bangladeshi garments & Textile professionals especially for Textile Engineering to be
+          connected each other in a platform. Mission is to support the RMG sector for its potential growth in
+          the world market.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
             <Button 

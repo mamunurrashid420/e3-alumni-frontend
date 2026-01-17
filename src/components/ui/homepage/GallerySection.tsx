@@ -1,11 +1,14 @@
 import { useState } from 'react'
+import event1 from '@/assets/static/event1.png'
+import event2 from '@/assets/static/event2.png'
+import event3 from '@/assets/static/event3.png'
 
 const galleryFilters = ['All', 'Old Memories', 'Event', 'Our Picnic', 'Recent']
 
 const galleryImages = [
-  { id: 1, category: 'All', url: 'https://picsum.photos/228/260?random=1' },
-  { id: 2, category: 'All', url: 'https://picsum.photos/200/248?random=2' },
-  { id: 3, category: 'All', url: 'https://picsum.photos/200/248?random=3' },
+  { id: 1, category: 'All', url: event1 },
+  { id: 2, category: 'All', url: event2 },
+  { id: 3, category: 'All', url: event3 },
   { id: 4, category: 'All', url: 'https://picsum.photos/296/520?random=4' },
   { id: 5, category: 'All', url: 'https://picsum.photos/200/248?random=5' },
   { id: 6, category: 'All', url: 'https://picsum.photos/200/248?random=6' },

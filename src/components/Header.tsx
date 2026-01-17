@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
+import logo from '@/assets/static/logo.png'
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -32,19 +33,20 @@ export function Header() {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="min-h-[70px] sm:h-[90px] lg:h-[100px] bg-white shadow-lg w-full flex items-center justify-between px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80 gap-4 sm:gap-6 lg:gap-10">
+      <div className="min-h-[80px] sm:h-[100px] lg:h-[100px] bg-white shadow-lg w-full flex items-center justify-between px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80 gap-4 sm:gap-6 lg:gap-10">
         {/* Logo and School Name */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full border-2 sm:border-3 md:border-4 border-[#3B60C9] bg-blue-50 flex items-center justify-center shrink-0">
-            <div className="text-[#3B60C9] text-[10px] sm:text-xs font-bold text-center leading-tight">
-              JSAA
-            </div>
-          </div>
+          <Link to="/" className="shrink-0">
+            <img 
+              src={logo} 
+              alt="ESAT-B Logo" 
+              className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain"
+            />
+          </Link>
           <div className="hidden sm:block">
             <h1 className="text-[#3B60C9] font-bold text-xs sm:text-sm md:text-base lg:text-lg leading-tight">
-              JAHAPUR SECONDARY SCHOOL
+              Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B)
             </h1>
-            <p className="text-[#3B60C9] text-[10px] sm:text-xs md:text-sm">ALUMNI ASSOCIATION</p>
           </div>
         </div>
 

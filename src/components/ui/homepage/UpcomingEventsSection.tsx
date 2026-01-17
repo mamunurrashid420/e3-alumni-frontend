@@ -1,4 +1,5 @@
 import { Clock, MapPin } from 'lucide-react'
+import event1 from '@/assets/static/event1.png'
 
 interface EventItemProps {
   date: string
@@ -124,7 +125,7 @@ export function UpcomingEventsSection() {
         {/* Right Side - Large Image */}
         <div className="flex-1">
           <img 
-            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=854&q=80"
+            src={event1}
             alt="Upcoming Event"
             className="w-full h-[474px] object-cover rounded-lg"
           />

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import logo from '@/assets/static/logo.png'
 
 export function Registration() {
   const [sscFile, setSscFile] = useState<File | null>(null)
@@ -119,18 +120,15 @@ export function Registration() {
           {/* Logo and School Info */}
           <div className="flex flex-col items-center">
             <div className="bg-white rounded-lg p-6 shadow-lg mb-6">
-              <div className="w-20 h-20 rounded-full border-4 border-[#3B60C9] bg-blue-50 flex items-center justify-center mx-auto mb-4">
-                <div className="text-[#3B60C9] text-sm font-bold text-center leading-tight">
-                  JSAA
-                </div>
-              </div>
+              <img 
+                src={logo} 
+                alt="ESAT-B Logo" 
+                className="w-20 h-20 object-contain mx-auto"
+              />
             </div>
             <h1 className="text-white text-3xl font-bold uppercase text-center mb-2">
-              JAHAPUR SECONDARY SCHOOL
+              Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B)
             </h1>
-            <p className="text-white text-lg uppercase text-center">
-              ALUMNI ASSOCIATION
-            </p>
           </div>
         </div>
       </div>

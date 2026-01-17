@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import { LayoutDashboard, User, CreditCard, Settings, LogOut, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import logo from '@/assets/static/logo.png'
 
 interface NavigationItem {
   icon: React.ComponentType<{ className?: string }>
@@ -48,16 +49,17 @@ export function Navigation() {
       {/* Header with Logo */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-[#3B60C9] flex items-center justify-center">
-            <span className="text-white font-bold text-lg">JS</span>
-          </div>
+          <Link to="/" className="shrink-0">
+            <img 
+              src={logo} 
+              alt="ESAT-B Logo" 
+              className="w-12 h-12 object-contain"
+            />
+          </Link>
           <div className="flex-1">
             <h2 className="text-xs font-semibold text-[#3B60C9] leading-tight">
-              JAHAPUR SECONDARY SCHOOL
+              Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B)
             </h2>
-            <h3 className="text-xs font-semibold text-[#3B60C9] leading-tight">
-              ALUMNI ASSOCIATION
-            </h3>
           </div>
         </div>
       </div>

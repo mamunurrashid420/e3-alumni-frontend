@@ -29,7 +29,7 @@ const aboutRoute = createRoute({
     <HomepageLayout>
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold mb-8">About Us</h1>
-        <p className="text-gray-600">Learn more about the Jahapur Secondary School Alumni Association.</p>
+        <p className="text-gray-600">Learn more about the Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B).</p>
       </div>
     </HomepageLayout>
   ),
@@ -120,7 +120,7 @@ const newsEventsRoute = createRoute({
     <HomepageLayout>
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold mb-8">News & Events</h1>
-        <p className="text-gray-600">Stay updated with the latest news and events from the alumni association.</p>
+        <p className="text-gray-600">Stay updated with the latest news and events from the Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B).</p>
       </div>
     </HomepageLayout>
   ),
@@ -134,7 +134,7 @@ const membershipRoute = createRoute({
     <HomepageLayout>
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold mb-8">Membership</h1>
-        <p className="text-gray-600">Join the alumni association and become a member.</p>
+        <p className="text-gray-600">Join the Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B) and become a member.</p>
       </div>
     </HomepageLayout>
   ),
@@ -148,7 +148,7 @@ const contactRoute = createRoute({
     <HomepageLayout>
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
-        <p className="text-gray-600">Get in touch with the alumni association.</p>
+        <p className="text-gray-600">Get in touch with the Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B).</p>
       </div>
     </HomepageLayout>
   ),
