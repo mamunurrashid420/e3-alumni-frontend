@@ -12,7 +12,7 @@ export function Header() {
     { label: 'About', href: '/about', hasDropdown: true },
     { label: 'Scholarship', href: '/scholarship' },
     { label: 'News & Events', href: '/news-events' },
-    { label: 'Membership', href: '/membership' },
+    { label: 'Board Members', href: '/membership' },
     { label: 'Contact Us', href: '/contact' },
   ]
 

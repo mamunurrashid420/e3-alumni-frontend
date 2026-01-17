@@ -4,6 +4,7 @@ import { UserSpaceLayout } from '@/layouts/UserSpaceLayout'
 import { Homepage } from '@/components/Homepage'
 import { Registration } from '@/components/Registration'
 import { Login } from '@/components/Login'
+import boardMembersImage from '@/assets/static/board_members.jpeg'
 
 // Root route
 const rootRoute = createRootRoute({
@@ -133,8 +134,15 @@ const membershipRoute = createRoute({
   component: () => (
     <HomepageLayout>
       <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">Membership</h1>
-        <p className="text-gray-600">Join the Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B) and become a member.</p>
+        <h1 className="text-4xl font-bold mb-8">Board Members</h1>
+        <p className="text-gray-600 mb-8">Meet the Executive Committee of the Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B) for 2025-2027.</p>
+        <div className="flex justify-center">
+          <img 
+            src={boardMembersImage} 
+            alt="ESAT-B Executive Committee 2025-2027" 
+            className="max-w-full h-auto rounded-lg shadow-lg"
+          />
+        </div>
       </div>
     </HomepageLayout>
   ),
