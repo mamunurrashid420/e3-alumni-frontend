@@ -7,42 +7,26 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export function Registration() {
-  const [sscFile, setSscFile] = useState<File | null>(null)
-  const [photoFile, setPhotoFile] = useState<File | null>(null)
+  const [studentshipProofFile, setStudentshipProofFile] = useState<File | null>(null)
   const [paymentReceiptFile, setPaymentReceiptFile] = useState<File | null>(null)
-  const [signatureFile, setSignatureFile] = useState<File | null>(null)
   const [membershipType, setMembershipType] = useState('')
   const [paymentYears, setPaymentYears] = useState('')
+  const [yearlyFee, setYearlyFee] = useState('')
   const [termsAccepted, setTermsAccepted] = useState(false)
   
-  const sscFileInputRef = useRef<HTMLInputElement>(null)
-  const photoFileInputRef = useRef<HTMLInputElement>(null)
+  const studentshipProofFileInputRef = useRef<HTMLInputElement>(null)
   const paymentReceiptFileInputRef = useRef<HTMLInputElement>(null)
-  const signatureFileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleSscFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStudentshipProofFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSscFile(e.target.files[0])
+      setStudentshipProofFile(e.target.files[0])
     }
   }
 
-  const handlePhotoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setPhotoFile(e.target.files[0])
-    }
-  }
-
-  const handleSscDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleStudentshipProofDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setSscFile(e.dataTransfer.files[0])
-    }
-  }
-
-  const handlePhotoDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setPhotoFile(e.dataTransfer.files[0])
+      setStudentshipProofFile(e.dataTransfer.files[0])
     }
   }
 
@@ -59,36 +43,30 @@ export function Registration() {
     }
   }
 
-  const handleSignatureFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSignatureFile(e.target.files[0])
-    }
-  }
-
-  const handleSignatureDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setSignatureFile(e.dataTransfer.files[0])
-    }
-  }
-
-  // Calculate total amount based on membership type and years
+  // Calculate total amount based on membership type, yearly fee, and years
   const calculateTotalAmount = () => {
-    if (!membershipType || !paymentYears) return 0
+    if (!yearlyFee || !paymentYears) return 0
     
     const years = parseInt(paymentYears) || 0
-    const baseAmounts: Record<string, number> = {
-      'associate': 10000,
-      'regular': 5000,
-      'lifetime': 50000,
-      'honorary': 0
-    }
-    
-    const baseAmount = baseAmounts[membershipType.toLowerCase()] || 0
-    return baseAmount * years
+    const fee = parseInt(yearlyFee) || 0
+    return fee * years
   }
 
   const totalAmount = calculateTotalAmount()
+
+  // Get yearly fee options based on membership type
+  const getYearlyFeeOptions = () => {
+    switch (membershipType) {
+      case 'general':
+        return [{ value: '500', label: '500 (General)' }]
+      case 'lifetime':
+        return [{ value: '10000', label: '10,000 (Lifetime)' }]
+      case 'associate':
+        return [{ value: '300', label: '300 (Associate)' }]
+      default:
+        return []
+    }
+  }
 
   return (
     <div className="min-h-screen flex">
@@ -180,10 +158,64 @@ export function Registration() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Left Column */}
               <div className="space-y-6">
-                {/* Full Name */}
+                {/* 01. Membership Type */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    01. Membership Type <span className="text-red-500">*</span>
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer p-2 rounded-md hover:bg-gray-50 transition-colors">
+                      <input
+                        type="radio"
+                        name="membershipType"
+                        value="general"
+                        checked={membershipType === 'general'}
+                        onChange={(e) => {
+                          setMembershipType(e.target.value)
+                          setYearlyFee('') // Reset yearly fee when membership type changes
+                        }}
+                        className="w-4 h-4 text-[#3B60C9] border-gray-300 focus:ring-[#3B60C9]"
+                        required
+                      />
+                      <span className="text-sm text-gray-700">General Member</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer p-2 rounded-md hover:bg-gray-50 transition-colors">
+                      <input
+                        type="radio"
+                        name="membershipType"
+                        value="lifetime"
+                        checked={membershipType === 'lifetime'}
+                        onChange={(e) => {
+                          setMembershipType(e.target.value)
+                          setYearlyFee('') // Reset yearly fee when membership type changes
+                        }}
+                        className="w-4 h-4 text-[#3B60C9] border-gray-300 focus:ring-[#3B60C9]"
+                        required
+                      />
+                      <span className="text-sm text-gray-700">Lifetime Member</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer p-2 rounded-md hover:bg-gray-50 transition-colors">
+                      <input
+                        type="radio"
+                        name="membershipType"
+                        value="associate"
+                        checked={membershipType === 'associate'}
+                        onChange={(e) => {
+                          setMembershipType(e.target.value)
+                          setYearlyFee('') // Reset yearly fee when membership type changes
+                        }}
+                        className="w-4 h-4 text-[#3B60C9] border-gray-300 focus:ring-[#3B60C9]"
+                        required
+                      />
+                      <span className="text-sm text-gray-700">Associate Member</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* 02. Full Name */}
                 <div>
                   <label htmlFor="fullName" className="block text-sm font-medium mb-2">
-                    Full Name <span className="text-red-500">*</span>
+                    02. Full Name <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="fullName"
@@ -193,10 +225,10 @@ export function Registration() {
                   />
                 </div>
 
-                {/* Father's Name */}
+                {/* 04. Father's Name */}
                 <div>
                   <label htmlFor="fatherName" className="block text-sm font-medium mb-2">
-                    Father's Name <span className="text-red-500">*</span>
+                    04. Father's Name <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="fatherName"
@@ -206,13 +238,25 @@ export function Registration() {
                   />
                 </div>
 
-                {/* SSC/Matric Year */}
+                {/* 05. Mother's Name */}
                 <div>
-                  <label htmlFor="yearOfPassing" className="block text-sm font-medium mb-2">
-                    SSC/Matric Year <span className="text-red-500">*</span>
+                  <label htmlFor="motherName" className="block text-sm font-medium mb-2">
+                    05. Mother's Name
                   </label>
-                  <Select id="yearOfPassing" required>
-                    <option value="">Select year</option>
+                  <Input
+                    id="motherName"
+                    type="text"
+                    placeholder="Enter mother's name"
+                  />
+                </div>
+
+                {/* 07. Year of Passing/Batch - JSC Year */}
+                <div>
+                  <label htmlFor="jscYear" className="block text-sm font-medium mb-2">
+                    07. Year of Passing/Batch* - JSC Year:
+                  </label>
+                  <Select id="jscYear">
+                    <option value="">Select JSC year</option>
                     {Array.from({ length: 50 }, (_, i) => {
                       const year = new Date().getFullYear() - i
                       return (
@@ -224,41 +268,40 @@ export function Registration() {
                   </Select>
                 </div>
 
-                {/* SSC Certificate/Marksheet */}
+                {/* 07. Year of Passing/Batch - SSC Year */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    SSC Certificate/Marksheet (Optional) <span className="text-red-500">*</span>
+                  <label htmlFor="sscYear" className="block text-sm font-medium mb-2">
+                    07. Year of Passing/Batch* - SSC Year:
                   </label>
-                  <div
-                    className={cn(
-                      "border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-[#3B60C9] transition-colors",
-                      sscFile && "border-[#3B60C9] bg-blue-50"
-                    )}
-                    onDrop={handleSscDrop}
-                    onDragOver={(e) => e.preventDefault()}
-                    onClick={() => sscFileInputRef.current?.click()}
-                  >
-                    <input
-                      ref={sscFileInputRef}
-                      type="file"
-                      className="hidden"
-                      accept=".doc,.docx,.pdf,.xls,.xlsx,.png,.jpg,.jpeg"
-                      onChange={handleSscFileChange}
-                    />
-                    <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm text-gray-600 mb-1">
-                      {sscFile ? sscFile.name : "Upload any Files or drag and drop"}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Doc, Pdf, Excel Sheet, PNG, JPG up to 10MB
-                    </p>
-                  </div>
+                  <Select id="sscYear" required>
+                    <option value="">Select SSC year</option>
+                    {Array.from({ length: 50 }, (_, i) => {
+                      const year = new Date().getFullYear() - i
+                      return (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      )
+                    })}
+                  </Select>
                 </div>
 
-                {/* Present Address */}
+                {/* 10. Highest Educational Degree */}
+                <div>
+                  <label htmlFor="highestDegree" className="block text-sm font-medium mb-2">
+                    10. Highest Educational Degree
+                  </label>
+                  <Input
+                    id="highestDegree"
+                    type="text"
+                    placeholder="Enter highest educational degree"
+                  />
+                </div>
+
+                {/* 11. Present Address */}
                 <div>
                   <label htmlFor="presentAddress" className="block text-sm font-medium mb-2">
-                    Present Address <span className="text-red-500">*</span>
+                    11. Present Address <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="presentAddress"
@@ -268,10 +311,10 @@ export function Registration() {
                   />
                 </div>
 
-                {/* Email address */}
+                {/* 13. Email */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email address
+                    13. Email
                   </label>
                   <Input
                     id="email"
@@ -280,10 +323,10 @@ export function Registration() {
                   />
                 </div>
 
-                {/* Profession */}
+                {/* 15. Profession */}
                 <div>
                   <label htmlFor="profession" className="block text-sm font-medium mb-2">
-                    Profession <span className="text-red-500">*</span>
+                    15. Profession <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="profession"
@@ -293,70 +336,61 @@ export function Registration() {
                   />
                 </div>
 
-                {/* Institute Name with Workplace */}
+                {/* 17. Institute Name/Workplace */}
                 <div>
                   <label htmlFor="instituteName" className="block text-sm font-medium mb-2">
-                    Institute Name with Workplace <span className="text-red-500">*</span>
+                    17. Institute Name/Workplace
                   </label>
                   <Input
                     id="instituteName"
                     type="text"
-                    placeholder="Enter institute name with workplace"
-                    required
+                    placeholder="Enter institute name/workplace"
                   />
                 </div>
 
-                {/* Blood Group */}
+                {/* 18. Blood Group */}
                 <div>
                   <label htmlFor="bloodGroup" className="block text-sm font-medium mb-2">
-                    Blood Group <span className="text-red-500">*</span>
+                    18. Blood Group <span className="text-red-500">*</span>
                   </label>
-                  <Input
-                    id="bloodGroup"
-                    type="text"
-                    placeholder="Enter blood group"
-                    required
-                  />
+                  <Select id="bloodGroup" required>
+                    <option value="">Select blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </Select>
                 </div>
 
-                {/* Number of years for payment */}
+                {/* 22. Yearly Fee (In Taka) */}
                 <div>
-                  <label htmlFor="paymentYears" className="block text-sm font-medium mb-2">
-                    Number of years for payment
+                  <label htmlFor="yearlyFee" className="block text-sm font-medium mb-2">
+                    22. Yearly Fee (In Taka) <span className="text-red-500">*</span>
                   </label>
                   <Select 
-                    id="paymentYears"
-                    value={paymentYears}
-                    onChange={(e) => setPaymentYears(e.target.value)}
+                    id="yearlyFee"
+                    required
+                    value={yearlyFee}
+                    onChange={(e) => setYearlyFee(e.target.value)}
+                    disabled={!membershipType}
                   >
-                    <option value="">Select options</option>
-                    {Array.from({ length: 10 }, (_, i) => i + 1).map((year) => (
-                      <option key={year} value={year}>
-                        {year} {year === 1 ? 'year' : 'years'}
+                    <option value="">Select yearly fee</option>
+                    {getYearlyFeeOptions().map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </Select>
                 </div>
 
-                {/* Payment Mode */}
-                <div>
-                  <label htmlFor="paymentMode" className="block text-sm font-medium mb-2">
-                    Payment Mode <span className="text-red-500">*</span>
-                  </label>
-                  <Select id="paymentMode" required>
-                    <option value="">Select payment mode</option>
-                    <option value="bkash">bKash</option>
-                    <option value="nagad">Nagad</option>
-                    <option value="rocket">Rocket</option>
-                    <option value="bank">Bank Transfer</option>
-                    <option value="cash">Cash</option>
-                  </Select>
-                </div>
-
-                {/* Payment Receipt */}
+                {/* 24. Total Paid Amount with Receipt */}
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Payment Receipt (Optional) <span className="text-red-500">*</span>
+                    24. Total Paid Amount with Receipt <span className="text-red-500">*</span>
                   </label>
                   <div
                     className={cn(
@@ -382,15 +416,22 @@ export function Registration() {
                       Doc, Pdf, Excel Sheet, PNG, JPG up to 10MB
                     </p>
                   </div>
+                  {totalAmount > 0 && (
+                    <div className="mt-2 bg-green-50 border border-green-200 rounded-md p-3">
+                      <p className="text-sm font-semibold text-green-700">
+                        Total Amount: {totalAmount.toLocaleString()} ৳
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Right Column */}
               <div className="space-y-6">
-                {/* Name (বাংলা) */}
+                {/* 03. Name (Bangla) */}
                 <div>
                   <label htmlFor="nameBengali" className="block text-sm font-medium mb-2">
-                    Name (বাংলা) <span className="text-red-500">*</span>
+                    03. Name (Bangla) <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="nameBengali"
@@ -400,12 +441,12 @@ export function Registration() {
                   />
                 </div>
 
-                {/* Gender */}
+                {/* 06. Gender */}
                 <div>
                   <label htmlFor="gender" className="block text-sm font-medium mb-2">
-                    Gender
+                    06. Gender <span className="text-red-500">*</span>
                   </label>
-                  <Select id="gender">
+                  <Select id="gender" required>
                     <option value="">Select gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -413,54 +454,50 @@ export function Registration() {
                   </Select>
                 </div>
 
-                {/* Highest Degree Obtained */}
+                {/* 09. Studentship Proof Copy */}
                 <div>
-                  <label htmlFor="highestDegree" className="block text-sm font-medium mb-2">
-                    Highest Degree Obtained <span className="text-red-500">*</span>
+                  <label htmlFor="studentshipProofType" className="block text-sm font-medium mb-2">
+                    09. Studentship Proof Copy
                   </label>
-                  <Input
-                    id="highestDegree"
-                    type="text"
-                    placeholder="Write here"
-                    required
-                  />
-                </div>
-
-                {/* Beautiful Formal Pic */}
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Beautiful Formal Pic of You <span className="text-red-500">*</span>
-                  </label>
+                  <Select id="studentshipProofType" className="mb-2">
+                    <option value="">Select proof type</option>
+                    <option value="jsc">JSC</option>
+                    <option value="eight">Eight</option>
+                    <option value="ssc">SSC</option>
+                    <option value="metric">Metric Certificate</option>
+                    <option value="marksheet">Marksheet</option>
+                    <option value="others">Others</option>
+                  </Select>
                   <div
                     className={cn(
                       "border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-[#3B60C9] transition-colors",
-                      photoFile && "border-[#3B60C9] bg-blue-50"
+                      studentshipProofFile && "border-[#3B60C9] bg-blue-50"
                     )}
-                    onDrop={handlePhotoDrop}
+                    onDrop={handleStudentshipProofDrop}
                     onDragOver={(e) => e.preventDefault()}
-                    onClick={() => photoFileInputRef.current?.click()}
+                    onClick={() => studentshipProofFileInputRef.current?.click()}
                   >
                     <input
-                      ref={photoFileInputRef}
+                      ref={studentshipProofFileInputRef}
                       type="file"
                       className="hidden"
-                      accept=".png,.jpg,.jpeg"
-                      onChange={handlePhotoFileChange}
+                      accept=".doc,.docx,.pdf,.xls,.xlsx,.png,.jpg,.jpeg"
+                      onChange={handleStudentshipProofFileChange}
                     />
                     <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                     <p className="text-sm text-gray-600 mb-1">
-                      {photoFile ? photoFile.name : "Upload any Files or drag and drop"}
+                      {studentshipProofFile ? studentshipProofFile.name : "Upload any Files or drag and drop"}
                     </p>
                     <p className="text-xs text-gray-500">
-                      PNG, JPG, JPEG up to 10MB
+                      Doc, Pdf, Excel Sheet, PNG, JPG up to 10MB
                     </p>
                   </div>
                 </div>
 
-                {/* Permanent Address */}
+                {/* 12. Permanent Address */}
                 <div>
                   <label htmlFor="permanentAddress" className="block text-sm font-medium mb-2">
-                    Permanent Address <span className="text-red-500">*</span>
+                    12. Permanent Address <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="permanentAddress"
@@ -470,23 +507,23 @@ export function Registration() {
                   />
                 </div>
 
-                {/* Phone number */}
+                {/* 14. Mobile/Phone Number */}
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                    Phone number <span className="text-red-500">*</span>
+                    14. Mobile/Phone Number <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="Enter phone number"
+                    placeholder="Enter mobile/phone number"
                     required
                   />
                 </div>
 
-                {/* Designation (Optional) */}
+                {/* 16. Designation */}
                 <div>
                   <label htmlFor="designation" className="block text-sm font-medium mb-2">
-                    Designation (Optional)
+                    16. Designation
                   </label>
                   <Input
                     id="designation"
@@ -495,99 +532,49 @@ export function Registration() {
                   />
                 </div>
 
-                {/* T-Shirt Size */}
+                {/* 19. T-shirt Size */}
                 <div>
                   <label htmlFor="tshirtSize" className="block text-sm font-medium mb-2">
-                    T-Shirt Size <span className="text-red-500">*</span>
+                    19. T-shirt Size <span className="text-red-500">*</span>
                   </label>
                   <Select id="tshirtSize" required>
                     <option value="">Select T-shirt size</option>
-                    <option value="xs">XS</option>
-                    <option value="s">S</option>
-                    <option value="m">M</option>
-                    <option value="l">L</option>
-                    <option value="xl">XL</option>
-                    <option value="xxl">XXL</option>
                     <option value="xxxl">XXXL</option>
+                    <option value="xxl">XXL</option>
+                    <option value="xl">XL</option>
+                    <option value="l">L</option>
+                    <option value="m">M</option>
+                    <option value="s">S</option>
                   </Select>
                 </div>
 
-                {/* Membership Type */}
+                {/* 20. Entry Fee */}
                 <div>
-                  <label htmlFor="membershipType" className="block text-sm font-medium mb-2">
-                    Membership Type <span className="text-red-500">*</span>
-                  </label>
-                  <Select 
-                    id="membershipType" 
-                    required
-                    value={membershipType}
-                    onChange={(e) => setMembershipType(e.target.value)}
-                  >
-                    <option value="">Select package</option>
-                    <option value="associate">Associate</option>
-                    <option value="regular">Regular</option>
-                    <option value="lifetime">Lifetime</option>
-                    <option value="honorary">Honorary</option>
-                  </Select>
-                </div>
-
-                {/* Total Amount to be paid */}
-                {totalAmount > 0 && (
-                  <div className="bg-green-50 border border-green-200 rounded-md p-4">
-                    <p className="text-xs text-gray-600 mb-1">Total Amount to be paid</p>
-                    {membershipType && paymentYears && (
-                      <p className="text-xs text-gray-600 mb-2">
-                        {membershipType.charAt(0).toUpperCase() + membershipType.slice(1)} membership for {paymentYears} {parseInt(paymentYears) === 1 ? 'year' : 'years'}: {totalAmount / parseInt(paymentYears)} x {paymentYears}
-                      </p>
-                    )}
-                    <p className="text-lg font-bold text-green-700">
-                      Total = {totalAmount.toLocaleString()} ৳
-                    </p>
-                  </div>
-                )}
-
-                {/* Transaction ID */}
-                <div>
-                  <label htmlFor="transactionId" className="block text-sm font-medium mb-2">
-                    Transaction ID <span className="text-red-500">*</span>
+                  <label htmlFor="entryFee" className="block text-sm font-medium mb-2">
+                    20. Entry Fee
                   </label>
                   <Input
-                    id="transactionId"
-                    type="text"
-                    placeholder="Enter payment transaction ID"
-                    required
+                    id="entryFee"
+                    type="number"
+                    placeholder="Enter entry fee amount"
                   />
                 </div>
 
-                {/* Signature */}
+                {/* 23. Number of years for payment */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Signature
+                  <label htmlFor="paymentYears" className="block text-sm font-medium mb-2">
+                    23. Number of years for payment
                   </label>
-                  <div
-                    className={cn(
-                      "border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-[#3B60C9] transition-colors",
-                      signatureFile && "border-[#3B60C9] bg-blue-50"
-                    )}
-                    onDrop={handleSignatureDrop}
-                    onDragOver={(e) => e.preventDefault()}
-                    onClick={() => signatureFileInputRef.current?.click()}
+                  <Select 
+                    id="paymentYears"
+                    value={paymentYears}
+                    onChange={(e) => setPaymentYears(e.target.value)}
                   >
-                    <input
-                      ref={signatureFileInputRef}
-                      type="file"
-                      className="hidden"
-                      accept=".doc,.docx,.pdf,.xls,.xlsx,.png,.jpg,.jpeg"
-                      onChange={handleSignatureFileChange}
-                    />
-                    <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm text-gray-600 mb-1">
-                      {signatureFile ? signatureFile.name : "Upload any Files or drag and drop"}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Doc, Pdf, Excel Sheet, PNG, JPG up to 10MB
-                    </p>
-                  </div>
+                    <option value="">Select number of years</option>
+                    <option value="1">1 Year</option>
+                    <option value="2">2 Years</option>
+                    <option value="3">3 Years</option>
+                  </Select>
                 </div>
               </div>
             </div>
