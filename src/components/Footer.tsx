@@ -123,10 +123,6 @@ export function Footer() {
               <span className="flex-1">01686787972, 01832133397, 01707431497</span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
-              <Phone className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">+880-1686787972</span>
-            </li>
-            <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Mail className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
               <span className="flex-1"> jssaa2025@gmail.com & info@jssalumni.org</span>
             </li>
