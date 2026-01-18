@@ -1,5 +1,6 @@
 import { Linkedin, Youtube, Twitter, Facebook } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import heroImage from '@/assets/alumni/gallery/1.jpg'
 
 export function HeroSection() {
   return (
@@ -14,7 +15,7 @@ export function HeroSection() {
         <div 
           className="w-full h-full bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?w=1920&q=80)',
+            backgroundImage: `url(${heroImage})`,
           }}
         />
         <div className="absolute inset-0 bg-black/60" />

@@ -1,7 +1,22 @@
+import { useMemo } from 'react'
 import { Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/alumni/event/1.jpg'
+import event2 from '@/assets/alumni/event/2.jpg'
+import event3 from '@/assets/alumni/event/3.jpeg'
+import event4 from '@/assets/alumni/event/4.jpeg'
+import gallery1 from '@/assets/alumni/gallery/1.jpg'
+import gallery2 from '@/assets/alumni/gallery/2.jpg'
+import gallery3 from '@/assets/alumni/gallery/3.jpeg'
+import gallery4 from '@/assets/alumni/gallery/4.jpeg'
+import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
+import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
+
+// Array of all available images (excluding logo)
+const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
 
 export function CommunitySection() {
+  const communityImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
   return (
     <section 
       className="w-full py-12 md:py-16 lg:py-20 relative"
@@ -25,7 +40,7 @@ export function CommunitySection() {
             />
           </svg>
           <img 
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=478&h=567&fit=crop"
+            src={communityImage}
             alt="Community"
             className="absolute w-[calc(100%-40px)] md:w-[calc(100%-60px)] lg:w-[478px] h-[calc(100%-40px)] md:h-[calc(100%-60px)] lg:h-[567px] rounded-t-[132px] md:rounded-t-[200px] lg:rounded-t-[265px] object-cover"
             style={{ 

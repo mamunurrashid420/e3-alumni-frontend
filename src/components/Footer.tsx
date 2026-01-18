@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Facebook, Linkedin, Youtube, Twitter, MapPin, Phone, Mail, ChevronsRight } from 'lucide-react'
+import logoImage from '@/assets/alumni/logo.jpg'
 
 export function Footer() {
   return (
@@ -9,13 +10,11 @@ export function Footer() {
         <div className="flex flex-col">
           <div className="flex flex-col gap-6 max-md:gap-5">
             <div className="mb-3">
-              <div className="w-[120px] h-[120px] rounded-full bg-white/10 flex items-center justify-center p-4 mb-5 max-[1280px]:w-[100px] max-[1280px]:h-[100px] max-[1024px]:w-[90px] max-[1024px]:h-[90px] max-md:w-[80px] max-md:h-[80px] max-md:mb-4 max-[640px]:w-[70px] max-[640px]:h-[70px]">
-                <div className="flex flex-col items-center justify-center text-center gap-[2px]">
-                  <span className="font-['Roboto'] font-bold text-sm text-white leading-4 uppercase block max-[1024px]:text-[11px] max-[640px]:text-[10px]">JAHAPUR</span>
-                  <span className="font-['Roboto'] font-normal text-[9px] text-white leading-4 uppercase block max-[1024px]:text-[8px] max-[640px]:text-[7px]">SECONDARY SCHOOL</span>
-                  <span className="font-['Roboto'] font-normal text-[9px] text-white leading-4 uppercase block max-[1024px]:text-[8px] max-[640px]:text-[7px]">ALUMNI ASSOCIATION</span>
-                </div>
-              </div>
+              <img 
+                src={logoImage} 
+                alt="Jahapur Secondary School Alumni Association Logo" 
+                className="w-[120px] h-[120px] rounded-full object-cover mb-5 max-[1280px]:w-[100px] max-[1280px]:h-[100px] max-[1024px]:w-[90px] max-[1024px]:h-[90px] max-md:w-[80px] max-md:h-[80px] max-md:mb-4 max-[640px]:w-[70px] max-[640px]:h-[70px]"
+              />
             </div>
             <p className="font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-w-full max-[1024px]:text-sm max-[640px]:text-xs max-[640px]:leading-5">
               It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.

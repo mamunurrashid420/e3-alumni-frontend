@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import { LayoutDashboard, User, CreditCard, Settings, LogOut, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import logoImage from '@/assets/alumni/logo.jpg'
 
 interface NavigationItem {
   icon: React.ComponentType<{ className?: string }>
@@ -48,8 +49,12 @@ export function Navigation() {
       {/* Header with Logo */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-[#3B60C9] flex items-center justify-center">
-            <span className="text-white font-bold text-lg">JS</span>
+          <div className="w-12 h-12 rounded-full border-2 border-[#3B60C9] bg-white flex items-center justify-center shrink-0 overflow-hidden">
+            <img 
+              src={logoImage} 
+              alt="JSSAA Logo" 
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="flex-1">
             <h2 className="text-xs font-semibold text-[#3B60C9] leading-tight">

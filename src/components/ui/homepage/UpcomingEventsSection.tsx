@@ -1,4 +1,8 @@
 import { Clock, MapPin } from 'lucide-react'
+import event1 from '@/assets/alumni/event/1.jpg'
+import event2 from '@/assets/alumni/event/2.jpg'
+import event3 from '@/assets/alumni/event/3.jpeg'
+import event4 from '@/assets/alumni/event/4.jpeg'
 
 interface EventItemProps {
   date: string
@@ -121,13 +125,30 @@ export function UpcomingEventsSection() {
           </a>
         </div>
 
-        {/* Right Side - Large Image */}
+        {/* Right Side - Event Images Grid */}
         <div className="flex-1">
-          <img 
-            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=854&q=80"
-            alt="Upcoming Event"
-            className="w-full h-[474px] object-cover rounded-lg"
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <img 
+              src={event1}
+              alt="Event 1"
+              className="w-full h-[230px] object-cover rounded-lg"
+            />
+            <img 
+              src={event2}
+              alt="Event 2"
+              className="w-full h-[230px] object-cover rounded-lg"
+            />
+            <img 
+              src={event3}
+              alt="Event 3"
+              className="w-full h-[230px] object-cover rounded-lg"
+            />
+            <img 
+              src={event4}
+              alt="Event 4"
+              className="w-full h-[230px] object-cover rounded-lg"
+            />
+          </div>
         </div>
       </div>
     </section>

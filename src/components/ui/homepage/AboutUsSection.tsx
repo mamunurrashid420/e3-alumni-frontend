@@ -1,6 +1,22 @@
+import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/alumni/event/1.jpg'
+import event2 from '@/assets/alumni/event/2.jpg'
+import event3 from '@/assets/alumni/event/3.jpeg'
+import event4 from '@/assets/alumni/event/4.jpeg'
+import gallery1 from '@/assets/alumni/gallery/1.jpg'
+import gallery2 from '@/assets/alumni/gallery/2.jpg'
+import gallery3 from '@/assets/alumni/gallery/3.jpeg'
+import gallery4 from '@/assets/alumni/gallery/4.jpeg'
+import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
+import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
+
+// Array of all available images (excluding logo)
+const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
 
 export function AboutUsSection() {
+  const mainImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
+  const overlappingImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
   return (
     <section 
       className="w-full py-12 md:py-16 lg:py-20 relative z-10"
@@ -20,14 +36,14 @@ export function AboutUsSection() {
           
           {/* Main Image */}
           <img 
-            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=403&q=80"
+            src={mainImage}
             alt="Students learning"
             className="absolute left-[18px] md:left-[28px] lg:left-[35px] top-[18px] md:top-[28px] lg:top-[35px] w-[calc(100%-36px)] md:w-[calc(100%-56px)] lg:w-[403px] h-[calc(100%-36px)] md:h-[calc(100%-56px)] lg:h-[433px] rounded object-cover"
           />
           
           {/* Overlapping Image */}
           <img 
-            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=227&q=80"
+            src={overlappingImage}
             alt="Students studying"
             className="absolute right-0 bottom-0 w-[40%] md:w-[45%] lg:w-[227px] h-[60%] md:h-[65%] lg:h-[312px] rounded shadow-lg object-cover"
             style={{ 

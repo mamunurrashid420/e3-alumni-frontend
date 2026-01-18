@@ -1,4 +1,18 @@
+import { useMemo } from 'react'
 import { Calendar, MessageCircle, User, ArrowRight } from 'lucide-react'
+import event1 from '@/assets/alumni/event/1.jpg'
+import event2 from '@/assets/alumni/event/2.jpg'
+import event3 from '@/assets/alumni/event/3.jpeg'
+import event4 from '@/assets/alumni/event/4.jpeg'
+import gallery1 from '@/assets/alumni/gallery/1.jpg'
+import gallery2 from '@/assets/alumni/gallery/2.jpg'
+import gallery3 from '@/assets/alumni/gallery/3.jpeg'
+import gallery4 from '@/assets/alumni/gallery/4.jpeg'
+import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
+import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
+
+// Array of all available images (excluding logo)
+const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
 
 interface NewsCardProps {
   image: string
@@ -101,29 +115,29 @@ function NewsCard({ image, date, title, description, author }: NewsCardProps) {
 }
 
 export function RecentNewsSection() {
-  const news = [
+  const news = useMemo(() => [
     {
-      image: 'https://picsum.photos/411/263?random=1',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       date: '13 Feb, 2023',
       title: 'Unsatiable entreaties may collecting Power.',
       description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
       author: 'By Author'
     },
     {
-      image: 'https://picsum.photos/411/263?random=2',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       date: '13 Feb, 2023',
       title: 'Regional Manager limited time management.',
       description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
       author: 'By Author'
     },
     {
-      image: 'https://picsum.photos/411/263?random=3',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       date: '13 Feb, 2023',
       title: "What's the Holding Back It Solution Industry?",
       description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
       author: 'By Author'
     }
-  ]
+  ], [])
 
   return (
     <section 

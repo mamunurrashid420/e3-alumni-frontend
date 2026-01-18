@@ -1,5 +1,19 @@
+import { useMemo } from 'react'
 import { Clock, Wifi, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/alumni/event/1.jpg'
+import event2 from '@/assets/alumni/event/2.jpg'
+import event3 from '@/assets/alumni/event/3.jpeg'
+import event4 from '@/assets/alumni/event/4.jpeg'
+import gallery1 from '@/assets/alumni/gallery/1.jpg'
+import gallery2 from '@/assets/alumni/gallery/2.jpg'
+import gallery3 from '@/assets/alumni/gallery/3.jpeg'
+import gallery4 from '@/assets/alumni/gallery/4.jpeg'
+import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
+import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
+
+// Array of all available images (excluding logo)
+const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
 
 const healthServices = [
   'Blood Group Database',
@@ -10,6 +24,9 @@ const healthServices = [
 ]
 
 export function HealthSection() {
+  const classroomImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
+  const collaborationImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
+  
   return (
     <section 
       className="w-full py-20 px-4 lg:px-0"
@@ -30,30 +47,22 @@ export function HealthSection() {
         >
           {/* Main Image - Top Left (Classroom Scene) */}
           <img 
-            src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=536&h=488&fit=crop&q=80"
+            src={classroomImage}
             alt="Classroom with students and teacher"
             className="absolute left-[22px] md:left-[32px] lg:left-[43px] top-0 w-[calc(100%-44px)] md:w-[calc(100%-64px)] lg:w-[536px] h-[calc(50%-20px)] md:h-[calc(55%-30px)] lg:h-[488px] rounded-[20px] md:rounded-[30px] lg:rounded-[40px] object-cover"
             style={{ 
               transform: 'rotate(5deg)', 
               borderRadius: '20px 20px 20px 0'
             }}
-            onError={(e) => {
-              // Fallback to placeholder if image fails
-              e.currentTarget.src = 'https://via.placeholder.com/536x488/7166F5/FFFFFF?text=Classroom+Scene'
-            }}
           />
           
           {/* Overlapping Image - Bottom Right (Collaborative Group) */}
           <img 
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=364&h=352&fit=crop&q=80"
+            src={collaborationImage}
             alt="Collaborative group discussion"
             className="absolute right-0 bottom-[29px] md:bottom-[44px] lg:bottom-[58px] w-[45%] md:w-[50%] lg:w-[364px] h-[calc(45%-20px)] md:h-[calc(50%-30px)] lg:h-[352px] rounded-[20px] md:rounded-[30px] lg:rounded-[40px] z-10 object-cover"
             style={{ 
               transform: 'rotate(5deg)'
-            }}
-            onError={(e) => {
-              // Fallback to placeholder if image fails
-              e.currentTarget.src = 'https://via.placeholder.com/364x352/7166F5/FFFFFF?text=Collaboration'
             }}
           />
 

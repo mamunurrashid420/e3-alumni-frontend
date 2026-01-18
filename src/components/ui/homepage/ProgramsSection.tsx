@@ -1,6 +1,19 @@
-import { useState, useId } from 'react'
+import { useState, useId, useMemo } from 'react'
 import { ChevronLeft, ChevronRight, GraduationCap, Heart, BookOpen, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/alumni/event/1.jpg'
+import event2 from '@/assets/alumni/event/2.jpg'
+import event3 from '@/assets/alumni/event/3.jpeg'
+import event4 from '@/assets/alumni/event/4.jpeg'
+import gallery1 from '@/assets/alumni/gallery/1.jpg'
+import gallery2 from '@/assets/alumni/gallery/2.jpg'
+import gallery3 from '@/assets/alumni/gallery/3.jpeg'
+import gallery4 from '@/assets/alumni/gallery/4.jpeg'
+import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
+import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
+
+// Array of all available images (excluding logo)
+const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
 
 interface ProgramCardProps {
   image: string
@@ -106,15 +119,15 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
 export function ProgramsSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const programs = [
+  const programs = useMemo(() => [
     {
-      image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=370&q=80',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       icon: <GraduationCap className="w-full h-full" />,
       title: 'Academic Coaching',
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     },
     {
-      image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=370&q=80',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       icon: (
         <div className="w-full h-full flex items-center justify-center text-white font-bold text-2xl">
           A+
@@ -124,24 +137,24 @@ export function ProgramsSection() {
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     },
     {
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=370&q=80',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       icon: <Heart className="w-full h-full" />,
       title: 'Special Care',
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     },
     {
-      image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=370&q=80',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       icon: <BookOpen className="w-full h-full" />,
       title: 'Training & Courses',
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     },
     {
-      image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=370&q=80',
+      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       icon: <Phone className="w-full h-full" />,
       title: 'Relevant Contacts',
       description: 'There are many variations the off passages of Lorem Ipsum free thing avagtilable, but majority'
     }
-  ]
+  ], [])
 
   const visiblePrograms = programs.slice(currentIndex, currentIndex + 3)
 
@@ -242,7 +255,7 @@ export function ProgramsSection() {
         >
           <div className="absolute left-[58px] top-[-40px] w-[258px] h-[185px]">
             <img 
-              src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=258&q=80"
+              src={alumniImages[Math.floor(Math.random() * alumniImages.length)]}
               alt="Decorative"
               className="w-full h-full object-cover"
             />

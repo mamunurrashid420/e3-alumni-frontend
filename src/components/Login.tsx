@@ -4,6 +4,8 @@ import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import logoImage from '@/assets/alumni/logo.jpg'
+import oldCoachingImage from '@/assets/alumni/old-coaching.jpeg'
 
 export function Login() {
   const [emailOrPhone, setEmailOrPhone] = useState('')
@@ -25,7 +27,7 @@ export function Login() {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80)'
+            backgroundImage: `url(${oldCoachingImage})`
           }}
         >
           {/* Overlay */}
@@ -46,10 +48,12 @@ export function Login() {
           {/* Logo and School Info */}
           <div className="flex flex-col items-center">
             <div className="bg-white rounded-lg p-6 shadow-lg mb-6">
-              <div className="w-20 h-20 rounded-full border-4 border-[#3B60C9] bg-blue-50 flex items-center justify-center mx-auto mb-4">
-                <div className="text-[#3B60C9] text-sm font-bold text-center leading-tight">
-                  JSAA
-                </div>
+              <div className="w-20 h-20 rounded-full border-4 border-[#3B60C9] bg-white flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                <img 
+                  src={logoImage} 
+                  alt="JSSAA Logo" 
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
             <h1 className="text-white text-3xl font-bold uppercase text-center mb-2">

@@ -1,4 +1,18 @@
+import { useMemo } from 'react'
 import { Button } from '@/components/ui/button'
+import event1 from '@/assets/alumni/event/1.jpg'
+import event2 from '@/assets/alumni/event/2.jpg'
+import event3 from '@/assets/alumni/event/3.jpeg'
+import event4 from '@/assets/alumni/event/4.jpeg'
+import gallery1 from '@/assets/alumni/gallery/1.jpg'
+import gallery2 from '@/assets/alumni/gallery/2.jpg'
+import gallery3 from '@/assets/alumni/gallery/3.jpeg'
+import gallery4 from '@/assets/alumni/gallery/4.jpeg'
+import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
+import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
+
+// Array of all available images (excluding logo)
+const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
 
 interface JobCardProps {
   logo: string
@@ -53,44 +67,44 @@ function JobCard({ logo, title, description, status }: JobCardProps) {
 }
 
 export function RecentJobsSection() {
-  const jobs = [
+  const jobs = useMemo(() => [
     {
-      logo: 'https://picsum.photos/100/100?random=10',
+      logo: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       title: 'Urgently Need Five Data Center Specialist',
       description: 'Claritas est etiam procsus dymicus, qui sequitur mutationem Claritas est etiam procsus est etiam procsus dymicus....',
       status: 'active' as const
     },
     {
-      logo: 'https://picsum.photos/100/100?random=11',
+      logo: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       title: 'Urgently Need Five Data Center Specialist',
       description: 'Claritas est etiam procsus dymicus, qui sequitur mutationem Claritas est etiam procsus est etiam procsus dymicus....',
       status: 'active' as const
     },
     {
-      logo: 'https://picsum.photos/100/100?random=12',
+      logo: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       title: 'Urgently Need Five Data Center Specialist',
       description: 'Claritas est etiam procsus dymicus, qui sequitur mutationem Claritas est etiam procsus est etiam procsus dymicus....',
       status: 'expired' as const
     },
     {
-      logo: 'https://picsum.photos/100/100?random=13',
+      logo: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       title: 'Urgently Need Five Data Center Specialist',
       description: 'Claritas est etiam procsus dymicus, qui sequitur mutationem Claritas est etiam procsus est etiam procsus dymicus....',
       status: 'active' as const
     },
     {
-      logo: 'https://picsum.photos/100/100?random=14',
+      logo: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       title: 'Urgently Need Five Data Center Specialist',
       description: 'Claritas est etiam procsus dymicus, qui sequitur mutationem Claritas est etiam procsus est etiam procsus dymicus....',
       status: 'expired' as const
     },
     {
-      logo: 'https://picsum.photos/100/100?random=15',
+      logo: alumniImages[Math.floor(Math.random() * alumniImages.length)],
       title: 'Urgently Need Five Data Center Specialist',
       description: 'Claritas est etiam procsus dymicus, qui sequitur mutationem Claritas est etiam procsus est etiam procsus dymicus....',
       status: 'active' as const
     }
-  ]
+  ], [])
 
   return (
     <section 

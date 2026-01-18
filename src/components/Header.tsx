@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
+import logoImage from '@/assets/alumni/logo.jpg'
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -18,14 +19,24 @@ export function Header() {
   return (
     <header className="relative w-full">
       {/* Top Blue Bar */}
-      <div className="h-7 sm:h-8 bg-[#3B60C9] w-full flex items-center justify-end px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80">
+      <div className="h-7 sm:h-8 bg-[#3B60C9] w-full flex items-center justify-end gap-2 px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80">
+        <Link to="/register">
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
+          >
+            <span className="hidden sm:inline">Apply for Membership</span>
+            <span className="sm:hidden">Apply</span>
+          </Button>
+        </Link>
         <Link to="/login">
           <Button
             variant="outline"
             size="sm"
             className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
           >
-            <span className="hidden sm:inline">Register / Log In</span>
+            <span className="hidden sm:inline">Log In</span>
             <span className="sm:hidden">Login</span>
           </Button>
         </Link>
@@ -35,10 +46,12 @@ export function Header() {
       <div className="min-h-[70px] sm:h-[90px] lg:h-[100px] bg-white shadow-lg w-full flex items-center justify-between px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80 gap-4 sm:gap-6 lg:gap-10">
         {/* Logo and School Name */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full border-2 sm:border-3 md:border-4 border-[#3B60C9] bg-blue-50 flex items-center justify-center shrink-0">
-            <div className="text-[#3B60C9] text-[10px] sm:text-xs font-bold text-center leading-tight">
-              JSAA
-            </div>
+          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full border-2 sm:border-3 md:border-4 border-[#3B60C9] bg-white flex items-center justify-center shrink-0 overflow-hidden">
+            <img 
+              src={logoImage} 
+              alt="JSSAA Logo" 
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="hidden sm:block">
             <h1 className="text-[#3B60C9] font-bold text-xs sm:text-sm md:text-base lg:text-lg leading-tight">

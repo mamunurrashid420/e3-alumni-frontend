@@ -1,15 +1,20 @@
 import { useState } from 'react'
+import gallery1 from '@/assets/alumni/gallery/1.jpg'
+import gallery2 from '@/assets/alumni/gallery/2.jpg'
+import gallery3 from '@/assets/alumni/gallery/3.jpeg'
+import gallery4 from '@/assets/alumni/gallery/4.jpeg'
+import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
 
 const galleryFilters = ['All', 'Old Memories', 'Event', 'Our Picnic', 'Recent']
 
 const galleryImages = [
-  { id: 1, category: 'All', url: 'https://picsum.photos/228/260?random=1' },
-  { id: 2, category: 'All', url: 'https://picsum.photos/200/248?random=2' },
-  { id: 3, category: 'All', url: 'https://picsum.photos/200/248?random=3' },
-  { id: 4, category: 'All', url: 'https://picsum.photos/296/520?random=4' },
-  { id: 5, category: 'All', url: 'https://picsum.photos/200/248?random=5' },
-  { id: 6, category: 'All', url: 'https://picsum.photos/200/248?random=6' },
-  { id: 7, category: 'All', url: 'https://picsum.photos/228/260?random=7' },
+  { id: 1, category: 'All', url: gallery1 },
+  { id: 2, category: 'All', url: gallery2 },
+  { id: 3, category: 'All', url: gallery3 },
+  { id: 4, category: 'All', url: gallery4 },
+  { id: 5, category: 'All', url: galleryBatch2005 },
+  { id: 6, category: 'All', url: gallery3 },
+  { id: 7, category: 'All', url: gallery1 },
 ]
 
 export function GallerySection() {
