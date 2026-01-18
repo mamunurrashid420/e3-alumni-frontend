@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { Camera, Edit, Save } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 export function Profile() {
   const [isEditing, setIsEditing] = useState(false)
@@ -311,12 +316,16 @@ export function Profile() {
               {isEditing ? (
                 <Select
                   value={formData.gender}
-                  onChange={(e) => handleInputChange('gender', e.target.value)}
-                  className="w-full"
+                  onValueChange={(value) => handleInputChange('gender', value)}
                 >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select gender" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
                 </Select>
               ) : (
                 <p className="text-sm text-black">{formData.gender}</p>
@@ -392,15 +401,19 @@ export function Profile() {
               {isEditing ? (
                 <Select
                   value={formData.tShirtSize}
-                  onChange={(e) => handleInputChange('tShirtSize', e.target.value)}
-                  className="w-full"
+                  onValueChange={(value) => handleInputChange('tShirtSize', value)}
                 >
-                  <option value="XS">XS</option>
-                  <option value="S">S</option>
-                  <option value="M">M</option>
-                  <option value="L">L</option>
-                  <option value="XL">XL</option>
-                  <option value="XXL">XXL</option>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select T-shirt size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="XS">XS</SelectItem>
+                    <SelectItem value="S">S</SelectItem>
+                    <SelectItem value="M">M</SelectItem>
+                    <SelectItem value="L">L</SelectItem>
+                    <SelectItem value="XL">XL</SelectItem>
+                    <SelectItem value="XXL">XXL</SelectItem>
+                  </SelectContent>
                 </Select>
               ) : (
                 <p className="text-sm text-black">{formData.tShirtSize}</p>
@@ -414,12 +427,16 @@ export function Profile() {
               {isEditing ? (
                 <Select
                   value={formData.membershipType}
-                  onChange={(e) => handleInputChange('membershipType', e.target.value)}
-                  className="w-full"
+                  onValueChange={(value) => handleInputChange('membershipType', value)}
                 >
-                  <option value="Associate member">Associate member</option>
-                  <option value="Life member">Life member</option>
-                  <option value="Regular member">Regular member</option>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select membership type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Associate member">Associate member</SelectItem>
+                    <SelectItem value="Life member">Life member</SelectItem>
+                    <SelectItem value="Regular member">Regular member</SelectItem>
+                  </SelectContent>
                 </Select>
               ) : (
                 <p className="text-sm text-black">{formData.membershipType}</p>

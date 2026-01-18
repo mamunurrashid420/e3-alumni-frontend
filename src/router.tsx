@@ -1,4 +1,5 @@
 import { createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router'
+import { Toaster } from 'sonner'
 import { HomepageLayout } from '@/layouts/HomepageLayout'
 import { UserSpaceLayout } from '@/layouts/UserSpaceLayout'
 import { Homepage } from '@/components/Homepage'
@@ -7,7 +8,12 @@ import { Login } from '@/components/Login'
 
 // Root route
 const rootRoute = createRootRoute({
-  component: () => <Outlet />,
+  component: () => (
+    <>
+      <Outlet />
+      <Toaster position="top-right" richColors />
+    </>
+  ),
 })
 
 // Homepage route

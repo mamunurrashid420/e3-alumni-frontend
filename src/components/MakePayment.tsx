@@ -1,8 +1,14 @@
 import { useState, useRef } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Upload, ArrowLeft } from 'lucide-react'
+import { Upload } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -110,16 +116,18 @@ export function MakePayment() {
               Select payment purpose
             </label>
             <Select
-              id="paymentPurpose"
               value={paymentPurpose}
-              onChange={(e) => setPaymentPurpose(e.target.value)}
-              className="w-full"
+              onValueChange={setPaymentPurpose}
             >
-              <option value="">Select option</option>
-              <option value="membership">Membership Fee</option>
-              <option value="donation">Donation</option>
-              <option value="event">Event Registration</option>
-              <option value="scholarship">Scholarship Contribution</option>
+              <SelectTrigger id="paymentPurpose" className="w-full">
+                <SelectValue placeholder="Select option" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="membership">Membership Fee</SelectItem>
+                <SelectItem value="donation">Donation</SelectItem>
+                <SelectItem value="event">Event Registration</SelectItem>
+                <SelectItem value="scholarship">Scholarship Contribution</SelectItem>
+              </SelectContent>
             </Select>
           </div>
 
