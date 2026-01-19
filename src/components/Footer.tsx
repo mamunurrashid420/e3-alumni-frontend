@@ -65,10 +65,10 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
+              <Link to="/privacy-policy" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
                 <ChevronsRight className="w-4 h-4 text-white max-[640px]:w-3.5 max-[640px]:h-3.5" />
                 Privacy Policy
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

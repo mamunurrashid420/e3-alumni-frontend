@@ -66,10 +66,23 @@ export function GetTogetherSection() {
         We Are Going To Arrange A Get Together!
       </h2>
 
-      {/* Description */}
-      <p className="text-white text-xs md:text-sm leading-relaxed mb-4 md:mb-6 opacity-90">
-        Hello Everybody Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit, Sed Do Eiusmod Termpor Incididunt Ut Labore Et Dolore Magna Aliqua. Ut Enim And Minim Veniam, Quis Nostrud Exercitation Ullamco Laboris Nisi Ut Aliquip Ex Ea
+      {/* Event Slogan */}
+      <p className="text-white text-base md:text-lg lg:text-xl font-semibold mb-3 md:mb-4 italic">
+        Let bonds be strength, memories be inspiration.
       </p>
+
+      {/* Description */}
+      <div className="text-white text-xs md:text-sm leading-relaxed mb-4 md:mb-6 opacity-90 space-y-3 md:space-y-4">
+        <p>
+          The Alumni Association is pleased to announce an upcoming event designed to bring our alumni community together for connection, celebration, and collaboration. This special gathering will provide an excellent opportunity for former students to reconnect with classmates, interact with faculty members, and strengthen the bond with their alma mater.
+        </p>
+        <p>
+          The event will feature engaging activities, inspiring discussions, networking sessions, and moments to relive cherished memories. It will also serve as a platform to share updates on alumni initiatives and future plans of the association.
+        </p>
+        <p>
+          We warmly invite all alumni to join us and be a part of this memorable occasion. Your presence and participation will make the event truly meaningful and successful.
+        </p>
+      </div>
 
       {/* Call to Action Button */}
       <Button 

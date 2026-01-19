@@ -5,6 +5,11 @@ import { UserSpaceLayout } from '@/layouts/UserSpaceLayout'
 import { Homepage } from '@/components/Homepage'
 import { Registration } from '@/components/Registration'
 import { Login } from '@/components/Login'
+import { About } from '@/components/About'
+import { Scholarship } from '@/components/Scholarship'
+import { PrivacyPolicy } from '@/components/PrivacyPolicy'
+import { MessageFromPresident } from '@/components/MessageFromPresident'
+import { MessageFromGeneralSecretary } from '@/components/MessageFromGeneralSecretary'
 
 // Root route
 const rootRoute = createRootRoute({
@@ -33,10 +38,29 @@ const aboutRoute = createRoute({
   path: '/about',
   component: () => (
     <HomepageLayout>
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">About Us</h1>
-        <p className="text-gray-600">Learn more about the Jahapur Secondary School Alumni Association.</p>
-      </div>
+      <About />
+    </HomepageLayout>
+  ),
+})
+
+// Message from President route
+const presidentMessageRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about/president',
+  component: () => (
+    <HomepageLayout>
+      <MessageFromPresident />
+    </HomepageLayout>
+  ),
+})
+
+// Message from General Secretary route
+const secretaryMessageRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about/secretary',
+  component: () => (
+    <HomepageLayout>
+      <MessageFromGeneralSecretary />
     </HomepageLayout>
   ),
 })
@@ -110,10 +134,7 @@ const scholarshipRoute = createRoute({
   path: '/scholarship',
   component: () => (
     <HomepageLayout>
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">Scholarship</h1>
-        <p className="text-gray-600">Information about scholarships available to alumni and students.</p>
-      </div>
+      <Scholarship />
     </HomepageLayout>
   ),
 })
@@ -160,14 +181,28 @@ const contactRoute = createRoute({
   ),
 })
 
+// Privacy Policy route
+const privacyPolicyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/privacy-policy',
+  component: () => (
+    <HomepageLayout>
+      <PrivacyPolicy />
+    </HomepageLayout>
+  ),
+})
+
 // Create route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
   aboutRoute,
+  presidentMessageRoute,
+  secretaryMessageRoute,
   scholarshipRoute,
   newsEventsRoute,
   membershipRoute,
   contactRoute,
+  privacyPolicyRoute,
   loginRoute,
   registerRoute,
   dashboardRoute,

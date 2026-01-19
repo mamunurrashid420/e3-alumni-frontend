@@ -24,7 +24,7 @@ export function AboutUsSection() {
       <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px]">
         <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 lg:gap-24">
         {/* Left Side - Image Collage */}
-        <div className="relative w-full lg:w-[494px] h-[400px] md:h-[450px] lg:h-[520px] flex-shrink-0 max-w-[494px] mx-auto lg:mx-0">
+        <div className="relative w-full lg:w-[494px] h-[400px] md:h-[450px] lg:h-[520px] shrink-0 max-w-[494px] mx-auto lg:mx-0">
           {/* Background SVG Shape */}
           <div 
             className="absolute left-0 top-0 w-[114px] md:w-[180px] lg:w-[228px] h-[90px] md:h-[140px] lg:h-[179px]"
@@ -66,7 +66,7 @@ export function AboutUsSection() {
                 className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px]"
                 style={{ color: '#021E40' }}
               >
-                Welcome to The University
+                Jahapur Secondary School Alumni Association
               </h2>
             </div>
 
@@ -75,19 +75,25 @@ export function AboutUsSection() {
                 className="text-sm md:text-base leading-relaxed md:leading-[26px]"
                 style={{ color: '#696868' }}
               >
-                Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris.
+                The Jahapur Secondary School Alumni Association (JSSAA) serves as the heart of our alumni community, connecting former students from different batches and backgrounds. The association is established with the vision of building strong bridges among the alumni, actively contributing to the welfare and overall development of both the school and its alumni through cooperation and collective initiatives.
               </p>
               <p 
                 className="text-sm md:text-base leading-relaxed md:leading-[26px]"
                 style={{ color: '#696868' }}
               >
-                Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris.
+                For decades, Jahapur Secondary School has shaped future leaders, professionals, and change-makers. We take immense pride in celebrating the achievements and contributions of our alumni across various fields. JSSAA aims to strengthen this proud legacy by organizing meaningful events, creating networking opportunities, and supporting initiatives that benefit both alumni and current students.
               </p>
               <p 
                 className="text-sm md:text-base leading-relaxed md:leading-[26px]"
                 style={{ color: '#696868' }}
               >
-                Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet . Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris.
+                Through reunions, mentorship programs, educational support, and community outreach activities, the association strives to ensure that every member feels connected, valued, and empowered to make a positive difference. JSSAA provides a platform where lifelong bonds are nurtured, knowledge is shared and collaboration is encouraged for mutual growth.
+              </p>
+              <p 
+                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
+                style={{ color: '#696868' }}
+              >
+                Through this platform, alumni will maintain and nurture the bond among themselves and contribute to the overall development of the school & ex-students. JSSAA also deeply respects the contribution of the great persons who established & developed the school. Let's keep the spirit of Jahapur Secondary School alive and soar together toward new horizons.
               </p>
             </div>
 

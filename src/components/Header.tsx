@@ -1,11 +1,18 @@
 import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import logoImage from '@/assets/alumni/logo.jpg'
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const navigate = useNavigate()
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -14,6 +21,12 @@ export function Header() {
     { label: 'News & Events', href: '/news-events' },
     { label: 'Membership', href: '/membership' },
     { label: 'Contact Us', href: '/contact' },
+  ]
+
+  const aboutMenuItems = [
+    { label: 'About Us', href: '/about' },
+    { label: 'Message from the President', href: '/about/president' },
+    { label: 'Message from the General Secretary', href: '/about/secretary' },
   ]
 
   return (
@@ -63,18 +76,40 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className="text-[#3B60C9] font-medium hover:underline flex items-center gap-1 text-sm xl:text-base whitespace-nowrap"
-            >
-              {item.label}
-              {item.hasDropdown && (
-                <ChevronDown className="w-3 h-3 xl:w-4 xl:h-4" />
-              )}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            if (item.hasDropdown) {
+              return (
+                <DropdownMenu key={item.href}>
+                  <DropdownMenuTrigger asChild>
+                    <button className="text-[#3B60C9] font-medium hover:underline flex items-center gap-1 text-sm xl:text-base whitespace-nowrap cursor-pointer">
+                      {item.label}
+                      <ChevronDown className="w-3 h-3 xl:w-4 xl:h-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="min-w-[200px]">
+                    {aboutMenuItems.map((menuItem) => (
+                      <DropdownMenuItem
+                        key={menuItem.href}
+                        onClick={() => navigate({ to: menuItem.href })}
+                        className="cursor-pointer text-[#3B60C9]"
+                      >
+                        {menuItem.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )
+            }
+            return (
+              <Link
+                key={item.href}
+                to={item.href}
+                className="text-[#3B60C9] font-medium hover:underline flex items-center gap-1 text-sm xl:text-base whitespace-nowrap"
+              >
+                {item.label}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -95,19 +130,46 @@ export function Header() {
       {isMobileMenuOpen && (
         <div className="lg:hidden absolute top-full left-0 right-0 bg-white shadow-lg z-50 px-3 sm:px-4 py-3 sm:py-4 border-t border-gray-200">
           <nav className="flex flex-col gap-2 sm:gap-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className="text-[#3B60C9] font-medium hover:bg-gray-50 flex items-center justify-between py-2 sm:py-2.5 px-2 rounded transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <span className="text-sm sm:text-base">{item.label}</span>
-                {item.hasDropdown && (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              if (item.hasDropdown) {
+                return (
+                  <div key={item.href} className="flex flex-col">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="text-[#3B60C9] font-medium hover:bg-gray-50 flex items-center justify-between py-2 sm:py-2.5 px-2 rounded transition-colors w-full text-left">
+                          <span className="text-sm sm:text-base">{item.label}</span>
+                          <ChevronDown className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start" className="min-w-[200px] ml-2">
+                        {aboutMenuItems.map((menuItem) => (
+                          <DropdownMenuItem
+                            key={menuItem.href}
+                            onClick={() => {
+                              navigate({ to: menuItem.href })
+                              setIsMobileMenuOpen(false)
+                            }}
+                            className="cursor-pointer text-[#3B60C9]"
+                          >
+                            {menuItem.label}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                )
+              }
+              return (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className="text-[#3B60C9] font-medium hover:bg-gray-50 flex items-center justify-between py-2 sm:py-2.5 px-2 rounded transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="text-sm sm:text-base">{item.label}</span>
+                </Link>
+              )
+            })}
           </nav>
         </div>
       )}
