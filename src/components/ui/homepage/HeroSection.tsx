@@ -71,7 +71,7 @@ export function HeroSection() {
             Students Of Jahapur Secondary School
           </h2>
           <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 md:mb-8 leading-relaxed px-4">
-            Alumni Needs Enables You To Harness The Power Of Your Alumni Network. Whatever May Be The Need (Academic, Relocation, Career, Projects, Mentorship, Etc. You Can Ask The Community And Get Responses In Three.
+            Join our vibrant alumni community and strengthen lifelong bonds. Through mentorship programs, networking events, and collaborative initiatives, we support each other's growth while contributing to the development of our school and community.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
             <Button 
