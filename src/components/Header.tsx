@@ -25,6 +25,8 @@ export function Header() {
 
   const aboutMenuItems = [
     { label: 'About Us', href: '/about' },
+    { label: 'Our History', href: '/about/history' },
+    { label: 'Mission & Vision', href: '/about/mission-vision' },
     { label: 'Message from the President', href: '/about/president' },
     { label: 'Message from the General Secretary', href: '/about/secretary' },
   ]

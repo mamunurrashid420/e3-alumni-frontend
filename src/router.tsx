@@ -10,6 +10,11 @@ import { Scholarship } from '@/components/Scholarship'
 import { PrivacyPolicy } from '@/components/PrivacyPolicy'
 import { MessageFromPresident } from '@/components/MessageFromPresident'
 import { MessageFromGeneralSecretary } from '@/components/MessageFromGeneralSecretary'
+import { History } from '@/components/History'
+import { MissionAndVision } from '@/components/MissionAndVision'
+import { NewsAndEvents } from '@/components/NewsAndEvents'
+import { Contact } from '@/components/Contact'
+import { Membership } from '@/components/Membership'
 
 // Root route
 const rootRoute = createRootRoute({
@@ -61,6 +66,28 @@ const secretaryMessageRoute = createRoute({
   component: () => (
     <HomepageLayout>
       <MessageFromGeneralSecretary />
+    </HomepageLayout>
+  ),
+})
+
+// History route
+const historyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about/history',
+  component: () => (
+    <HomepageLayout>
+      <History />
+    </HomepageLayout>
+  ),
+})
+
+// Mission & Vision route
+const missionVisionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about/mission-vision',
+  component: () => (
+    <HomepageLayout>
+      <MissionAndVision />
     </HomepageLayout>
   ),
 })
@@ -145,10 +172,7 @@ const newsEventsRoute = createRoute({
   path: '/news-events',
   component: () => (
     <HomepageLayout>
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">News & Events</h1>
-        <p className="text-gray-600">Stay updated with the latest news and events from the alumni association.</p>
-      </div>
+      <NewsAndEvents />
     </HomepageLayout>
   ),
 })
@@ -159,10 +183,7 @@ const membershipRoute = createRoute({
   path: '/membership',
   component: () => (
     <HomepageLayout>
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">Membership</h1>
-        <p className="text-gray-600">Join the alumni association and become a member.</p>
-      </div>
+      <Membership />
     </HomepageLayout>
   ),
 })
@@ -173,10 +194,7 @@ const contactRoute = createRoute({
   path: '/contact',
   component: () => (
     <HomepageLayout>
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
-        <p className="text-gray-600">Get in touch with the alumni association.</p>
-      </div>
+      <Contact />
     </HomepageLayout>
   ),
 })
@@ -198,6 +216,8 @@ const routeTree = rootRoute.addChildren([
   aboutRoute,
   presidentMessageRoute,
   secretaryMessageRoute,
+  historyRoute,
+  missionVisionRoute,
   scholarshipRoute,
   newsEventsRoute,
   membershipRoute,
