@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/stores/authStore'
 
 interface MemberInfo {
   member_id: string
@@ -27,13 +28,19 @@ interface MakePaymentProps {
   showMemberId?: boolean
 }
 
-// Zod schema for form validation
-const paymentSchema = z.object({
+// Create schema based on whether user is authenticated
+const createPaymentSchema = (isAuthenticated: boolean) => z.object({
   member_id: z.string().optional(),
   payment_purpose: z.string().min(1, 'Please select a payment purpose'),
-  name: z.string().min(1, 'Name is required').trim(),
-  address: z.string().min(1, 'Address is required').trim(),
-  mobile_number: z.string().min(1, 'Mobile number is required').trim(),
+  name: isAuthenticated 
+    ? z.string().optional() 
+    : z.string().min(1, 'Name is required').trim(),
+  address: isAuthenticated 
+    ? z.string().optional() 
+    : z.string().min(1, 'Address is required').trim(),
+  mobile_number: isAuthenticated 
+    ? z.string().optional() 
+    : z.string().min(1, 'Mobile number is required').trim(),
   payment_amount: z.string().min(1, 'Please enter a payment amount').refine(
     (val) => {
       const num = parseFloat(val)
@@ -56,9 +63,10 @@ const paymentSchema = z.object({
   }),
 })
 
-type PaymentFormData = z.infer<typeof paymentSchema>
+type PaymentFormData = z.infer<ReturnType<typeof createPaymentSchema>>
 
 export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
+  const { user, isAuthenticated } = useAuthStore()
   const navigate = useNavigate()
   const [isDragging, setIsDragging] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -74,6 +82,9 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const memberIdTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // Determine if user is authenticated (showMemberId=false means authenticated user)
+  const isAuthUser = !showMemberId && isAuthenticated
+
   const {
     register,
     handleSubmit,
@@ -83,7 +94,7 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
     reset,
     formState: { errors },
   } = useForm<PaymentFormData>({
-    resolver: zodResolver(paymentSchema),
+    resolver: zodResolver(createPaymentSchema(isAuthUser)),
     mode: 'onSubmit',
     defaultValues: {
       member_id: '',
@@ -95,6 +106,32 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       payment_proof_file: undefined as any,
     },
   })
+
+  // Populate user data when authenticated
+  useEffect(() => {
+    if (isAuthUser && user) {
+      // Set name from user
+      if (user.name) {
+        setValue('name', user.name)
+      }
+      
+      // Set address and mobile from membership application if available
+      if (user.membership_application) {
+        const app = user.membership_application
+        if (app.present_address) {
+          setValue('address', app.present_address)
+        }
+        if (app.mobile_number) {
+          setValue('mobile_number', app.mobile_number)
+        }
+      }
+      
+      // Set member_id if available
+      if (user.member_id) {
+        setValue('member_id', user.member_id)
+      }
+    }
+  }, [isAuthUser, user, setValue])
 
   const memberId = watch('member_id')
   const paymentAmount = watch('payment_amount')
@@ -280,28 +317,59 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
 
     try {
       const apiFormData = new FormData()
+      
+      // For authenticated users, populate from user data if not provided
+      let name: string = data.name || ''
+      let address: string = data.address || ''
+      let mobile_number: string = data.mobile_number || ''
+      
+      if (isAuthUser && user) {
+        // Use provided data or fallback to user data
+        name = name || user.name || ''
+        if (user.membership_application) {
+          address = address || user.membership_application.present_address || ''
+          mobile_number = mobile_number || user.membership_application.mobile_number || ''
+        }
+      }
+      
       if (data.member_id) {
         apiFormData.append('member_id', data.member_id)
+      } else if (isAuthUser && user?.member_id) {
+        apiFormData.append('member_id', user.member_id)
       }
-      apiFormData.append('name', data.name)
-      apiFormData.append('address', data.address)
-      apiFormData.append('mobile_number', data.mobile_number)
+      
+      // Ensure all values are strings before appending
+      apiFormData.append('name', name || '')
+      apiFormData.append('address', address || '')
+      apiFormData.append('mobile_number', mobile_number || '')
       apiFormData.append('payment_purpose', data.payment_purpose)
       apiFormData.append('payment_amount', data.payment_amount)
       apiFormData.append('payment_proof_file', data.payment_proof_file)
 
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+      
+      // Prepare headers with authentication token if user is authenticated
+      const headers: Record<string, string> = {
+        'Content-Type': 'multipart/form-data',
+      }
+      
+      // Add authorization token if user is authenticated
+      if (isAuthUser) {
+        const token = localStorage.getItem('auth_token')
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`
+        }
+      }
+      
       await axios.post(`${apiBaseUrl}/api/payments`, apiFormData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers,
       })
 
       // Success - handle based on page type
       if (showMemberId) {
         // Donate page - show success card instead of redirecting
         setSubmittedPaymentData({
-          name: data.name,
+          name: name,
           paymentPurpose: data.payment_purpose,
           paymentAmount: data.payment_amount,
           memberId: data.member_id || undefined,
@@ -478,65 +546,71 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
             )}
           </div>
 
-          {/* Name */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-2">
-              Name <span className="text-red-500">*</span>
-            </label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="Enter full name"
-              {...register('name')}
-              className={errors.name || apiErrors.name ? 'border-red-500' : ''}
-            />
-            {(errors.name || apiErrors.name) && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.name?.message || apiErrors.name?.[0]}
-              </p>
-            )}
-          </div>
-
-          {/* Address */}
-          <div>
-            <label htmlFor="address" className="block text-sm font-medium mb-2">
-              Address <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="address"
-              placeholder="Enter address"
-              rows={3}
-              {...register('address')}
-              className={cn(
-                "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none",
-                (errors.address || apiErrors.address) && 'border-red-500'
+          {/* Name - Only show for non-authenticated users */}
+          {showMemberId && (
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium mb-2">
+                Name <span className="text-red-500">*</span>
+              </label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Enter full name"
+                {...register('name')}
+                className={errors.name || apiErrors.name ? 'border-red-500' : ''}
+              />
+              {(errors.name || apiErrors.name) && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.name?.message || apiErrors.name?.[0]}
+                </p>
               )}
-            />
-            {(errors.address || apiErrors.address) && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.address?.message || apiErrors.address?.[0]}
-              </p>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* Mobile number */}
-          <div>
-            <label htmlFor="mobileNumber" className="block text-sm font-medium mb-2">
-              Mobile Number <span className="text-red-500">*</span>
-            </label>
-            <Input
-              id="mobileNumber"
-              type="text"
-              placeholder="Enter mobile number"
-              {...register('mobile_number')}
-              className={errors.mobile_number || apiErrors.mobile_number ? 'border-red-500' : ''}
-            />
-            {(errors.mobile_number || apiErrors.mobile_number) && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.mobile_number?.message || apiErrors.mobile_number?.[0]}
-              </p>
-            )}
-          </div>
+          {/* Address - Only show for non-authenticated users */}
+          {showMemberId && (
+            <div>
+              <label htmlFor="address" className="block text-sm font-medium mb-2">
+                Address <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                id="address"
+                placeholder="Enter address"
+                rows={3}
+                {...register('address')}
+                className={cn(
+                  "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none",
+                  (errors.address || apiErrors.address) && 'border-red-500'
+                )}
+              />
+              {(errors.address || apiErrors.address) && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.address?.message || apiErrors.address?.[0]}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Mobile number - Only show for non-authenticated users */}
+          {showMemberId && (
+            <div>
+              <label htmlFor="mobileNumber" className="block text-sm font-medium mb-2">
+                Mobile Number <span className="text-red-500">*</span>
+              </label>
+              <Input
+                id="mobileNumber"
+                type="text"
+                placeholder="Enter mobile number"
+                {...register('mobile_number')}
+                className={errors.mobile_number || apiErrors.mobile_number ? 'border-red-500' : ''}
+              />
+              {(errors.mobile_number || apiErrors.mobile_number) && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.mobile_number?.message || apiErrors.mobile_number?.[0]}
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Payment amount */}
           <div>

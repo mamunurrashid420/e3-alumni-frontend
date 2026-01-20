@@ -16,7 +16,7 @@ const navigationItems: NavigationItem[] = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
   { icon: User, label: 'Profile', href: '/profile' },
   { icon: CreditCard, label: 'Payment', href: '/payment' },
-  { icon: Settings, label: 'Settings', href: '/settings' },
+  // { icon: Settings, label: 'Settings', href: '/settings' },
 ]
 
 export function Navigation() {
