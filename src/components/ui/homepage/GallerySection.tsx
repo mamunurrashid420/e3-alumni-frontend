@@ -2,6 +2,9 @@ import { useState } from 'react'
 import event1 from '@/assets/static/event1.png'
 import event2 from '@/assets/static/event2.png'
 import event3 from '@/assets/static/event3.png'
+import gallery2 from '@/assets/static/2.png'
+import static3 from '@/assets/static/3.png'
+import static4 from '@/assets/static/4.png'
 
 const galleryFilters = ['All', 'Old Memories', 'Event', 'Our Picnic', 'Recent']
 
@@ -9,9 +12,9 @@ const galleryImages = [
   { id: 1, category: 'All', url: event1 },
   { id: 2, category: 'All', url: event2 },
   { id: 3, category: 'All', url: event3 },
-  { id: 4, category: 'All', url: 'https://picsum.photos/296/520?random=4' },
-  { id: 5, category: 'All', url: 'https://picsum.photos/200/248?random=5' },
-  { id: 6, category: 'All', url: 'https://picsum.photos/200/248?random=6' },
+  { id: 4, category: 'All', url: gallery2 },
+  { id: 5, category: 'All', url: static3 },
+  { id: 6, category: 'All', url: static4 },
   { id: 7, category: 'All', url: 'https://picsum.photos/228/260?random=7' },
 ]
 

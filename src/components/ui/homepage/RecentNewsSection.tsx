@@ -1,7 +1,7 @@
 import { Calendar, MessageCircle, User, ArrowRight } from 'lucide-react'
-import event1 from '@/assets/static/event1.png'
-import event2 from '@/assets/static/event2.png'
-import event3 from '@/assets/static/event3.png'
+import gallery2 from '@/assets/static/2.png'
+import static3 from '@/assets/static/3.png'
+import static4 from '@/assets/static/4.png'
 
 interface NewsCardProps {
   image: string
@@ -106,21 +106,21 @@ function NewsCard({ image, date, title, description, author }: NewsCardProps) {
 export function RecentNewsSection() {
   const news = [
     {
-      image: event1,
+      image: gallery2,
       date: '13 Feb, 2023',
       title: 'Unsatiable entreaties may collecting Power.',
       description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
       author: 'By Author'
     },
     {
-      image: event2,
+      image: static3,
       date: '13 Feb, 2023',
       title: 'Regional Manager limited time management.',
       description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
       author: 'By Author'
     },
     {
-      image: event3,
+      image: static4,
       date: '13 Feb, 2023',
       title: "What's the Holding Back It Solution Industry?",
       description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
