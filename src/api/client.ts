@@ -83,14 +83,8 @@ class ApiClient {
 
   // Authentication methods
   async login(emailOrPhone: string, password: string): Promise<LoginResponse> {
-    // Determine if input is email or phone
-    const isEmail = emailOrPhone.includes('@');
-    const payload = isEmail
-      ? { email: emailOrPhone, password }
-      : { phone: emailOrPhone, password };
-
     const response = await this.client.post<LoginResponse>(endpoints.login, {
-      email: emailOrPhone, // Backend expects email field
+      email_or_phone: emailOrPhone,
       password,
     });
     

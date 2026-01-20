@@ -7,87 +7,6 @@ import { apiClient } from '@/api/client'
 import { toast } from 'sonner'
 import type { Payment as PaymentType } from '@/types/api'
 
-interface PaymentRecord {
-  id: number
-  paymentTitle: string
-  paymentAmount: string
-  paymentMethod: string
-  transactionId: string
-}
-
-const mockPayments: PaymentRecord[] = [
-  {
-    id: 1,
-    paymentTitle: 'South-western Coastal Area and Sundarbans',
-    paymentAmount: 'Bkash',
-    paymentMethod: 'Storm Surge',
-    transactionId: 'Storm Surge',
-  },
-  {
-    id: 2,
-    paymentTitle: 'Haor and Flash Floods Area',
-    paymentAmount: 'Nagad',
-    paymentMethod: 'Flash Flood',
-    transactionId: 'Flash Flood',
-  },
-  {
-    id: 3,
-    paymentTitle: 'South-eastern Coastal Area',
-    paymentAmount: 'Bkash',
-    paymentMethod: 'Cyclone',
-    transactionId: 'Cyclone',
-  },
-  {
-    id: 4,
-    paymentTitle: 'South-western Coastal Area and Sundarbans',
-    paymentAmount: 'Nagad',
-    paymentMethod: 'Salinity',
-    transactionId: 'Salinity',
-  },
-  {
-    id: 5,
-    paymentTitle: 'Urban Areas',
-    paymentAmount: 'Bkash',
-    paymentMethod: 'Urban Flood',
-    transactionId: 'Urban Flood',
-  },
-  {
-    id: 6,
-    paymentTitle: 'South-western Coastal Area and Sundarbans',
-    paymentAmount: 'Bkash',
-    paymentMethod: 'Storm Surge',
-    transactionId: 'Storm Surge',
-  },
-  {
-    id: 7,
-    paymentTitle: 'Haor and Flash Floods Area',
-    paymentAmount: 'Nagad',
-    paymentMethod: 'Flash Flood',
-    transactionId: 'Flash Flood',
-  },
-  {
-    id: 8,
-    paymentTitle: 'South-eastern Coastal Area',
-    paymentAmount: 'Bkash',
-    paymentMethod: 'Cyclone',
-    transactionId: 'Cyclone',
-  },
-  {
-    id: 9,
-    paymentTitle: 'South-western Coastal Area and Sundarbans',
-    paymentAmount: 'Nagad',
-    paymentMethod: 'Salinity',
-    transactionId: 'Salinity',
-  },
-  {
-    id: 10,
-    paymentTitle: 'Urban Areas',
-    paymentAmount: 'Bkash',
-    paymentMethod: 'Urban Flood',
-    transactionId: 'Urban Flood',
-  },
-]
-
 export function Payment() {
   const [searchQuery, setSearchQuery] = useState('')
   const [payments, setPayments] = useState<PaymentType[]>([])
@@ -98,11 +17,9 @@ export function Payment() {
     const loadPayments = async () => {
       try {
         setIsLoading(true)
-        // Note: Current backend API only allows super admins to view payments
-        // Members cannot view their own payments through the API yet
-        // This will show an empty state for now
-        setPayments([])
-        setError('Payment history is currently only available to administrators.')
+        setError(null)
+        const response = await apiClient.getPayments()
+        setPayments(response.data)
       } catch (err: any) {
         setError(err?.message || 'Failed to load payments')
         toast.error('Failed to load payment history')
@@ -114,11 +31,15 @@ export function Payment() {
     loadPayments()
   }, [])
 
-  const filteredPayments = payments.filter((payment) =>
-    payment.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    payment.payment_purpose?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    payment.member_id?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredPayments = payments.filter((payment) => {
+    const searchLower = searchQuery.toLowerCase()
+    const purposeString = payment.payment_purpose?.replace(/_/g, ' ').toLowerCase() || ''
+    return (
+      payment.name?.toLowerCase().includes(searchLower) ||
+      purposeString.includes(searchLower) ||
+      payment.member_id?.toLowerCase().includes(searchLower)
+    )
+  })
 
   return (
     <div className="space-y-6">
@@ -147,9 +68,9 @@ export function Payment() {
         </Link>
       </div>
 
-      {/* Error or Info Message */}
-      {error && (
-        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-md">
+      {/* Error Message */}
+      {error && !isLoading && (
+        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
           <p className="text-sm">{error}</p>
         </div>
       )}
@@ -220,7 +141,7 @@ export function Payment() {
                 ) : (
                   <tr>
                     <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-500">
-                      {error ? 'Payment history is not available' : 'No payments found'}
+                      No payments found
                     </td>
                   </tr>
                 )}
