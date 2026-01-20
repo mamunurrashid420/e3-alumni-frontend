@@ -1,4 +1,9 @@
+import { useAuthStore } from '@/stores/authStore'
+
 export function WelcomeBanner() {
+  const { user } = useAuthStore()
+  const userName = user?.name || 'Member'
+
   return (
     <div className="bg-[#3B60C9] rounded-lg p-8 text-white relative overflow-hidden mb-6">
       {/* Decorative background elements */}
@@ -9,7 +14,7 @@ export function WelcomeBanner() {
       </div>
 
       <div className="relative z-10">
-        <h2 className="text-3xl font-bold mb-4">Hello, Lyana Stark!</h2>
+        <h2 className="text-3xl font-bold mb-4">Hello, {userName}!</h2>
         <p className="text-white/90 text-lg leading-relaxed max-w-3xl">
           Welcome to your dashboard. You can update your information here. You
           can also check your notification and explore related events from this

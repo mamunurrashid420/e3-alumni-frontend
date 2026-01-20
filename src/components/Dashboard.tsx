@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import { Award, FileText } from 'lucide-react'
 import { WelcomeBanner } from './dashboard/WelcomeBanner'
 import { InfoCard } from './dashboard/InfoCard'
@@ -5,8 +7,37 @@ import { NotificationsSection } from './dashboard/NotificationsSection'
 import { SubscriptionSection } from './dashboard/SubscriptionSection'
 import { ProfileCard } from './dashboard/ProfileCard'
 import { EventsSection } from './dashboard/EventsSection'
+import { useAuthStore } from '@/stores/authStore'
 
 export function Dashboard() {
+  const navigate = useNavigate()
+  const { fetchUser, isAuthenticated, isLoading } = useAuthStore()
+
+  useEffect(() => {
+    const loadUser = async () => {
+      if (!isAuthenticated) {
+        try {
+          await fetchUser()
+        } catch (error) {
+          navigate({ to: '/login' })
+        }
+      }
+    }
+
+    loadUser()
+  }, [fetchUser, isAuthenticated, navigate])
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#3B60C9]"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col lg:flex-row gap-6">
       {/* Main Content */}
@@ -37,7 +68,7 @@ export function Dashboard() {
             title="Payment history"
             description="The App Is A Great Way To Stay Connected With Your Colleagues And Learn About What They're Working On. You Can Also Use The App"
             actionIcon="arrow"
-            onAction={() => console.log('View payment history')}
+            onAction={() => navigate({ to: '/payment' })}
           />
         </div>
 

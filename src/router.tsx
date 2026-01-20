@@ -2,6 +2,7 @@ import { createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/re
 import { Toaster } from 'sonner'
 import { HomepageLayout } from '@/layouts/HomepageLayout'
 import { UserSpaceLayout } from '@/layouts/UserSpaceLayout'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Homepage } from '@/components/Homepage'
 import { Registration } from '@/components/Registration'
 import { Login } from '@/components/Login'
@@ -116,9 +117,11 @@ const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/dashboard',
   component: () => (
-    <UserSpaceLayout title="Dashboard" subtitle="User Information And Details">
-      <Dashboard />
-    </UserSpaceLayout>
+    <ProtectedRoute>
+      <UserSpaceLayout title="Dashboard" subtitle="User Information And Details">
+        <Dashboard />
+      </UserSpaceLayout>
+    </ProtectedRoute>
   ),
 })
 
@@ -127,9 +130,11 @@ const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/profile',
   component: () => (
-    <UserSpaceLayout title="User Profile" subtitle="User Information And Details">
-      <Profile />
-    </UserSpaceLayout>
+    <ProtectedRoute>
+      <UserSpaceLayout title="User Profile" subtitle="User Information And Details">
+        <Profile />
+      </UserSpaceLayout>
+    </ProtectedRoute>
   ),
 })
 
@@ -138,9 +143,11 @@ const paymentRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/payment',
   component: () => (
-    <UserSpaceLayout title="Payment List" subtitle="Payment Information And Details">
-      <Payment />
-    </UserSpaceLayout>
+    <ProtectedRoute>
+      <UserSpaceLayout title="Payment List" subtitle="Payment Information And Details">
+        <Payment />
+      </UserSpaceLayout>
+    </ProtectedRoute>
   ),
 })
 
@@ -149,9 +156,11 @@ const makePaymentRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/make-payment',
   component: () => (
-    <UserSpaceLayout title="Payment Page" subtitle="Select your purpose and make your payment">
-      <MakePayment showMemberId={false} />
-    </UserSpaceLayout>
+    <ProtectedRoute>
+      <UserSpaceLayout title="Payment Page" subtitle="Select your purpose and make your payment">
+        <MakePayment showMemberId={false} />
+      </UserSpaceLayout>
+    </ProtectedRoute>
   ),
 })
 

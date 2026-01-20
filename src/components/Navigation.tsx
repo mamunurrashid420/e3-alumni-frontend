@@ -1,7 +1,9 @@
 import { useState } from 'react'
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { LayoutDashboard, User, CreditCard, Settings, LogOut, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/stores/authStore'
+import { toast } from 'sonner'
 import logoImage from '@/assets/alumni/logo.jpg'
 
 interface NavigationItem {
@@ -19,7 +21,19 @@ const navigationItems: NavigationItem[] = [
 
 export function Navigation() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { logout } = useAuthStore()
   const [isOpen, setIsOpen] = useState(false)
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      toast.success('Logged out successfully')
+      navigate({ to: '/login' })
+    } catch (error) {
+      toast.error('Failed to logout')
+    }
+  }
 
   return (
     <>
@@ -100,7 +114,10 @@ export function Navigation() {
 
       {/* Logout */}
       <div className="p-4 border-t border-gray-200">
-        <button className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full"
+        >
           <LogOut className="w-5 h-5" />
           <span>Logout</span>
         </button>

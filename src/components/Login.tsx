@@ -1,22 +1,41 @@
 import { useState } from 'react'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
+import { useAuthStore } from '@/stores/authStore'
 import logoImage from '@/assets/alumni/logo.jpg'
 import oldCoachingImage from '@/assets/alumni/old-coaching.jpeg'
 
 export function Login() {
+  const navigate = useNavigate()
+  const { login, isLoading } = useAuthStore()
   const [emailOrPhone, setEmailOrPhone] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log('Login:', { emailOrPhone, password, rememberMe })
+    setError(null)
+
+    if (!emailOrPhone || !password) {
+      setError('Please enter both email/phone and password')
+      return
+    }
+
+    try {
+      await login(emailOrPhone, password)
+      toast.success('Login successful!')
+      navigate({ to: '/dashboard' })
+    } catch (err: any) {
+      const errorMessage = err?.message || err?.errors?.email?.[0] || 'Login failed. Please try again.'
+      setError(errorMessage)
+      toast.error(errorMessage)
+    }
   }
 
   return (
@@ -91,6 +110,13 @@ export function Login() {
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+
             {/* Email or Phone */}
             <div>
               <label htmlFor="emailOrPhone" className="block text-sm font-medium mb-2">
@@ -101,9 +127,13 @@ export function Login() {
                 type="text"
                 placeholder="Enter email/phone"
                 value={emailOrPhone}
-                onChange={(e) => setEmailOrPhone(e.target.value)}
+                onChange={(e) => {
+                  setEmailOrPhone(e.target.value)
+                  setError(null)
+                }}
                 required
                 className="w-full"
+                disabled={isLoading}
               />
             </div>
 
@@ -118,9 +148,13 @@ export function Login() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setError(null)
+                  }}
                   required
                   className="w-full pr-10"
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
@@ -178,9 +212,10 @@ export function Login() {
             {/* Login Button */}
             <Button
               type="submit"
-              className="w-full bg-[#3B60C9] hover:bg-[#2d4fa8] text-white py-2.5 rounded-md transition-colors font-medium"
+              disabled={isLoading}
+              className="w-full bg-[#3B60C9] hover:bg-[#2d4fa8] text-white py-2.5 rounded-md transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Login
+              {isLoading ? 'Logging in...' : 'Login'}
             </Button>
 
             {/* Footer */}

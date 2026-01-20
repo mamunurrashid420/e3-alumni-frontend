@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { apiClient } from '@/api/client'
+import { toast } from 'sonner'
+import type { Payment as PaymentType } from '@/types/api'
 
 interface PaymentRecord {
   id: number
@@ -87,12 +90,34 @@ const mockPayments: PaymentRecord[] = [
 
 export function Payment() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [payments, setPayments] = useState<PaymentType[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const filteredPayments = mockPayments.filter((payment) =>
-    payment.paymentTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    payment.paymentAmount.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    payment.paymentMethod.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    payment.transactionId.toLowerCase().includes(searchQuery.toLowerCase())
+  useEffect(() => {
+    const loadPayments = async () => {
+      try {
+        setIsLoading(true)
+        // Note: Current backend API only allows super admins to view payments
+        // Members cannot view their own payments through the API yet
+        // This will show an empty state for now
+        setPayments([])
+        setError('Payment history is currently only available to administrators.')
+      } catch (err: any) {
+        setError(err?.message || 'Failed to load payments')
+        toast.error('Failed to load payment history')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadPayments()
+  }, [])
+
+  const filteredPayments = payments.filter((payment) =>
+    payment.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    payment.payment_purpose?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    payment.member_id?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
@@ -122,63 +147,87 @@ export function Payment() {
         </Link>
       </div>
 
+      {/* Error or Info Message */}
+      {error && (
+        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-md">
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
+
       {/* Payment Table */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-12">
-                  #
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
-                  Payment Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
-                  Payment Amount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
-                  Payment Method
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
-                  Transaction ID
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredPayments.length > 0 ? (
-                filteredPayments.map((payment, index) => (
-                  <tr
-                    key={payment.id}
-                    className={index % 2 === 0 ? 'bg-white' : 'bg-[#F5F7F9]'}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {index + 1}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {payment.paymentTitle}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {payment.paymentAmount}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {payment.paymentMethod}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {payment.transactionId}
+        {isLoading ? (
+          <div className="px-6 py-8 text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#3B60C9]"></div>
+            <p className="mt-4 text-sm text-gray-600">Loading payments...</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-12">
+                    #
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                    Payment Purpose
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                    Amount
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredPayments.length > 0 ? (
+                  filteredPayments.map((payment, index) => (
+                    <tr
+                      key={payment.id}
+                      className={index % 2 === 0 ? 'bg-white' : 'bg-[#F5F7F9]'}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {index + 1}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {payment.payment_purpose.replace(/_/g, ' ')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        ৳{payment.payment_amount.toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            payment.status === 'APPROVED'
+                              ? 'bg-green-100 text-green-800'
+                              : payment.status === 'REJECTED'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}
+                        >
+                          {payment.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {new Date(payment.created_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-500">
+                      {error ? 'Payment history is not available' : 'No payments found'}
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-sm">
-                    No payments found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   )

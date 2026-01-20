@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Camera, Edit, Save } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Camera, Edit, Save, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -9,32 +9,84 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { apiClient } from '@/api/client'
+import { toast } from 'sonner'
 
 export function Profile() {
   const [isEditing, setIsEditing] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({
-    fullName: 'Cameron Williamson',
+    fullName: '',
     nameInBengali: '',
-    fathersName: 'Jacob Jones',
-    gender: 'Male',
-    sscMatricYear: '1994',
-    highestDegree: 'First-Class Honours',
-    presentAddress: '4517 Washington Ave. Manchester, Kentucky 39495',
-    permanentAddress: '4517 Washington Ave. Manchester, Kentucky 39495',
-    email: 'rianasingh3@email.com',
-    phone: '(603) 555-0123',
-    profession: 'Corporate',
-    instituteName: 'Data Entry Officer (DEO)',
-    designation: 'Vice-president',
-    tShirtSize: 'XL',
-    bloodGroup: '+B',
-    membershipType: 'Associate member',
+    fathersName: '',
+    gender: '',
+    sscMatricYear: '',
+    highestDegree: '',
+    presentAddress: '',
+    permanentAddress: '',
+    email: '',
+    phone: '',
+    profession: '',
+    instituteName: '',
+    designation: '',
+    tShirtSize: '',
+    bloodGroup: '',
+    membershipType: '',
     password: '***********',
-    idNo: '123456789',
-    passingYear: '1994',
-    displayEmail: 'Useremail@email.com',
-    displayPhone: '##########',
+    idNo: '',
+    passingYear: '',
+    displayEmail: '',
+    displayPhone: '',
   })
+
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        setIsLoading(true)
+        // Fetch fresh user data
+        const user = await apiClient.getCurrentUser()
+        
+        // Map user data to form fields
+        const membershipApp = user.membership_application
+        
+        setFormData((prev) => ({
+          ...prev,
+          fullName: membershipApp?.full_name || user.name || '',
+          nameInBengali: membershipApp?.name_bangla || '',
+          fathersName: membershipApp?.father_name || '',
+          gender: membershipApp?.gender 
+            ? membershipApp.gender.charAt(0) + membershipApp.gender.slice(1).toLowerCase()
+            : '',
+          sscMatricYear: membershipApp?.ssc_year?.toString() || '',
+          highestDegree: membershipApp?.highest_educational_degree || '',
+          presentAddress: membershipApp?.present_address || '',
+          permanentAddress: membershipApp?.permanent_address || '',
+          email: user.email || '',
+          phone: membershipApp?.mobile_number || '',
+          profession: membershipApp?.profession || '',
+          instituteName: membershipApp?.institute_name || '',
+          designation: membershipApp?.designation || '',
+          tShirtSize: membershipApp?.t_shirt_size || '',
+          bloodGroup: membershipApp?.blood_group || '',
+          membershipType: user.primary_member_type 
+            ? user.primary_member_type.charAt(0) + user.primary_member_type.slice(1).toLowerCase() + ' member'
+            : '',
+          password: '***********',
+          idNo: user.member_id || '',
+          passingYear: membershipApp?.ssc_year?.toString() || '',
+          displayEmail: user.email || '',
+          displayPhone: membershipApp?.mobile_number || '',
+        }))
+      } catch (error: any) {
+        console.error('Failed to load profile:', error)
+        toast.error(error.message || 'Failed to load profile data')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadProfileData()
+  }, [])
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -43,6 +95,24 @@ export function Profile() {
   const handleSave = () => {
     // TODO: Implement save functionality
     setIsEditing(false)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-[#3B60C9]" />
+      </div>
+    )
+  }
+
+  // Get initials for avatar
+  const getInitials = (name: string) => {
+    if (!name) return 'U'
+    const parts = name.trim().split(' ')
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+    }
+    return name[0].toUpperCase()
   }
 
   return (
@@ -61,7 +131,9 @@ export function Profile() {
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
               <div className="relative">
                 <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                  <span className="text-2xl font-bold text-black/70">MW</span>
+                  <span className="text-2xl font-bold text-black/70">
+                    {getInitials(formData.fullName)}
+                  </span>
                 </div>
                 <button className="absolute bottom-0 right-0 w-8 h-8 bg-[#3B60C9] rounded-full flex items-center justify-center hover:bg-[#2348B2] transition-colors">
                   <Camera className="w-4 h-4 text-white" />
@@ -69,38 +141,50 @@ export function Profile() {
               </div>
               <div className="text-center md:text-left flex-1">
                 <h2 className="text-xl font-bold text-black mb-1">
-                  Md. Hosne Mobarak Rubai
+                  {formData.fullName || '—'}
                 </h2>
-                <p className="text-sm text-[#3B60C9] font-medium mb-1">
-                  ID No: {formData.idNo}
-                </p>
-                <p className="text-sm text-[#3B60C9] font-medium">
-                  Passing year: {formData.passingYear}
-                </p>
+                {formData.idNo && (
+                  <p className="text-sm text-[#3B60C9] font-medium mb-1">
+                    ID No: {formData.idNo}
+                  </p>
+                )}
+                {formData.passingYear && (
+                  <p className="text-sm text-[#3B60C9] font-medium">
+                    Passing year: {formData.passingYear}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Right Section - Details */}
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 border-l border-gray-200 pl-6">
               <div className="space-y-3">
-                <div>
-                  <span className="text-sm text-black/70">Blood group: </span>
-                  <span className="text-sm font-medium text-black">{formData.bloodGroup}</span>
-                </div>
-                <div>
-                  <span className="text-sm text-black/70">Membership Type: </span>
-                  <span className="text-sm font-medium text-black">{formData.membershipType}</span>
-                </div>
+                {formData.bloodGroup && (
+                  <div>
+                    <span className="text-sm text-black/70">Blood group: </span>
+                    <span className="text-sm font-medium text-black">{formData.bloodGroup}</span>
+                  </div>
+                )}
+                {formData.membershipType && (
+                  <div>
+                    <span className="text-sm text-black/70">Membership Type: </span>
+                    <span className="text-sm font-medium text-black">{formData.membershipType}</span>
+                  </div>
+                )}
               </div>
               <div className="space-y-3">
-                <div>
-                  <span className="text-sm text-black/70">Phone: </span>
-                  <span className="text-sm font-medium text-black">{formData.displayPhone}</span>
-                </div>
-                <div>
-                  <span className="text-sm text-black/70">Email: </span>
-                  <span className="text-sm font-medium text-black">{formData.displayEmail}</span>
-                </div>
+                {formData.displayPhone && (
+                  <div>
+                    <span className="text-sm text-black/70">Phone: </span>
+                    <span className="text-sm font-medium text-black">{formData.displayPhone}</span>
+                  </div>
+                )}
+                {formData.displayEmail && (
+                  <div>
+                    <span className="text-sm text-black/70">Email: </span>
+                    <span className="text-sm font-medium text-black">{formData.displayEmail}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -138,7 +222,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.fullName}</p>
+                <p className="text-sm text-black">{formData.fullName || '—'}</p>
               )}
             </div>
 
@@ -153,7 +237,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.fathersName}</p>
+                <p className="text-sm text-black">{formData.fathersName || '—'}</p>
               )}
             </div>
 
@@ -168,7 +252,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.sscMatricYear}</p>
+                <p className="text-sm text-black">{formData.sscMatricYear || '—'}</p>
               )}
             </div>
 
@@ -183,7 +267,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.presentAddress}</p>
+                <p className="text-sm text-black">{formData.presentAddress || '—'}</p>
               )}
             </div>
 
@@ -199,7 +283,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.email}</p>
+                <p className="text-sm text-black">{formData.email || '—'}</p>
               )}
             </div>
 
@@ -214,7 +298,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.profession}</p>
+                <p className="text-sm text-black">{formData.profession || '—'}</p>
               )}
             </div>
 
@@ -229,7 +313,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.instituteName}</p>
+                <p className="text-sm text-black">{formData.instituteName || '—'}</p>
               )}
             </div>
 
@@ -244,7 +328,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.bloodGroup}</p>
+                <p className="text-sm text-black">{formData.bloodGroup || '—'}</p>
               )}
             </div>
 
@@ -328,7 +412,7 @@ export function Profile() {
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="text-sm text-black">{formData.gender}</p>
+                <p className="text-sm text-black">{formData.gender || '—'}</p>
               )}
             </div>
 
@@ -343,7 +427,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.highestDegree}</p>
+                <p className="text-sm text-black">{formData.highestDegree || '—'}</p>
               )}
             </div>
 
@@ -358,7 +442,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.permanentAddress}</p>
+                <p className="text-sm text-black">{formData.permanentAddress || '—'}</p>
               )}
             </div>
 
@@ -374,7 +458,7 @@ export function Profile() {
                   className="w-full"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.phone}</p>
+                <p className="text-sm text-black">{formData.phone || '—'}</p>
               )}
             </div>
 
@@ -390,7 +474,7 @@ export function Profile() {
                   placeholder="Enter designation"
                 />
               ) : (
-                <p className="text-sm text-black">{formData.designation}</p>
+                <p className="text-sm text-black">{formData.designation || '—'}</p>
               )}
             </div>
 
@@ -416,7 +500,7 @@ export function Profile() {
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="text-sm text-black">{formData.tShirtSize}</p>
+                <p className="text-sm text-black">{formData.tShirtSize || '—'}</p>
               )}
             </div>
 
@@ -439,7 +523,7 @@ export function Profile() {
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="text-sm text-black">{formData.membershipType}</p>
+                <p className="text-sm text-black">{formData.membershipType || '—'}</p>
               )}
             </div>
           </div>
