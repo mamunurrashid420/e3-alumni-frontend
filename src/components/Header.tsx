@@ -45,6 +45,16 @@ export function Header() {
             <span className="sm:hidden">Apply</span>
           </Button>
         </Link>
+        <Link to="/donate">
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
+          >
+            <span className="hidden sm:inline">Make Payment/Donate</span>
+            <span className="sm:hidden">Payment</span>
+          </Button>
+        </Link>
         <Link to="/login">
           <Button
             variant="outline"

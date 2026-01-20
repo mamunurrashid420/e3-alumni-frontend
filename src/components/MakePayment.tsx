@@ -1,6 +1,10 @@
-import { useState, useRef } from 'react'
-import { Link } from '@tanstack/react-router'
-import { Upload } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { Upload, CheckCircle2 } from 'lucide-react'
+import axios from 'axios'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -12,35 +16,202 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-export function MakePayment() {
-  const [paymentPurpose, setPaymentPurpose] = useState('')
-  const [userId] = useState('A-12345678')
-  const [fullName] = useState('Md. Hosne Mobarak Rubai')
-  const [mobileNumber] = useState('+880 ### ### ##')
-  const [donationAmount, setDonationAmount] = useState('')
-  const [donationDescription, setDonationDescription] = useState('')
-  const [paymentProofFile, setPaymentProofFile] = useState<File | null>(null)
+interface MemberInfo {
+  member_id: string
+  name: string
+  address: string
+  mobile_number: string
+}
+
+interface MakePaymentProps {
+  showMemberId?: boolean
+}
+
+// Zod schema for form validation
+const paymentSchema = z.object({
+  member_id: z.string().optional(),
+  payment_purpose: z.string().min(1, 'Please select a payment purpose'),
+  name: z.string().min(1, 'Name is required').trim(),
+  address: z.string().min(1, 'Address is required').trim(),
+  mobile_number: z.string().min(1, 'Mobile number is required').trim(),
+  payment_amount: z.string().min(1, 'Please enter a payment amount').refine(
+    (val) => {
+      const num = parseFloat(val)
+      return !isNaN(num) && num > 0
+    },
+    { message: 'Please enter a valid payment amount' }
+  ),
+  payment_proof_file: z.custom<File>(
+    (val) => val instanceof File,
+    { message: 'Please upload payment proof' }
+  ).refine((file) => {
+    const validTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']
+    return validTypes.includes(file.type)
+  }, {
+    message: 'Invalid file type. Please upload PDF, PNG, or JPG files.',
+  }).refine((file) => {
+    return file.size <= 5 * 1024 * 1024 // 5MB
+  }, {
+    message: 'File size exceeds 5MB limit.',
+  }),
+})
+
+type PaymentFormData = z.infer<typeof paymentSchema>
+
+export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
+  const navigate = useNavigate()
   const [isDragging, setIsDragging] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [fetchingMemberInfo, setFetchingMemberInfo] = useState(false)
+  const [apiErrors, setApiErrors] = useState<Record<string, string[]>>({})
+  const [paymentSubmitted, setPaymentSubmitted] = useState(false)
+  const [submittedPaymentData, setSubmittedPaymentData] = useState<{
+    name: string
+    paymentPurpose: string
+    paymentAmount: string
+    memberId?: string
+  } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const memberIdTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<PaymentFormData>({
+    resolver: zodResolver(paymentSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      member_id: '',
+      payment_purpose: '',
+      name: '',
+      address: '',
+      mobile_number: '',
+      payment_amount: '',
+      payment_proof_file: undefined as any,
+    },
+  })
+
+  const memberId = watch('member_id')
+  const paymentAmount = watch('payment_amount')
+
+  // Function to scroll to first error field
+  const scrollToFirstError = (formErrors?: typeof errors) => {
+    // Field order based on form layout
+    const fieldOrder = [
+      'member_id',
+      'payment_purpose',
+      'name',
+      'address',
+      'mobile_number',
+      'payment_amount',
+      'payment_proof_file',
+    ]
+
+    // Find first error field (check both form errors and API errors)
+    const firstErrorField = fieldOrder.find((field) => {
+      const fieldKey = field as keyof PaymentFormData
+      return (formErrors && formErrors[fieldKey]) || apiErrors[fieldKey]
+    })
+
+    if (firstErrorField) {
+      // Get the element
+      let element: HTMLElement | null = null
+
+      if (firstErrorField === 'payment_purpose') {
+        // For Select, find the trigger element
+        element = document.getElementById('paymentPurpose')
+      } else {
+        // For all other fields including file input, use the field ID
+        element = document.getElementById(firstErrorField)
+      }
+
+      if (element) {
+        // Scroll to element with smooth behavior
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+        // Focus the element if it's focusable
+        if (element instanceof HTMLElement && 'focus' in element) {
+          setTimeout(() => {
+            if (element && 'focus' in element) {
+              ;(element as HTMLElement).focus()
+            }
+          }, 300)
+        }
+      }
+    }
+  }
+
+  // Fetch member info when member_id is entered
+  useEffect(() => {
+    if (memberId && memberId.trim() !== '') {
+      // Clear previous timeout
+      if (memberIdTimeoutRef.current) {
+        clearTimeout(memberIdTimeoutRef.current)
+      }
+
+      // Debounce API call
+      memberIdTimeoutRef.current = setTimeout(async () => {
+        setFetchingMemberInfo(true)
+        try {
+          const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+          const response = await axios.get<MemberInfo>(
+            `${apiBaseUrl}/api/members/${memberId}/info`
+          )
+          const memberInfo = response.data
+          setValue('name', memberInfo.name || '')
+          setValue('address', memberInfo.address || '')
+          setValue('mobile_number', memberInfo.mobile_number || '')
+        } catch (error) {
+          // Member not found or invalid - allow manual entry
+          if (axios.isAxiosError(error) && error.response?.status === 404) {
+            // Clear fields if member not found
+            setValue('name', '')
+            setValue('address', '')
+            setValue('mobile_number', '')
+          }
+        } finally {
+          setFetchingMemberInfo(false)
+        }
+      }, 500) // 500ms debounce
+    } else {
+      // Clear fields if member_id is empty
+      setValue('name', '')
+      setValue('address', '')
+      setValue('mobile_number', '')
+    }
+
+    return () => {
+      if (memberIdTimeoutRef.current) {
+        clearTimeout(memberIdTimeoutRef.current)
+      }
+    }
+  }, [memberId, setValue])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
-      // Validate file type and size
-      const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'image/png', 'image/jpeg', 'image/jpg']
-      const maxSize = 10 * 1024 * 1024 // 10MB
+      // Validate file type and size - only PDF and images
+      const validTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']
+      const maxSize = 5 * 1024 * 1024 // 5MB
       
       if (!validTypes.includes(file.type)) {
-        alert('Invalid file type. Please upload Doc, Pdf, Excel Sheet, PNG, or JPG files.')
+        alert('Invalid file type. Please upload PDF, PNG, or JPG files.')
         return
       }
       
       if (file.size > maxSize) {
-        alert('File size exceeds 10MB limit.')
+        alert('File size exceeds 5MB limit.')
         return
       }
       
-      setPaymentProofFile(file)
+      setValue('payment_proof_file', file, { shouldValidate: true })
     }
   }
 
@@ -50,20 +221,20 @@ export function MakePayment() {
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0]
-      const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'image/png', 'image/jpeg', 'image/jpg']
-      const maxSize = 10 * 1024 * 1024 // 10MB
+      const validTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']
+      const maxSize = 5 * 1024 * 1024 // 5MB
       
       if (!validTypes.includes(file.type)) {
-        alert('Invalid file type. Please upload Doc, Pdf, Excel Sheet, PNG, or JPG files.')
+        alert('Invalid file type. Please upload PDF, PNG, or JPG files.')
         return
       }
       
       if (file.size > maxSize) {
-        alert('File size exceeds 10MB limit.')
+        alert('File size exceeds 5MB limit.')
         return
       }
       
-      setPaymentProofFile(file)
+      setValue('payment_proof_file', file, { shouldValidate: true })
     }
   }
 
@@ -78,26 +249,160 @@ export function MakePayment() {
   }
 
   const calculateTotalAmount = () => {
-    const amount = parseFloat(donationAmount) || 0
-    // Assuming VAT/charge is 0% for now, but can be calculated if needed
+    const amount = parseFloat(paymentAmount) || 0
     return amount
   }
 
   const totalAmount = calculateTotalAmount()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle payment submission logic here
-    console.log('Payment submitted', {
-      paymentPurpose,
-      userId,
-      fullName,
-      mobileNumber,
-      donationAmount,
-      donationDescription,
-      paymentProofFile,
-      totalAmount
-    })
+  // Handle form validation errors
+  const onError = (formErrors: typeof errors) => {
+    scrollToFirstError(formErrors)
+  }
+
+  // Effect to scroll to first error when API errors change
+  useEffect(() => {
+    const hasFieldErrors = Object.keys(apiErrors).some(
+      (key) => key !== '_general' && apiErrors[key]?.length > 0
+    )
+    if (hasFieldErrors) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        scrollToFirstError(errors)
+      }, 100)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiErrors])
+
+  const onSubmit = async (data: PaymentFormData) => {
+    setLoading(true)
+    setApiErrors({})
+
+    try {
+      const apiFormData = new FormData()
+      if (data.member_id) {
+        apiFormData.append('member_id', data.member_id)
+      }
+      apiFormData.append('name', data.name)
+      apiFormData.append('address', data.address)
+      apiFormData.append('mobile_number', data.mobile_number)
+      apiFormData.append('payment_purpose', data.payment_purpose)
+      apiFormData.append('payment_amount', data.payment_amount)
+      apiFormData.append('payment_proof_file', data.payment_proof_file)
+
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+      await axios.post(`${apiBaseUrl}/api/payments`, apiFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      // Success - handle based on page type
+      if (showMemberId) {
+        // Donate page - show success card instead of redirecting
+        setSubmittedPaymentData({
+          name: data.name,
+          paymentPurpose: data.payment_purpose,
+          paymentAmount: data.payment_amount,
+          memberId: data.member_id || undefined,
+        })
+        setPaymentSubmitted(true)
+        // Reset form
+        reset()
+      } else {
+        // Dashboard page - redirect to payment list
+        alert('Payment submitted successfully!')
+        // Reset form
+        reset()
+        navigate({ to: '/payment' })
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data?.errors) {
+        setApiErrors(error.response.data.errors)
+      } else {
+        setApiErrors({
+          _general: [error instanceof Error ? error.message : 'An error occurred while submitting payment'],
+        })
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Show success card if payment was submitted on donate page
+  if (paymentSubmitted && showMemberId && submittedPaymentData) {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 md:p-8 max-w-2xl mx-auto">
+          <div className="text-center space-y-4">
+            <div className="flex justify-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle2 className="w-10 h-10 text-green-600" />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold  mb-2">
+                Payment Details Recorded
+              </h2>
+              <p className="">
+                Thank you for your payment submission. Your payment details have been recorded successfully.
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-6 mt-6 text-left space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">Name:</span>
+                <span className="text-sm font-semibold ">{submittedPaymentData.name}</span>
+              </div>
+              {submittedPaymentData.memberId && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">Member ID:</span>
+                  <span className="text-sm font-semibold ">{submittedPaymentData.memberId}</span>
+                </div>
+              )}
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">Payment Purpose:</span>
+                <span className="text-sm font-semibold ">
+                  {submittedPaymentData.paymentPurpose === 'ASSOCIATE_MEMBERSHIP_FEES' && 'Associate Membership Fees'}
+                  {submittedPaymentData.paymentPurpose === 'GENERAL_MEMBERSHIP_FEES' && 'General Membership Fees'}
+                  {submittedPaymentData.paymentPurpose === 'LIFETIME_MEMBERSHIP_FEES' && 'Lifetime Membership Fees'}
+                  {submittedPaymentData.paymentPurpose === 'SPECIAL_YEARLY_CONTRIBUTION_EXECUTIVE' && 'Special Yearly Contribution (Executive)'}
+                  {submittedPaymentData.paymentPurpose === 'DONATIONS' && 'Donations'}
+                  {submittedPaymentData.paymentPurpose === 'PATRON' && 'Patron'}
+                  {submittedPaymentData.paymentPurpose === 'OTHERS' && 'Others'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">Amount:</span>
+                <span className="text-sm font-semibold text-green-600">
+                  {parseFloat(submittedPaymentData.paymentAmount).toLocaleString()} ৳
+                </span>
+              </div>
+            </div>
+            <div className="pt-4">
+              <p className="text-sm mb-4">
+                Your payment is pending approval. You will be notified once it has been reviewed.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <Button
+                  onClick={() => {
+                    setPaymentSubmitted(false)
+                    setSubmittedPaymentData(null)
+                  }}
+                  className="bg-[#3B60C9] hover:bg-[#3B60C9]/90 text-white"
+                >
+                  Submit Another Payment
+                </Button>
+                <Link to="/">
+                  <Button variant="outline">
+                    Back to Home
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -109,99 +414,149 @@ export function MakePayment() {
           <p className="text-sm">Select your purpose and make your payment</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
+          {apiErrors._general && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-sm text-red-700">{apiErrors._general[0]}</p>
+            </div>
+          )}
+
+          {/* Member Unique ID Number - Only show if showMemberId is true */}
+          {showMemberId && (
+            <div>
+              <label htmlFor="memberId" className="block text-sm font-medium mb-2">
+                Member Unique ID Number
+              </label>
+              <Input
+                id="memberId"
+                type="text"
+                placeholder="Enter member ID (optional)"
+                {...register('member_id')}
+                className={apiErrors.member_id ? 'border-red-500' : ''}
+              />
+              {fetchingMemberInfo && (
+                <p className="mt-1 text-sm">Fetching member information...</p>
+              )}
+              {apiErrors.member_id && (
+                <p className="mt-1 text-sm text-red-600">{apiErrors.member_id[0]}</p>
+              )}
+            </div>
+          )}
+
           {/* Select payment purpose */}
           <div>
             <label htmlFor="paymentPurpose" className="block text-sm font-medium mb-2">
-              Select payment purpose
+              Payment Purpose <span className="text-red-500">*</span>
             </label>
-            <Select
-              value={paymentPurpose}
-              onValueChange={setPaymentPurpose}
-            >
-              <SelectTrigger id="paymentPurpose" className="w-full">
-                <SelectValue placeholder="Select option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="membership">Membership Fee</SelectItem>
-                <SelectItem value="donation">Donation</SelectItem>
-                <SelectItem value="event">Event Registration</SelectItem>
-                <SelectItem value="scholarship">Scholarship Contribution</SelectItem>
-              </SelectContent>
-            </Select>
+            <Controller
+              name="payment_purpose"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger id="paymentPurpose" className={`w-full ${errors.payment_purpose || apiErrors.payment_purpose ? 'border-red-500' : ''}`}>
+                    <SelectValue placeholder="Select payment purpose" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ASSOCIATE_MEMBERSHIP_FEES">Associate Membership fees</SelectItem>
+                    <SelectItem value="GENERAL_MEMBERSHIP_FEES">General Membership fees</SelectItem>
+                    <SelectItem value="LIFETIME_MEMBERSHIP_FEES">Lifetime Membership fees</SelectItem>
+                    <SelectItem value="SPECIAL_YEARLY_CONTRIBUTION_EXECUTIVE">Special Yearly Contribution for Executive Committee Members</SelectItem>
+                    <SelectItem value="DONATIONS">Donations</SelectItem>
+                    <SelectItem value="PATRON">Patron</SelectItem>
+                    <SelectItem value="OTHERS">Others</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {(errors.payment_purpose || apiErrors.payment_purpose) && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.payment_purpose?.message || apiErrors.payment_purpose?.[0]}
+              </p>
+            )}
           </div>
 
-          {/* User ID */}
+          {/* Name */}
           <div>
-            <label htmlFor="userId" className="block text-sm font-medium mb-2">
-              User ID (If any)
+            <label htmlFor="name" className="block text-sm font-medium mb-2">
+              Name <span className="text-red-500">*</span>
             </label>
             <Input
-              id="userId"
+              id="name"
               type="text"
-              value={userId}
-              readOnly
-              className="bg-gray-50"
+              placeholder="Enter full name"
+              {...register('name')}
+              className={errors.name || apiErrors.name ? 'border-red-500' : ''}
             />
+            {(errors.name || apiErrors.name) && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.name?.message || apiErrors.name?.[0]}
+              </p>
+            )}
           </div>
 
-          {/* Full name */}
+          {/* Address */}
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium mb-2">
-              Full name
+            <label htmlFor="address" className="block text-sm font-medium mb-2">
+              Address <span className="text-red-500">*</span>
             </label>
-            <Input
-              id="fullName"
-              type="text"
-              value={fullName}
-              readOnly
-              className="bg-gray-50"
+            <textarea
+              id="address"
+              placeholder="Enter address"
+              rows={3}
+              {...register('address')}
+              className={cn(
+                "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none",
+                (errors.address || apiErrors.address) && 'border-red-500'
+              )}
             />
+            {(errors.address || apiErrors.address) && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.address?.message || apiErrors.address?.[0]}
+              </p>
+            )}
           </div>
 
           {/* Mobile number */}
           <div>
             <label htmlFor="mobileNumber" className="block text-sm font-medium mb-2">
-              Mobile number
+              Mobile Number <span className="text-red-500">*</span>
             </label>
             <Input
               id="mobileNumber"
               type="text"
-              value={mobileNumber}
-              readOnly
-              className="bg-gray-50"
+              placeholder="Enter mobile number"
+              {...register('mobile_number')}
+              className={errors.mobile_number || apiErrors.mobile_number ? 'border-red-500' : ''}
             />
+            {(errors.mobile_number || apiErrors.mobile_number) && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.mobile_number?.message || apiErrors.mobile_number?.[0]}
+              </p>
+            )}
           </div>
 
-          {/* Donation amount */}
+          {/* Payment amount */}
           <div>
-            <label htmlFor="donationAmount" className="block text-sm font-medium mb-2">
-              Donation amount
+            <label htmlFor="paymentAmount" className="block text-sm font-medium mb-2">
+              Payment Amount <span className="text-red-500">*</span>
             </label>
             <Input
-              id="donationAmount"
+              id="paymentAmount"
               type="number"
-              placeholder="Enter donation amount"
-              value={donationAmount}
-              onChange={(e) => setDonationAmount(e.target.value)}
+              placeholder="Enter payment amount"
               min="0"
               step="0.01"
+              {...register('payment_amount')}
+              className={errors.payment_amount || apiErrors.payment_amount ? 'border-red-500' : ''}
             />
-          </div>
-
-          {/* Donation Description */}
-          <div>
-            <label htmlFor="donationDescription" className="block text-sm font-medium mb-2">
-              Donation Description
-            </label>
-            <textarea
-              id="donationDescription"
-              placeholder="Enter donation description"
-              value={donationDescription}
-              onChange={(e) => setDonationDescription(e.target.value)}
-              rows={4}
-              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-            />
+            {(errors.payment_amount || apiErrors.payment_amount) && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.payment_amount?.message || apiErrors.payment_amount?.[0]}
+              </p>
+            )}
           </div>
 
           {/* Total Payable Amount */}
@@ -221,6 +576,7 @@ export function MakePayment() {
               Attachment of payment proof<span className="text-red-500">*</span>
             </label>
             <div
+              id="payment_proof_file"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -229,13 +585,14 @@ export function MakePayment() {
                 "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
                 isDragging
                   ? "border-[#3B60C9] bg-blue-50"
-                  : "border-gray-300 hover:border-gray-400 bg-gray-50"
+                  : "border-gray-300 hover:border-gray-400 bg-gray-50",
+                (errors.payment_proof_file || apiErrors.payment_proof_file) && "border-red-500"
               )}
             >
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".doc,.docx,.pdf,.xls,.xlsx,.png,.jpg,.jpeg"
+                accept=".pdf,.png,.jpg,.jpeg"
                 onChange={handleFileChange}
                 className="hidden"
               />
@@ -244,26 +601,32 @@ export function MakePayment() {
                 Upload any Files or drag and drop
               </p>
               <p className="text-xs">
-                Doc, Pdf, Excel Sheet, PNG, JPG up to 10MB
+                PDF, PNG, JPG up to 5MB
               </p>
-              {paymentProofFile && (
+              {watch('payment_proof_file') && (
                 <p className="text-sm text-[#3B60C9] mt-2 font-medium">
-                  Selected: {paymentProofFile.name}
+                  Selected: {watch('payment_proof_file')?.name}
                 </p>
               )}
             </div>
+            {(errors.payment_proof_file || apiErrors.payment_proof_file) && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.payment_proof_file?.message || apiErrors.payment_proof_file?.[0]}
+              </p>
+            )}
           </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-3 pt-4">
             <Button
               type="submit"
-              className="w-full bg-[#3B60C9] hover:bg-[#3B60C9]/90 text-white h-12 text-base font-medium"
+              disabled={loading}
+              className="w-full bg-[#3B60C9] hover:bg-[#3B60C9]/90 text-white h-12 text-base font-medium disabled:opacity-50"
             >
-              Proceed to payment
+              {loading ? 'Submitting...' : 'Submit Payment'}
             </Button>
             <Link
-              to="/payment"
+              to={showMemberId ? "/" : "/payment"}
               className="text-center text-sm underline"
             >
               Go back

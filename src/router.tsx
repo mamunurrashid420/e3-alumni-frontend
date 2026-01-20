@@ -144,14 +144,25 @@ const paymentRoute = createRoute({
   ),
 })
 
-// Make Payment route
+// Make Payment route (Dashboard Layout - for logged-in users)
 const makePaymentRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/make-payment',
   component: () => (
     <UserSpaceLayout title="Payment Page" subtitle="Select your purpose and make your payment">
-      <MakePayment />
+      <MakePayment showMemberId={false} />
     </UserSpaceLayout>
+  ),
+})
+
+// Make Payment route (Homepage Layout - for public users)
+const makePaymentPublicRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/donate',
+  component: () => (
+    <HomepageLayout>
+      <MakePayment showMemberId={true} />
+    </HomepageLayout>
   ),
 })
 
@@ -229,6 +240,7 @@ const routeTree = rootRoute.addChildren([
   profileRoute,
   paymentRoute,
   makePaymentRoute,
+  makePaymentPublicRoute,
 ])
 
 // Create router
