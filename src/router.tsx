@@ -4,6 +4,7 @@ import { UserSpaceLayout } from '@/layouts/UserSpaceLayout'
 import { Homepage } from '@/components/Homepage'
 import { Registration } from '@/components/Registration'
 import { Login } from '@/components/Login'
+import { Contact } from '@/components/Contact'
 import boardMembersImage from '@/assets/static/board_members.jpeg'
 
 // Root route
@@ -154,10 +155,7 @@ const contactRoute = createRoute({
   path: '/contact',
   component: () => (
     <HomepageLayout>
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
-        <p className="text-gray-600">Get in touch with the Ex-Students Association Of Textile Engineering College,Barishal (ESAT-B).</p>
-      </div>
+      <Contact />
     </HomepageLayout>
   ),
 })
