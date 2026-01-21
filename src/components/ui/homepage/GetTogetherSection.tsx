@@ -68,7 +68,8 @@ export function GetTogetherSection() {
 
       {/* Description */}
       <p className="text-white text-xs md:text-sm leading-relaxed mb-4 md:mb-6 opacity-90">
-        Hello Everybody Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit, Sed Do Eiusmod Termpor Incididunt Ut Labore Et Dolore Magna Aliqua. Ut Enim And Minim Veniam, Quis Nostrud Exercitation Ullamco Laboris Nisi Ut Aliquip Ex Ea
+        
+        We are delighted to inform you that we are going to arrange an alumni get-together. This event will be a great opportunity to reconnect with former classmates, share memories, strengthen our alumni network, and celebrate our journey together. We sincerely hope you will join us and help make this gathering meaningful and memorable. Further details regarding the date, venue, and program will be shared soon. Stay connected!
       </p>
 
       {/* Call to Action Button */}
