@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Facebook, Linkedin, Youtube, Twitter, MapPin, Phone, Mail, ChevronsRight } from 'lucide-react'
+import { Facebook, Linkedin, Youtube, Twitter, MapPin, Phone, Mail, ChevronsRight, MessageCircle } from 'lucide-react'
 import logo from '@/assets/static/logo.png'
 
 export function Footer() {
@@ -118,19 +118,19 @@ export function Footer() {
           <ul className="list-none p-0 m-0 flex flex-col gap-5 max-md:gap-4 max-[640px]:gap-4">
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <MapPin className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">275 Quadra Street Victoria Road, New York</span>
+              <span className="flex-1">Hossain Tower, 5th Floor, Sector #7, Uttara, Dhaka, Bangladesh</span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Phone className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">+1 (237) 382-2839</span>
+              <span className="flex-1">+880 1772-125014</span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
-              <Phone className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">+1 (237) 382-2840</span>
+              <MessageCircle className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
+              <span className="flex-1">+880 1322-918182</span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Mail className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">yourmailaddress@example.com</span>
+              <span className="flex-1">aiftinfo@gmail.com</span>
             </li>
           </ul>
         </div>
