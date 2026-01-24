@@ -17,7 +17,7 @@ export function Footer() {
               />
             </div>
             <p className="font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-w-full max-[1024px]:text-sm max-[640px]:text-xs max-[640px]:leading-5">
-              It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.
+              Jahapur Secondary School Alumni Association (JSSAA) .
             </p>
             <div className="flex gap-3 mt-3 max-md:gap-2 max-[640px]:gap-2">
               <a href="#" className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8" aria-label="Facebook">
