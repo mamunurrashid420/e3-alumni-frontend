@@ -623,7 +623,7 @@ export function Registration() {
                     {/* 01. Membership Type */}
                     <div className="flex flex-col min-h-[120px]">
                       <label className="block text-sm font-medium mb-2">
-                        01. Membership Type <span className="text-red-500">*</span>
+                        Membership Type <span className="text-red-500">*</span>
                       </label>
                       <Controller
                         name="membershipType"
@@ -676,7 +676,7 @@ export function Registration() {
                     {/* 02. Full Name */}
                     <div>
                       <label htmlFor="fullName" className="block text-sm font-medium mb-2">
-                        02. Full Name <span className="text-red-500">*</span>
+                        Full Name <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="fullName"
@@ -697,7 +697,7 @@ export function Registration() {
                     {/* 03. Name (Bangla) */}
                     <div>
                       <label htmlFor="nameBengali" className="block text-sm font-medium mb-2">
-                        03. Name (Bangla) <span className="text-red-500">*</span>
+                        Name (Bangla) <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="nameBengali"
@@ -715,7 +715,7 @@ export function Registration() {
                     {/* 04. Father's Name */}
                     <div>
                       <label htmlFor="fatherName" className="block text-sm font-medium mb-2">
-                        04. Father's Name <span className="text-red-500">*</span>
+                        Father's Name <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="fatherName"
@@ -736,7 +736,7 @@ export function Registration() {
                     {/* 05. Mother's Name */}
                     <div>
                       <label htmlFor="motherName" className="block text-sm font-medium mb-2">
-                        05. Mother's Name
+                        Mother's Name
                       </label>
                       <Input
                         id="motherName"
@@ -752,7 +752,7 @@ export function Registration() {
                     {/* 06. Gender */}
                     <div>
                       <label htmlFor="gender" className="block text-sm font-medium mb-2">
-                        06. Gender <span className="text-red-500">*</span>
+                        Gender <span className="text-red-500">*</span>
                       </label>
                       <Controller
                         name="gender"
@@ -783,7 +783,7 @@ export function Registration() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-x-8">
                       <div className="flex flex-col min-h-[88px]">
                         <label htmlFor="jscYear" className="block text-sm font-medium mb-2">
-                          07. Year of Passing/Batch* - JSC Year: <span className="text-red-500">*</span>
+                          Year of Passing/Batch* - JSC Year: <span className="text-red-500">*</span>
                         </label>
                         <Controller
                           name="jscYear"
@@ -821,7 +821,7 @@ export function Registration() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-x-8">
                       <div className="flex flex-col min-h-[88px]">
                         <label htmlFor="sscYear" className="block text-sm font-medium mb-2">
-                          07. Year of Passing/Batch* - SSC Year: <span className="text-red-500">*</span>
+                          Year of Passing/Batch* - SSC Year: <span className="text-red-500">*</span>
                         </label>
                         <Controller
                           name="sscYear"
@@ -859,7 +859,7 @@ export function Registration() {
                     {/* 09. Studentship Proof Copy */}
                     <div className="flex flex-col">
                       <label htmlFor="studentshipProofType" className="block text-sm font-medium mb-2">
-                        09. Studentship Proof Copy <span className="text-red-500">*</span>
+                        Studentship Proof Copy <span className="text-red-500">*</span>
                       </label>
                       <Controller
                         name="studentshipProofType"
@@ -917,7 +917,7 @@ export function Registration() {
                     {/* 10. Highest Educational Degree */}
                     <div>
                       <label htmlFor="highestDegree" className="block text-sm font-medium mb-2">
-                        10. Highest Educational Degree
+                        Highest Educational Degree
                       </label>
                       <Input
                         id="highestDegree"
@@ -936,7 +936,7 @@ export function Registration() {
                     {/* 11. Present Address */}
                     <div>
                       <label htmlFor="presentAddress" className="block text-sm font-medium mb-2">
-                        11. Present Address <span className="text-red-500">*</span>
+                        Present Address <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="presentAddress"
@@ -954,7 +954,7 @@ export function Registration() {
                     {/* 12. Permanent Address */}
                     <div>
                       <label htmlFor="permanentAddress" className="block text-sm font-medium mb-2">
-                        12. Permanent Address <span className="text-red-500">*</span>
+                        Permanent Address <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="permanentAddress"
@@ -975,7 +975,7 @@ export function Registration() {
                     {/* 13. Email */}
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        13. Email
+                        Email
                       </label>
                       <Input
                         id="email"
@@ -993,7 +993,7 @@ export function Registration() {
                     {/* 14. Mobile/Phone Number */}
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        14. Mobile/Phone Number <span className="text-red-500">*</span>
+                        Mobile/Phone Number <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="phone"
@@ -1014,7 +1014,7 @@ export function Registration() {
                     {/* 15. Profession */}
                     <div>
                       <label htmlFor="profession" className="block text-sm font-medium mb-2">
-                        15. Profession <span className="text-red-500">*</span>
+                        Profession <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="profession"
@@ -1032,7 +1032,7 @@ export function Registration() {
                     {/* 16. Designation */}
                     <div>
                       <label htmlFor="designation" className="block text-sm font-medium mb-2">
-                        16. Designation
+                        Designation
                       </label>
                       <Input
                         id="designation"
@@ -1051,7 +1051,7 @@ export function Registration() {
                     {/* 17. Institute Name/Workplace */}
                     <div>
                       <label htmlFor="instituteName" className="block text-sm font-medium mb-2">
-                        17. Institute Name/Workplace
+                        Institute Name/Workplace
                       </label>
                       <Input
                         id="instituteName"
@@ -1067,7 +1067,7 @@ export function Registration() {
                     {/* 18. Blood Group */}
                     <div>
                       <label htmlFor="bloodGroup" className="block text-sm font-medium mb-2">
-                        18. Blood Group <span className="text-red-500">*</span>
+                        Blood Group <span className="text-red-500">*</span>
                       </label>
                       <Controller
                         name="bloodGroup"
@@ -1103,7 +1103,7 @@ export function Registration() {
                     {/* 19. T-shirt Size */}
                     <div>
                       <label htmlFor="tshirtSize" className="block text-sm font-medium mb-2">
-                        19. T-shirt Size <span className="text-red-500">*</span>
+                        T-shirt Size <span className="text-red-500">*</span>
                       </label>
                       <Controller
                         name="tShirtSize"
@@ -1134,7 +1134,7 @@ export function Registration() {
                     {/* 20. Entry Fee */}
                     <div>
                       <label htmlFor="entryFee" className="block text-sm font-medium mb-2">
-                        20. Entry Fee
+                        Entry Fee
                       </label>
                       <Input
                         id="entryFee"
@@ -1156,7 +1156,7 @@ export function Registration() {
                     {/* 22. Yearly Fee (In Taka) */}
                     <div>
                       <label htmlFor="yearlyFee" className="block text-sm font-medium mb-2">
-                        22. Yearly Fee (In Taka) <span className="text-red-500">*</span>
+                        Yearly Fee (In Taka) <span className="text-red-500">*</span>
                       </label>
                       <Input
                         id="yearlyFee"
@@ -1176,7 +1176,7 @@ export function Registration() {
                     {/* 23. Number of years for payment */}
                     <div>
                       <label htmlFor="paymentYears" className="block text-sm font-medium mb-2">
-                        23. Number of years for payment <span className="text-red-500">*</span>
+                        Number of years for payment <span className="text-red-500">*</span>
                       </label>
                       <Controller
                         name="paymentYears"
@@ -1205,7 +1205,7 @@ export function Registration() {
                   {/* 24. Total Paid Amount with Receipt */}
                   <div className="flex flex-col">
                     <label className="block text-sm font-medium mb-2">
-                      24. Total Paid Amount with Receipt <span className="text-red-500">*</span>
+                      Total Paid Amount with Receipt <span className="text-red-500">*</span>
                     </label>
                     <div
                       className={cn(
