@@ -55,6 +55,7 @@ const registrationSchema = z.object({
     message: 'Please select the number of years for payment',
   }),
   yearlyFee: z.string().min(1, 'Yearly fee is required'),
+  paymentMethod: z.string().min(1, 'Please select a payment method'),
   termsAccepted: z.boolean().refine((val) => val === true, {
     message: 'Please accept the terms and conditions to continue',
   }),
@@ -132,6 +133,7 @@ export function Registration() {
       bloodGroup: undefined,
       entryFee: '',
       paymentYears: '',
+      paymentMethod: '',
       yearlyFee: '',
       termsAccepted: false,
       studentshipProofFile: undefined,
@@ -141,6 +143,7 @@ export function Registration() {
 
   const membershipType = watch('membershipType')
   const yearlyFee = watch('yearlyFee')
+  const paymentMethod = watch('paymentMethod')
   const paymentYears = watch('paymentYears')
   const studentshipProofFile = watch('studentshipProofFile')
   const paymentReceiptFile = watch('paymentReceiptFile')
@@ -262,6 +265,10 @@ export function Registration() {
   const calculateTotalAmount = () => {
     if (!yearlyFee || !paymentYears) return 0
     
+    if (paymentYears === 'lifetime') {
+      return parseInt(yearlyFee) || 0
+    }
+
     const years = parseInt(paymentYears) || 0
     const fee = parseInt(yearlyFee) || 0
     return fee * years
@@ -354,6 +361,11 @@ export function Registration() {
       toast.error('Please select the number of years for payment')
       return
     }
+    if (!data.paymentMethod || data.paymentMethod.trim() === '') {
+      setLoading(false)
+      toast.error('Please select a payment method')
+      return
+    }
     if (!(data.studentshipProofFile instanceof File)) {
       setLoading(false)
       toast.error('Please upload your studentship proof copy')
@@ -383,6 +395,7 @@ export function Registration() {
     apiFormData.append('t_shirt_size', mapTShirtSize(data.tShirtSize))
     apiFormData.append('blood_group', data.bloodGroup)
     apiFormData.append('payment_years', data.paymentYears)
+    apiFormData.append('payment_method', data.paymentMethod)
     apiFormData.append('studentship_proof_file', data.studentshipProofFile)
     apiFormData.append('receipt_file', data.paymentReceiptFile)
 
@@ -480,6 +493,14 @@ export function Registration() {
     // Clear year fields when switching membership types
     setValue('jscYear', '')
     setValue('sscYear', '')
+    
+    // Set payment years for lifetime, clear for others
+    if (value === 'lifetime') {
+      setValue('paymentYears', 'lifetime')
+    } else {
+      setValue('paymentYears', '')
+    }
+    
     // Yearly fee and entry fee will be auto-populated by useEffect
   }
 
@@ -1182,16 +1203,28 @@ export function Registration() {
                         name="paymentYears"
                         control={control}
                         render={({ field }) => (
-                          <Select value={field.value || ''} onValueChange={field.onChange}>
-                            <SelectTrigger id="paymentYears">
-                              <SelectValue placeholder="Select number of years" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="1">1 Year</SelectItem>
-                              <SelectItem value="2">2 Years</SelectItem>
-                              <SelectItem value="3">3 Years</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          membershipType === 'lifetime' ? (
+                            <Input
+                              value="Lifetime"
+                              disabled
+                              className="bg-gray-100 cursor-not-allowed font-medium text-gray-900"
+                              readOnly
+                            />
+                          ) : (
+                            <Select 
+                              value={field.value || ''} 
+                              onValueChange={field.onChange}
+                            >
+                              <SelectTrigger id="paymentYears">
+                                <SelectValue placeholder="Select number of years" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1">1 Year</SelectItem>
+                                <SelectItem value="2">2 Years</SelectItem>
+                                <SelectItem value="3">3 Years</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )
                         )}
                       />
                       {(errors.paymentYears || apiErrors.payment_years) && (
@@ -1200,6 +1233,38 @@ export function Registration() {
                         </p>
                       )}
                     </div>
+                  </div>
+
+                  {/* Payment Method */}
+                  <div className="flex flex-col">
+                    <label htmlFor="paymentMethod" className="block text-sm font-medium mb-2">
+                      Payment Method <span className="text-red-500">*</span>
+                    </label>
+                    <Controller
+                      name="paymentMethod"
+                      control={control}
+                      render={({ field }) => (
+                        <Select value={field.value || ''} onValueChange={field.onChange}>
+                          <SelectTrigger id="paymentMethod">
+                            <SelectValue placeholder="Select payment method" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="BKASH">BKash</SelectItem>
+                            <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {(errors.paymentMethod || apiErrors.payment_method) && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.paymentMethod?.message || apiErrors.payment_method?.[0]}
+                      </p>
+                    )}
+                    {paymentMethod === 'BKASH' && (
+                       <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md text-blue-800 text-sm font-medium">
+                          Send Money to 01686787972
+                       </div>
+                    )}
                   </div>
 
                   {/* 24. Total Paid Amount with Receipt */}
