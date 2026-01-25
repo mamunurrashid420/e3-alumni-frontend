@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Upload, CheckCircle2 } from 'lucide-react'
 import axios from 'axios'
+import { toast } from 'sonner'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -279,12 +280,12 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       const maxSize = 5 * 1024 * 1024 // 5MB
       
       if (!validTypes.includes(file.type)) {
-        alert('Invalid file type. Please upload PDF, PNG, or JPG files.')
+        toast.error('Invalid file type. Please upload PDF, PNG, or JPG files.')
         return
       }
       
       if (file.size > maxSize) {
-        alert('File size exceeds 5MB limit.')
+        toast.error('File size exceeds 5MB limit.')
         return
       }
       
@@ -302,12 +303,12 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       const maxSize = 5 * 1024 * 1024 // 5MB
       
       if (!validTypes.includes(file.type)) {
-        alert('Invalid file type. Please upload PDF, PNG, or JPG files.')
+        toast.error('Invalid file type. Please upload PDF, PNG, or JPG files.')
         return
       }
       
       if (file.size > maxSize) {
-        alert('File size exceeds 5MB limit.')
+        toast.error('File size exceeds 5MB limit.')
         return
       }
       
@@ -416,11 +417,12 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
           memberId: data.member_id || undefined,
         })
         setPaymentSubmitted(true)
+        toast.success('Payment submitted successfully!')
         // Reset form
         reset()
       } else {
         // Dashboard page - redirect to payment list
-        alert('Payment submitted successfully!')
+        toast.success('Payment submitted successfully!')
         // Reset form
         reset()
         navigate({ to: '/payment' })
@@ -428,10 +430,13 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data?.errors) {
         setApiErrors(error.response.data.errors)
+        toast.error('Please check the form for errors')
       } else {
+        const errorMessage = error instanceof Error ? error.message : 'An error occurred while submitting payment'
         setApiErrors({
-          _general: [error instanceof Error ? error.message : 'An error occurred while submitting payment'],
+          _general: [errorMessage],
         })
+        toast.error(errorMessage)
       }
     } finally {
       setLoading(false)
