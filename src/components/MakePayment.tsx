@@ -41,6 +41,7 @@ const createPaymentSchema = (isAuthenticated: boolean) => z.object({
   mobile_number: isAuthenticated 
     ? z.string().optional() 
     : z.string().min(1, 'Mobile number is required').trim(),
+  payment_method: z.string().min(1, 'Please select a payment method'),
   payment_amount: z.string().min(1, 'Please enter a payment amount').refine(
     (val) => {
       const num = parseFloat(val)
@@ -99,6 +100,7 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
     defaultValues: {
       member_id: '',
       payment_purpose: '',
+      payment_method: '',
       name: '',
       address: '',
       mobile_number: '',
@@ -135,6 +137,41 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
 
   const memberId = watch('member_id')
   const paymentAmount = watch('payment_amount')
+  const paymentMethod = watch('payment_method')
+  const paymentPurpose = watch('payment_purpose')
+
+  // Auto-populate payment amount based on purpose
+  useEffect(() => {
+    let feeValue = ''
+    switch (paymentPurpose) {
+      case 'GENERAL_MEMBERSHIP_FEES':
+      case 'YEARLY_SUBSCRIPTION_GENERAL_MEMBER':
+        feeValue = '500'
+        break
+      case 'LIFETIME_MEMBERSHIP_FEES':
+      case 'YEARLY_SUBSCRIPTION_LIFETIME_MEMBER':
+        feeValue = '10000'
+        break
+      case 'ASSOCIATE_MEMBERSHIP_FEES':
+      case 'YEARLY_SUBSCRIPTION_ASSOCIATE_MEMBER':
+        feeValue = '300'
+        break
+      default:
+        // Keep existing value or clear it? 
+        // If we clear it, it might annoy users switching from a preset to custom.
+        // But if we don't, the old preset value remains.
+        // Given the requirement "show total amount to be paid", let's clear it if it's not one of the presets,
+        // so the user knows they need to enter it.
+        // However, we should check if the current amount is one of the *other* preset values before clearing.
+        // For simplicity and user experience, if the user selects a preset type, we set it.
+        // If they select 'OTHERS' or 'DONATIONS', we might want to clear it if it equals one of the other presets.
+        break
+    }
+
+    if (feeValue) {
+      setValue('payment_amount', feeValue)
+    }
+  }, [paymentPurpose, setValue])
 
   // Function to scroll to first error field
   const scrollToFirstError = (formErrors?: typeof errors) => {
@@ -145,6 +182,7 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       'name',
       'address',
       'mobile_number',
+      'payment_method',
       'payment_amount',
       'payment_proof_file',
     ]
@@ -162,6 +200,8 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       if (firstErrorField === 'payment_purpose') {
         // For Select, find the trigger element
         element = document.getElementById('paymentPurpose')
+      } else if (firstErrorField === 'payment_method') {
+        element = document.getElementById('paymentMethod')
       } else {
         // For all other fields including file input, use the field ID
         element = document.getElementById(firstErrorField)
@@ -343,6 +383,7 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       apiFormData.append('address', address || '')
       apiFormData.append('mobile_number', mobile_number || '')
       apiFormData.append('payment_purpose', data.payment_purpose)
+      apiFormData.append('payment_method', data.payment_method)
       apiFormData.append('payment_amount', data.payment_amount)
       apiFormData.append('payment_proof_file', data.payment_proof_file)
 
@@ -617,6 +658,43 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
               )}
             </div>
           )}
+
+          {/* Payment Method */}
+          <div>
+            <label htmlFor="paymentMethod" className="block text-sm font-medium mb-2">
+              Payment Method <span className="text-red-500">*</span>
+            </label>
+            <Controller
+              name="payment_method"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger id="paymentMethod" className={`w-full ${errors.payment_method || apiErrors.payment_method ? 'border-red-500' : ''}`}>
+                    <SelectValue placeholder="Select payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="BKASH">BKash</SelectItem>
+                    <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {(errors.payment_method || apiErrors.payment_method) && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.payment_method?.message || apiErrors.payment_method?.[0]}
+              </p>
+            )}
+            
+            {/* Show BKash number if BKash is selected */}
+            {paymentMethod === 'BKASH' && (
+               <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md text-blue-800 text-sm font-medium">
+                  Send Money to 01686787972
+               </div>
+            )}
+          </div>
 
           {/* Payment amount */}
           <div>
