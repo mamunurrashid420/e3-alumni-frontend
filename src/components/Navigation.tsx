@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from '@tanstack/react-router'
-import { LayoutDashboard, User, CreditCard, Settings, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, User, CreditCard, Settings, LogOut, Menu, X, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/authStore'
 import { toast } from 'sonner'
@@ -12,18 +12,19 @@ interface NavigationItem {
   href: string
 }
 
-const navigationItems: NavigationItem[] = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: User, label: 'Profile', href: '/profile' },
-  { icon: CreditCard, label: 'Payment', href: '/payment' },
-  // { icon: Settings, label: 'Settings', href: '/settings' },
-]
-
 export function Navigation() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { logout } = useAuthStore()
+  const { logout, user } = useAuthStore()
   const [isOpen, setIsOpen] = useState(false)
+
+  const navigationItems: NavigationItem[] = [
+    { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
+    { icon: User, label: 'Profile', href: '/profile' },
+    { icon: CreditCard, label: 'Payment', href: '/payment' },
+    { icon: FileText, label: 'Submit Self Declaration', href: '/self-declaration' },
+    // { icon: Settings, label: 'Settings', href: '/settings' },
+  ]
 
   const handleLogout = async () => {
     try {

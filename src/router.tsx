@@ -111,6 +111,7 @@ import { Dashboard } from '@/components/Dashboard'
 import { Profile } from '@/components/Profile'
 import { Payment } from '@/components/Payment'
 import { MakePayment } from '@/components/MakePayment'
+import { SelfDeclaration } from '@/components/SelfDeclaration'
 
 // Dashboard route
 const dashboardRoute = createRoute({
@@ -172,6 +173,19 @@ const makePaymentPublicRoute = createRoute({
     <HomepageLayout>
       <MakePayment showMemberId={true} />
     </HomepageLayout>
+  ),
+})
+
+// Self Declaration route
+const selfDeclarationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/self-declaration',
+  component: () => (
+    <ProtectedRoute>
+      <UserSpaceLayout title="Self Declaration" subtitle="Submit your self-declaration form">
+        <SelfDeclaration />
+      </UserSpaceLayout>
+    </ProtectedRoute>
   ),
 })
 
@@ -250,6 +264,7 @@ const routeTree = rootRoute.addChildren([
   paymentRoute,
   makePaymentRoute,
   makePaymentPublicRoute,
+  selfDeclarationRoute,
 ])
 
 // Create router

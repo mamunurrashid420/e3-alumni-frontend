@@ -2,6 +2,8 @@
 
 export type PaymentStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
+export type SelfDeclarationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
 export type PaymentPurpose =
   | 'ASSOCIATE_MEMBERSHIP_FEES'
   | 'GENERAL_MEMBERSHIP_FEES'
@@ -12,6 +14,36 @@ export type PaymentPurpose =
   | 'OTHERS';
 
 export type MembershipType = 'GENERAL' | 'LIFETIME' | 'ASSOCIATE';
+
+export interface MemberType {
+  id: number;
+  name: string;
+  description: string | null;
+}
+
+export interface SelfDeclaration {
+  id: number;
+  user?: {
+    id: number;
+    name: string;
+    email: string | null;
+    phone: string | null;
+    member_id: string | null;
+  };
+  name: string;
+  signature_file: string | null;
+  secondary_member_type?: MemberType;
+  date: string;
+  status: SelfDeclarationStatus;
+  approved_by?: {
+    id: number;
+    name: string;
+  };
+  approved_at: string | null;
+  rejected_reason: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 export interface MembershipApplication {
   id: number;
@@ -54,6 +86,8 @@ export interface User {
   role: 'super_admin' | 'member';
   primary_member_type: MembershipType | null;
   secondary_member_type_id: number | null;
+  secondary_member_type?: MemberType | null;
+  latest_self_declaration?: SelfDeclaration | null;
   member_id: string | null;
   email_verified_at: string | null;
   created_at: string;

@@ -17,7 +17,8 @@ export function ProfileCard() {
   const userName = user?.name || 'Member'
   const initials = getInitials(userName)
   const memberId = user?.member_id || 'N/A'
-  const memberType = user?.primary_member_type || 'N/A'
+  const primaryMemberType = user?.primary_member_type || 'N/A'
+  const secondaryMemberType = user?.secondary_member_type
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
@@ -37,7 +38,12 @@ export function ProfileCard() {
         </div>
         <h4 className="text-lg font-bold text-black mb-1">{userName}</h4>
         <p className="text-sm text-black/70 mb-1">Member ID: {memberId}</p>
-        <p className="text-sm text-black/60">Type: {memberType}</p>
+        <div className="text-sm text-black/60">
+          <p>{primaryMemberType}</p>
+          {secondaryMemberType && (
+            <p className="mt-1">{secondaryMemberType.name}</p>
+          )}
+        </div>
       </div>
     </div>
   )

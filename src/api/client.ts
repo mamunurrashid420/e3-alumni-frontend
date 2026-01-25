@@ -8,6 +8,8 @@ import type {
   PaginatedResponse,
   Payment,
   ApiError,
+  SelfDeclaration,
+  MemberType,
 } from '@/types/api';
 import { endpoints } from './endpoints';
 
@@ -134,6 +136,39 @@ class ApiClient {
   async getPayment(id: number): Promise<{ data: Payment }> {
     const response = await this.client.get<{ data: Payment }>(
       endpoints.payment(id)
+    );
+    return response.data;
+  }
+
+  // Self Declaration methods
+  async submitSelfDeclaration(data: {
+    name: string;
+    signature_file: File;
+    secondary_member_type_id: number;
+    date: string;
+  }): Promise<{ data: SelfDeclaration }> {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('signature_file', data.signature_file);
+    formData.append('secondary_member_type_id', data.secondary_member_type_id.toString());
+    formData.append('date', data.date);
+
+    const response = await this.client.post<{ data: SelfDeclaration }>(
+      endpoints.selfDeclarations,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  }
+
+  // Member Type methods
+  async getMemberTypes(): Promise<{ data: MemberType[] }> {
+    const response = await this.client.get<{ data: MemberType[] }>(
+      endpoints.memberTypes
     );
     return response.data;
   }

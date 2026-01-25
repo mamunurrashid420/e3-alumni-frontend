@@ -44,7 +44,7 @@ export function OurResponsibilitySection() {
     },
     {
       icon: <Building2 className="w-full h-full" style={{ color: '#121212' }} />,
-      title: 'Help Our University',
+      title: 'Help Our School',
       description: 'De create building thinking about your requirment and latest treand on our marketplace area'
     },
     {
