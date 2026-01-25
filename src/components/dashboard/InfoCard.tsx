@@ -8,6 +8,7 @@ interface InfoCardProps {
   description: string
   actionIcon?: 'download' | 'arrow'
   onAction?: () => void
+  isLoading?: boolean
 }
 
 export function InfoCard({
@@ -16,6 +17,7 @@ export function InfoCard({
   description,
   actionIcon = 'arrow',
   onAction,
+  isLoading = false,
 }: InfoCardProps) {
   const ActionIcon = actionIcon === 'download' ? Download : ArrowRight
 
@@ -28,14 +30,19 @@ export function InfoCard({
       </div>
       <button
         onClick={onAction}
+        disabled={isLoading}
         className={cn(
           'flex-shrink-0 p-2 rounded-full transition-colors',
           actionIcon === 'download'
-            ? 'text-black hover:bg-gray-100'
-            : 'bg-[#3B60C9] text-white hover:bg-[#2348B2]'
+            ? 'text-black hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed'
+            : 'bg-[#3B60C9] text-white hover:bg-[#2348B2] disabled:opacity-50 disabled:cursor-not-allowed'
         )}
       >
-        <ActionIcon className="w-5 h-5" />
+        {isLoading ? (
+          <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        ) : (
+          <ActionIcon className="w-5 h-5" />
+        )}
       </button>
     </div>
   )
