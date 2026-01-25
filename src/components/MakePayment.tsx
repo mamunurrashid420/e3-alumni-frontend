@@ -433,6 +433,9 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
                   {submittedPaymentData.paymentPurpose === 'ASSOCIATE_MEMBERSHIP_FEES' && 'Associate Membership Fees'}
                   {submittedPaymentData.paymentPurpose === 'GENERAL_MEMBERSHIP_FEES' && 'General Membership Fees'}
                   {submittedPaymentData.paymentPurpose === 'LIFETIME_MEMBERSHIP_FEES' && 'Lifetime Membership Fees'}
+                  {submittedPaymentData.paymentPurpose === 'YEARLY_SUBSCRIPTION_ASSOCIATE_MEMBER' && 'Yearly Subscription for Associate Member'}
+                  {submittedPaymentData.paymentPurpose === 'YEARLY_SUBSCRIPTION_GENERAL_MEMBER' && 'Yearly Subscription for General Member'}
+                  {submittedPaymentData.paymentPurpose === 'YEARLY_SUBSCRIPTION_LIFETIME_MEMBER' && 'Yearly Subscription for Lifetime Member'}
                   {submittedPaymentData.paymentPurpose === 'SPECIAL_YEARLY_CONTRIBUTION_EXECUTIVE' && 'Special Yearly Contribution (Executive)'}
                   {submittedPaymentData.paymentPurpose === 'DONATIONS' && 'Donations'}
                   {submittedPaymentData.paymentPurpose === 'PATRON' && 'Patron'}
@@ -531,6 +534,9 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
                     <SelectItem value="ASSOCIATE_MEMBERSHIP_FEES">Associate Membership fees</SelectItem>
                     <SelectItem value="GENERAL_MEMBERSHIP_FEES">General Membership fees</SelectItem>
                     <SelectItem value="LIFETIME_MEMBERSHIP_FEES">Lifetime Membership fees</SelectItem>
+                    <SelectItem value="YEARLY_SUBSCRIPTION_ASSOCIATE_MEMBER">Yearly Subscription for Associate Member</SelectItem>
+                    <SelectItem value="YEARLY_SUBSCRIPTION_GENERAL_MEMBER">Yearly Subscription for General Member</SelectItem>
+                    <SelectItem value="YEARLY_SUBSCRIPTION_LIFETIME_MEMBER">Yearly Subscription for Lifetime Member</SelectItem>
                     <SelectItem value="SPECIAL_YEARLY_CONTRIBUTION_EXECUTIVE">Special Yearly Contribution for Executive Committee Members</SelectItem>
                     <SelectItem value="DONATIONS">Donations</SelectItem>
                     <SelectItem value="PATRON">Patron</SelectItem>
