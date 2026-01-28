@@ -73,6 +73,12 @@ const registrationSchema = z.object({
   paymentReceiptFile: z.union([z.instanceof(File), z.undefined()]).refine((val) => val instanceof File, {
     message: 'Please upload your payment receipt',
   }),
+  photo: z.union([z.instanceof(File), z.undefined()]).refine((val) => val instanceof File, {
+    message: 'Please upload a beautiful photo of you',
+  }),
+  signature: z.union([z.instanceof(File), z.undefined()]).refine((val) => val instanceof File, {
+    message: 'Please upload your signature',
+  }),
 }).superRefine((data, ctx) => {
   // For general and lifetime members: SSC year is required
   if (data.membershipType === 'general' || data.membershipType === 'lifetime') {
@@ -109,6 +115,8 @@ export function Registration() {
   
   const studentshipProofFileInputRef = useRef<HTMLInputElement>(null)
   const paymentReceiptFileInputRef = useRef<HTMLInputElement>(null)
+  const photoFileInputRef = useRef<HTMLInputElement>(null)
+  const signatureFileInputRef = useRef<HTMLInputElement>(null)
 
   const {
     register,
@@ -146,6 +154,8 @@ export function Registration() {
       termsAccepted: false,
       studentshipProofFile: undefined,
       paymentReceiptFile: undefined,
+      photo: undefined,
+      signature: undefined,
     },
   })
 
@@ -155,6 +165,8 @@ export function Registration() {
   const paymentYears = watch('paymentYears')
   const studentshipProofFile = watch('studentshipProofFile')
   const paymentReceiptFile = watch('paymentReceiptFile')
+  const photo = watch('photo')
+  const signature = watch('signature')
 
   // Auto-populate yearly fee and entry fee with 1 year of membership fee based on membership type
   useEffect(() => {
@@ -192,6 +204,22 @@ export function Registration() {
     
     if (!allowedTypes.includes(file.type)) {
       return { valid: false, error: 'Invalid file type. Please upload a PDF, JPG, JPEG, or PNG file' }
+    }
+    
+    return { valid: true }
+  }
+
+  // Image validation helper (for photo and signature)
+  const validateImageFile = (file: File): { valid: boolean; error?: string } => {
+    const maxSize = 5 * 1024 * 1024 // 5 MB in bytes
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png']
+    
+    if (file.size > maxSize) {
+      return { valid: false, error: 'File size is too large. Please upload a file smaller than 5 MB' }
+    }
+    
+    if (!allowedTypes.includes(file.type)) {
+      return { valid: false, error: 'Invalid file type. Please upload a JPG, JPEG, or PNG image' }
     }
     
     return { valid: true }
@@ -261,6 +289,78 @@ export function Registration() {
         setApiErrors((prev: FormErrors) => {
           const newErrors = { ...prev }
           delete newErrors.receipt_file
+          return newErrors
+        })
+      } else {
+        toast.error(validation.error || 'Invalid file')
+      }
+    }
+  }
+
+  const handlePhotoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      const validation = validateImageFile(file)
+      if (validation.valid) {
+        setValue('photo', file, { shouldValidate: true })
+        setApiErrors((prev: FormErrors) => {
+          const newErrors = { ...prev }
+          delete newErrors.photo
+          return newErrors
+        })
+      } else {
+        toast.error(validation.error || 'Invalid file')
+        e.target.value = ''
+      }
+    }
+  }
+
+  const handlePhotoDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0]
+      const validation = validateImageFile(file)
+      if (validation.valid) {
+        setValue('photo', file, { shouldValidate: true })
+        setApiErrors((prev: FormErrors) => {
+          const newErrors = { ...prev }
+          delete newErrors.photo
+          return newErrors
+        })
+      } else {
+        toast.error(validation.error || 'Invalid file')
+      }
+    }
+  }
+
+  const handleSignatureFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      const validation = validateImageFile(file)
+      if (validation.valid) {
+        setValue('signature', file, { shouldValidate: true })
+        setApiErrors((prev: FormErrors) => {
+          const newErrors = { ...prev }
+          delete newErrors.signature
+          return newErrors
+        })
+      } else {
+        toast.error(validation.error || 'Invalid file')
+        e.target.value = ''
+      }
+    }
+  }
+
+  const handleSignatureDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0]
+      const validation = validateImageFile(file)
+      if (validation.valid) {
+        setValue('signature', file, { shouldValidate: true })
+        setApiErrors((prev: FormErrors) => {
+          const newErrors = { ...prev }
+          delete newErrors.signature
           return newErrors
         })
       } else {
@@ -384,6 +484,16 @@ export function Registration() {
       toast.error('Please upload your payment receipt')
       return
     }
+    if (!(data.photo instanceof File)) {
+      setLoading(false)
+      toast.error('Please upload a beautiful photo of you')
+      return
+    }
+    if (!(data.signature instanceof File)) {
+      setLoading(false)
+      toast.error('Please upload your signature')
+      return
+    }
 
     const apiFormData = new FormData()
 
@@ -411,6 +521,8 @@ export function Registration() {
     apiFormData.append('payment_method', data.paymentMethod)
     apiFormData.append('studentship_proof_file', data.studentshipProofFile)
     apiFormData.append('receipt_file', data.paymentReceiptFile)
+    apiFormData.append('photo', data.photo)
+    apiFormData.append('signature', data.signature)
 
     // Optional fields
     if (data.motherName) {
@@ -1127,6 +1239,81 @@ export function Registration() {
                       {(errors.bloodGroup || apiErrors.blood_group) && (
                         <p className="mt-1 text-sm text-red-600">
                           {errors.bloodGroup?.message || apiErrors.blood_group?.[0]}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Photo and Signature */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-x-8">
+                    {/* Beautiful photo of you */}
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-medium mb-2">
+                        Beautiful photo of you <span className="text-red-500">*</span>
+                      </label>
+                      <div
+                        className={cn(
+                          "border-2 border-dashed border-gray-300 rounded-md p-4 sm:p-6 text-center cursor-pointer hover:border-[#3B60C9] transition-colors",
+                          photo && "border-[#3B60C9] bg-blue-50"
+                        )}
+                        onDrop={handlePhotoDrop}
+                        onDragOver={(e) => e.preventDefault()}
+                        onClick={() => photoFileInputRef.current?.click()}
+                      >
+                        <input
+                          ref={photoFileInputRef}
+                          type="file"
+                          className="hidden"
+                          accept="image/jpeg,image/jpg,image/png"
+                          onChange={handlePhotoFileChange}
+                        />
+                        <Upload className="w-8 h-8 mx-auto mb-2 text-black" />
+                        <p className="text-sm text-black mb-1">
+                          {photo ? photo.name : "Upload any Files or drag and drop"}
+                        </p>
+                        <p className="text-xs text-black">
+                          PNG, JPG, JPEG up to 5MB
+                        </p>
+                      </div>
+                      {(errors.photo || apiErrors.photo) && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.photo?.message || apiErrors.photo?.[0]}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Signature */}
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-medium mb-2">
+                        Signature <span className="text-red-500">*</span>
+                      </label>
+                      <div
+                        className={cn(
+                          "border-2 border-dashed border-gray-300 rounded-md p-4 sm:p-6 text-center cursor-pointer hover:border-[#3B60C9] transition-colors",
+                          signature && "border-[#3B60C9] bg-blue-50"
+                        )}
+                        onDrop={handleSignatureDrop}
+                        onDragOver={(e) => e.preventDefault()}
+                        onClick={() => signatureFileInputRef.current?.click()}
+                      >
+                        <input
+                          ref={signatureFileInputRef}
+                          type="file"
+                          className="hidden"
+                          accept="image/jpeg,image/jpg,image/png"
+                          onChange={handleSignatureFileChange}
+                        />
+                        <Upload className="w-8 h-8 mx-auto mb-2 text-black" />
+                        <p className="text-sm text-black mb-1">
+                          {signature ? signature.name : "Upload any Files or drag and drop"}
+                        </p>
+                        <p className="text-xs text-black">
+                          PNG, JPG, JPEG up to 5MB
+                        </p>
+                      </div>
+                      {(errors.signature || apiErrors.signature) && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.signature?.message || apiErrors.signature?.[0]}
                         </p>
                       )}
                     </div>
