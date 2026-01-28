@@ -16,6 +16,7 @@ import { MissionAndVision } from '@/components/MissionAndVision'
 import { NewsAndEvents } from '@/components/NewsAndEvents'
 import { Contact } from '@/components/Contact'
 import { Membership } from '@/components/Membership'
+import { ExecutiveMembers } from '@/components/ExecutiveMembers'
 
 // Root route
 const rootRoute = createRootRoute({
@@ -89,6 +90,17 @@ const missionVisionRoute = createRoute({
   component: () => (
     <HomepageLayout>
       <MissionAndVision />
+    </HomepageLayout>
+  ),
+})
+
+// Executive Members route
+const executiveMembersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about/executive-members',
+  component: () => (
+    <HomepageLayout>
+      <ExecutiveMembers />
     </HomepageLayout>
   ),
 })
@@ -266,6 +278,7 @@ const routeTree = rootRoute.addChildren([
   secretaryMessageRoute,
   historyRoute,
   missionVisionRoute,
+  executiveMembersRoute,
   scholarshipRoute,
   newsEventsRoute,
   membershipRoute,

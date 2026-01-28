@@ -29,6 +29,7 @@ export function Header() {
     { label: 'Mission & Vision', href: '/about/mission-vision' },
     { label: 'Message from the President', href: '/about/president' },
     { label: 'Message from the General Secretary', href: '/about/secretary' },
+    { label: 'Executive Members', href: '/about/executive-members' },
   ]
 
   return (
