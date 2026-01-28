@@ -74,7 +74,7 @@ const registrationSchema = z.object({
     message: 'Please upload your payment receipt',
   }),
   photo: z.union([z.instanceof(File), z.undefined()]).refine((val) => val instanceof File, {
-    message: 'Please upload a beautiful photo of you',
+    message: 'Please upload a formal photo of yourself',
   }),
   signature: z.union([z.instanceof(File), z.undefined()]).refine((val) => val instanceof File, {
     message: 'Please upload your signature',
@@ -486,7 +486,7 @@ export function Registration() {
     }
     if (!(data.photo instanceof File)) {
       setLoading(false)
-      toast.error('Please upload a beautiful photo of you')
+      toast.error('Please upload a formal photo of yourself')
       return
     }
     if (!(data.signature instanceof File)) {
@@ -1249,7 +1249,7 @@ export function Registration() {
                     {/* Beautiful photo of you */}
                     <div className="flex flex-col">
                       <label className="block text-sm font-medium mb-2">
-                        Beautiful photo of you <span className="text-red-500">*</span>
+                        Formal photo of yourself <span className="text-red-500">*</span>
                       </label>
                       <div
                         className={cn(
