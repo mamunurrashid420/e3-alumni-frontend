@@ -1,30 +1,42 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Download } from 'lucide-react'
 import { MembershipCertificate } from './certificate/MembershipCertificate'
 import { useAuthStore } from '@/stores/authStore'
 import { generateCertificate } from '@/lib/certificateGenerator'
+import { apiClient } from '@/api/client'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
 
 export function Certificate() {
   const navigate = useNavigate()
-  const { fetchUser, isAuthenticated, isLoading, user } = useAuthStore()
+  const { fetchUser, isLoading, user } = useAuthStore()
   const [isGeneratingCertificate, setIsGeneratingCertificate] = useState(false)
+  const hasInitializedRef = useRef(false)
 
   useEffect(() => {
-    const loadUser = async () => {
-      if (!isAuthenticated) {
-        try {
-          await fetchUser()
-        } catch (error) {
-          navigate({ to: '/login' })
-        }
-      }
+    // Only run once on mount
+    if (hasInitializedRef.current) {
+      return
+    }
+    hasInitializedRef.current = true
+
+    // If user already exists and has membership_application, don't fetch
+    if (user?.membership_application) {
+      return
     }
 
-    loadUser()
-  }, [fetchUser, isAuthenticated, navigate])
+    // If we have a token, fetch fresh user data (to get membership_application)
+    if (apiClient.isAuthenticated() && !isLoading) {
+      fetchUser().catch(() => {
+        navigate({ to: '/login' })
+      })
+    } else if (!apiClient.isAuthenticated()) {
+      // If not authenticated, redirect to login
+      navigate({ to: '/login' })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run once on mount
 
   const handleDownloadCertificate = async () => {
     if (!user) {

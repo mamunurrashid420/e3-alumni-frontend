@@ -9,6 +9,16 @@ interface MembershipCertificateProps {
 export function MembershipCertificate({ user }: MembershipCertificateProps) {
   // Extract certificate data from user
   const membershipApp = user.membership_application
+  
+  // Debug logging (remove in production)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('User Data:', user)
+    console.log('Membership Application:', membershipApp)
+    console.log('Membership Application Type:', typeof membershipApp)
+    console.log('Membership Application Keys:', membershipApp ? Object.keys(membershipApp) : 'null/undefined')
+    console.log('Approved At:', membershipApp?.approved_at)
+  }
+  
   const memberName = user.name || 'N/A'
   const memberId = user.member_id || 'N/A'
   const membershipType = user.primary_member_type || 'GENERAL'
@@ -39,8 +49,37 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
     : 'GENERAL'
   
   // Calculate valid until date
-  const issuedDate = new Date()
-  const issuedDateFormatted = issuedDate.toLocaleDateString('en-GB', {
+  // Use approved_at as the start date, or fallback to current date if not available
+  let startDate: Date
+  if (membershipApp?.approved_at) {
+    try {
+      const parsedDate = new Date(membershipApp.approved_at)
+      // Check if date is valid
+      if (isNaN(parsedDate.getTime())) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Invalid approved_at date:', membershipApp.approved_at, 'Using current date')
+        }
+        startDate = new Date()
+      } else {
+        startDate = parsedDate
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Parsed approved_at date:', startDate.toISOString(), 'Original:', membershipApp.approved_at)
+        }
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error parsing approved_at date:', error, membershipApp.approved_at)
+      }
+      startDate = new Date()
+    }
+  } else {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('No approved_at date found in membership application. Available fields:', Object.keys(membershipApp || {}))
+    }
+    startDate = new Date()
+  }
+  
+  const issuedDateFormatted = startDate.toLocaleDateString('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric'
@@ -51,8 +90,24 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
     validUntilText = 'Lifetime'
   } else {
     // For GENERAL/ASSOCIATE, calculate based on payment_years or default to 1 year
-    const paymentYears = membershipApp?.payment_years || 1
-    const validUntilDate = new Date(issuedDate)
+    // payment_years might be a string (e.g., "1") or number
+    const paymentYearsRaw = membershipApp?.payment_years
+    let paymentYears = 1
+    
+    if (paymentYearsRaw !== null && paymentYearsRaw !== undefined) {
+      // Handle string values (convert to number)
+      if (typeof paymentYearsRaw === 'string') {
+        const parsed = parseInt(paymentYearsRaw, 10)
+        if (!isNaN(parsed) && parsed > 0) {
+          paymentYears = parsed
+        }
+      } else if (typeof paymentYearsRaw === 'number' && paymentYearsRaw > 0) {
+        paymentYears = paymentYearsRaw
+      }
+    }
+    
+    // Calculate valid until date from approval date
+    const validUntilDate = new Date(startDate)
     validUntilDate.setFullYear(validUntilDate.getFullYear() + paymentYears)
     validUntilText = validUntilDate.toLocaleDateString('en-GB', {
       day: '2-digit',

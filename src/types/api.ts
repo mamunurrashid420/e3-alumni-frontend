@@ -69,7 +69,7 @@ export interface MembershipApplication {
   blood_group: string | null;
   entry_fee: number | null;
   yearly_fee: number | null;
-  payment_years: number | null;
+  payment_years: number | string | null;
   total_paid_amount: number | null;
   receipt_file: string | null;
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | null;
