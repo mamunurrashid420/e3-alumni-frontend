@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Award, FileText } from 'lucide-react'
 import { WelcomeBanner } from './dashboard/WelcomeBanner'
@@ -8,13 +8,10 @@ import { SubscriptionSection } from './dashboard/SubscriptionSection'
 import { ProfileCard } from './dashboard/ProfileCard'
 import { EventsSection } from './dashboard/EventsSection'
 import { useAuthStore } from '@/stores/authStore'
-import { generateCertificate } from '@/lib/certificateGenerator'
-import { toast } from 'sonner'
 
 export function Dashboard() {
   const navigate = useNavigate()
-  const { fetchUser, isAuthenticated, isLoading, user } = useAuthStore()
-  const [isGeneratingCertificate, setIsGeneratingCertificate] = useState(false)
+  const { fetchUser, isAuthenticated, isLoading } = useAuthStore()
 
   useEffect(() => {
     const loadUser = async () => {
@@ -29,33 +26,6 @@ export function Dashboard() {
 
     loadUser()
   }, [fetchUser, isAuthenticated, navigate])
-
-  const handleDownloadCertificate = async () => {
-    if (!user) {
-      toast.error('User data not available. Please try again.')
-      return
-    }
-
-    if (!user.member_id) {
-      toast.error('Member ID is missing. Please contact support.')
-      return
-    }
-
-    setIsGeneratingCertificate(true)
-    try {
-      await generateCertificate(user)
-      toast.success('Certificate downloaded successfully!')
-    } catch (error) {
-      console.error('Certificate generation error:', error)
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : 'Failed to generate certificate. Please try again.'
-      )
-    } finally {
-      setIsGeneratingCertificate(false)
-    }
-  }
 
   if (isLoading) {
     return (
@@ -82,10 +52,9 @@ export function Dashboard() {
               <Award className="w-12 h-12 text-yellow-500" />
             }
             title="Membership certificate"
-            description="Download your official membership certificate from JSSAA. This certificate verifies your membership status and can be used for official purposes."
-            actionIcon="download"
-            onAction={handleDownloadCertificate}
-            isLoading={isGeneratingCertificate}
+            description="View and download your official membership certificate from JSSAA. This certificate verifies your membership status and can be used for official purposes."
+            actionIcon="arrow"
+            onAction={() => navigate({ to: '/certificate' })}
           />
           <InfoCard
             icon={

@@ -40,7 +40,15 @@ const registrationSchema = z.object({
   presentAddress: z.string().min(1, 'Please enter your present address'),
   permanentAddress: z.string().min(1, 'Please enter your permanent address'),
   email: z.union([z.string().email('Please enter a valid email address'), z.literal('')]).optional(),
-  mobileNumber: z.string().min(1, 'Mobile number is required').regex(/^[0-9+\-\s()]+$/, 'Please enter a valid mobile number'),
+  mobileNumber: z.string()
+    .min(1, 'Mobile number is required')
+    .refine((val) => {
+      const nums = val.replace(/[^0-9]/g, '')
+      if (nums.length === 13 && nums.startsWith('880')) {
+        return true
+      }
+      return nums.length === 11
+    }, 'Mobile number must be 11 digits (e.g., 017XXXXXXXX)'),
   profession: z.string().min(1, 'Please enter your profession'),
   designation: z.string().optional(),
   instituteName: z.string().optional(),
@@ -390,7 +398,12 @@ export function Registration() {
     if (data.email && data.email.trim() !== '') {
       apiFormData.append('email', data.email)
     }
-    apiFormData.append('mobile_number', data.mobileNumber)
+    // Normalize mobile number
+    let normalizedMobile = data.mobileNumber.replace(/[^0-9]/g, '')
+    if (normalizedMobile.length === 13 && normalizedMobile.startsWith('880')) {
+      normalizedMobile = normalizedMobile.substring(2)
+    }
+    apiFormData.append('mobile_number', normalizedMobile)
     apiFormData.append('profession', data.profession)
     apiFormData.append('t_shirt_size', mapTShirtSize(data.tShirtSize))
     apiFormData.append('blood_group', data.bloodGroup)

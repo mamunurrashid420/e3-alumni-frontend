@@ -1,4 +1,3 @@
-import React from 'react'
 import type { User } from '@/types/api'
 import logoImage from '@/assets/alumni/logo.jpg'
 import backgroundImage from '@/assets/alumni/gallery/1.jpg'
@@ -32,7 +31,7 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
     }
   }
   
-  // Format membership type for display
+  // Format membership type for display (lowercase for display in sentence)
   const membershipTypeDisplay = membershipType === 'LIFETIME' 
     ? 'LIFETIME' 
     : membershipType === 'ASSOCIATE' 
@@ -62,6 +61,9 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
     })
   }
 
+  // Green color matching the template - using RGB format for better PDF compatibility
+  const greenColor = 'rgb(26, 95, 63)'
+
   return (
     <div
       id="membership-certificate"
@@ -74,13 +76,13 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        padding: '20mm',
+        padding: '15mm',
         boxSizing: 'border-box',
         fontFamily: 'Arial, sans-serif',
         overflow: 'hidden',
       }}
     >
-      {/* Background overlay with opacity */}
+      {/* Overlay for text readability */}
       <div
         style={{
           position: 'absolute',
@@ -88,72 +90,91 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0.92)',
-          zIndex: 1,
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          zIndex: 0,
         }}
       />
-      
       {/* Content */}
       <div
         style={{
-          position: 'relative',
-          zIndex: 2,
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
+          position: 'relative',
+          zIndex: 1,
         }}
       >
-        {/* Header Section */}
-        <div style={{ marginBottom: '15mm' }}>
-          {/* Logo */}
-          <div style={{ marginBottom: '10mm' }}>
-            <img
-              src={logoImage}
-              alt="JSSAA Logo"
+        {/* Header Section - Logo and Association Name */}
+        <div style={{ marginBottom: '10mm', position: 'relative' }}>
+          {/* Logo and Association Names Row */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+            }}
+          >
+            {/* Logo - positioned on the left */}
+            <div
               style={{
-                width: '60px',
-                height: '60px',
-                objectFit: 'contain',
+                position: 'absolute',
+                left: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
               }}
-            />
+            >
+              <img
+                src={logoImage}
+                alt="JSSAA Logo"
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  objectFit: 'contain',
+                }}
+              />
+            </div>
+            
+            {/* Association Names Container - centered */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1mm', alignItems: 'center' }}>
+              {/* Association Name - English */}
+              <h1
+                style={{
+                  fontSize: '22px',
+                  fontWeight: 'bold',
+                  color: greenColor,
+                  marginBottom: 0,
+                  textAlign: 'center',
+                  fontFamily: 'Arial, sans-serif',
+                  lineHeight: '1.3',
+                }}
+              >
+                JAHAPUR SECONDARY SCHOOL ALUMNI ASSOCIATION (JSSAA)
+              </h1>
+              
+              {/* Association Name - Bengali */}
+              <h2
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: greenColor,
+                  marginBottom: 0,
+                  textAlign: 'center',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                জাহাপুর মাধ্যমিক বিদ্যালয় অ্যালামনাই অ্যাসোসিয়েশন
+              </h2>
+            </div>
           </div>
           
-          {/* Association Name - English */}
-          <h1
-            style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              color: '#1a365d',
-              marginBottom: '5mm',
-              textAlign: 'center',
-              fontFamily: 'Arial, sans-serif',
-            }}
-          >
-            JAHAPUR SECONDARY SCHOOL ALUMNI ASSOCIATION (JSSAA)
-          </h1>
-          
-          {/* Association Name - Bengali */}
-          <h2
-            style={{
-              fontSize: '18px',
-              fontWeight: 'bold',
-              color: '#1a365d',
-              marginBottom: '3mm',
-              textAlign: 'center',
-              fontFamily: 'Arial, sans-serif',
-            }}
-          >
-            জাহাপুর মাধ্যমিক বিদ্যালয় অ্যালামনাই অ্যাসোসিয়েশন
-          </h2>
-          
-          {/* Motto - Bengali */}
+          {/* Slogan - Bengali */}
           <p
             style={{
               fontSize: '14px',
-              color: '#1a365d',
-              marginBottom: '8mm',
+              color: greenColor,
+              marginBottom: '2mm',
               textAlign: 'center',
-              fontStyle: 'italic',
               fontFamily: 'Arial, sans-serif',
             }}
           >
@@ -163,13 +184,13 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
           {/* Certificate Title */}
           <h3
             style={{
-              fontSize: '32px',
-              fontWeight: 'bold',
-              color: '#2563eb',
+              fontSize: '36px',
+              fontWeight: 'normal',
+              color: greenColor,
               textAlign: 'center',
-              marginBottom: '15mm',
+              marginBottom: '10mm',
               fontStyle: 'italic',
-              fontFamily: 'Georgia, serif',
+              fontFamily: 'Times New Roman, serif',
             }}
           >
             Membership Certificate
@@ -182,39 +203,68 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
-            padding: '0 10mm',
+            justifyContent: 'flex-start',
+            padding: '0 15mm',
+            minHeight: 0,
           }}
         >
+          {/* Main Certificate Text */}
           <p
             style={{
-              fontSize: '16px',
+              fontSize: '20px',
               color: '#000000',
-              lineHeight: '2.0',
-              textAlign: 'justify',
-              marginBottom: '10mm',
+              lineHeight: '1.8',
+              textAlign: 'center',
+              marginBottom: '8mm',
               fontFamily: 'Arial, sans-serif',
             }}
           >
             This is to certify that {namePrefix && `${namePrefix} `}
-            <span style={{ display: 'inline-block', borderBottom: '1px solid #000', fontWeight: 'bold', padding: '0 5px', lineHeight: '1.2' }}>{memberName}</span>,
-            Membership Number: <span style={{ display: 'inline-block', borderBottom: '1px solid #000', fontWeight: 'bold', padding: '0 5px', lineHeight: '1.2' }}>{memberId}</span>, Batch: <span style={{ display: 'inline-block', borderBottom: '1px solid #000', fontWeight: 'bold', padding: '0 5px', lineHeight: '1.2' }}>{batchYear}</span> is
-            hereby enrolled as a <span style={{ display: 'inline-block', borderBottom: '1px solid #000', fontWeight: 'bold', padding: '0 5px', lineHeight: '1.2' }}>{membershipTypeDisplay}</span> MEMBER of Jahapur Secondary School Alumni Association (JSSAA). This
-            membership is valid until <span style={{ display: 'inline-block', borderBottom: '1px solid #000', fontWeight: 'bold', padding: '0 5px', lineHeight: '1.2' }}>{validUntilText}</span> (Not applicable for Lifetime Membership).
+            <span style={{ 
+              display: 'inline-block', 
+              borderBottom: '2px solid #000', 
+              minWidth: '120px',
+              paddingBottom: '2px',
+              textAlign: 'center',
+            }}>{memberName}</span>, Membership Number: <span style={{ 
+              display: 'inline-block', 
+              borderBottom: '2px solid #000', 
+              minWidth: '80px',
+              paddingBottom: '2px',
+              textAlign: 'center',
+            }}>{memberId}</span>, Batch: <span style={{ 
+              display: 'inline-block', 
+              borderBottom: '2px solid #000', 
+              minWidth: '60px',
+              paddingBottom: '2px',
+              textAlign: 'center',
+            }}>{batchYear}</span> is hereby enrolled as a <span style={{ 
+              display: 'inline-block', 
+              borderBottom: '2px solid #000', 
+              minWidth: '80px',
+              paddingBottom: '2px',
+              textAlign: 'center',
+            }}>{membershipTypeDisplay}</span> MEMBER of Jahapur Secondary School Alumni Association (JSSAA). This membership is valid till <span style={{ 
+              display: 'inline-block', 
+              borderBottom: '2px solid #000', 
+              minWidth: '100px',
+              paddingBottom: '2px',
+              textAlign: 'center',
+            }}>{validUntilText}</span>.
           </p>
           
+          {/* Rights and Privileges Statement */}
           <p
             style={{
-              fontSize: '16px',
+              fontSize: '20px',
               color: '#000000',
-              lineHeight: '2.0',
-              textAlign: 'justify',
-              marginBottom: '15mm',
+              lineHeight: '1.8',
+              textAlign: 'center',
+              marginBottom: '5mm',
               fontFamily: 'Arial, sans-serif',
             }}
           >
-            The member is entitled to enjoy all rights and privileges as per
-            the constitution of JSSAA and abide by its rules and regulations.
+            The member is entitled to enjoy all rights and privileges as per the constitution of JSSAA and abide by its rules and regulations.
           </p>
         </div>
         
@@ -222,119 +272,137 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            flexDirection: 'column',
+            alignItems: 'center',
             marginTop: 'auto',
-            paddingTop: '10mm',
+            paddingTop: '5mm',
+            flexShrink: 0,
           }}
         >
-          {/* Left Signature */}
-          <div style={{ flex: 1, textAlign: 'left' }}>
-            <div
-              style={{
-                borderTop: '1px solid #000',
-                width: '150px',
-                marginBottom: '5mm',
-                marginTop: '20mm',
-              }}
-            />
-            <p
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-                color: '#000000',
-                marginBottom: '2mm',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
-              Md. Mostafijur Rahman Nanna
-            </p>
-            <p
-              style={{
-                fontSize: '11px',
-                color: '#000000',
-                marginBottom: '2mm',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
-              General Secretary
-            </p>
-            <p
-              style={{
-                fontSize: '11px',
-                color: '#000000',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
-              Jahapur Secondary School Alumni Association (JSSAA)
-            </p>
-            <p
-              style={{
-                fontSize: '10px',
-                color: '#000000',
-                marginTop: '5mm',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
-              Issued on: <strong>{issuedDateFormatted}</strong>
-            </p>
+          {/* Signatures Container */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '70mm',
+              width: '100%',
+              marginBottom: '3mm',
+            }}
+          >
+            {/* Left Signature */}
+            <div style={{ textAlign: 'center' }}>
+              {/* Signature Line */}
+              <div
+                style={{
+                  borderTop: '1px solid #000',
+                  width: '180px',
+                  marginBottom: '4mm',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }}
+              />
+              <p
+                style={{
+                  fontSize: '13px',
+                  fontWeight: 'bold',
+                  color: '#000000',
+                  marginBottom: '2mm',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                Md. Mostafijur Rahman Nanna
+              </p>
+              <p
+                style={{
+                  fontSize: '11px',
+                  color: '#000000',
+                  marginBottom: '1mm',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                General Secretary
+              </p>
+              <p
+                style={{
+                  fontSize: '11px',
+                  color: '#000000',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                Jahapur Secondary School Alumni Association (JSSAA)
+              </p>
+            </div>
+            
+            {/* Right Signature */}
+            <div style={{ textAlign: 'center' }}>
+              {/* Signature Line */}
+              <div
+                style={{
+                  borderTop: '1px solid #000',
+                  width: '180px',
+                  marginBottom: '4mm',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }}
+              />
+              <p
+                style={{
+                  fontSize: '13px',
+                  fontWeight: 'bold',
+                  color: '#000000',
+                  marginBottom: '2mm',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                Major (Rtd.) Md. Rustom Ali
+              </p>
+              <p
+                style={{
+                  fontSize: '11px',
+                  color: '#000000',
+                  marginBottom: '1mm',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                President
+              </p>
+              <p
+                style={{
+                  fontSize: '11px',
+                  color: '#000000',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
+                Jahapur Secondary School Alumni Association (JSSAA)
+              </p>
+            </div>
           </div>
           
-          {/* Right Signature */}
-          <div style={{ flex: 1, textAlign: 'right' }}>
-            <div
-              style={{
-                borderTop: '1px solid #000',
-                width: '150px',
-                marginBottom: '5mm',
-                marginTop: '20mm',
-                marginLeft: 'auto',
-              }}
-            />
-            <p
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-                color: '#000000',
-                marginBottom: '2mm',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
-              Major (Rtd.) Md. Rustom Ali
-            </p>
-            <p
-              style={{
-                fontSize: '11px',
-                color: '#000000',
-                marginBottom: '2mm',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
-              President
-            </p>
-            <p
-              style={{
-                fontSize: '11px',
-                color: '#000000',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
-              Jahapur Secondary School Alumni Association (JSSAA)
-            </p>
-          </div>
+          {/* Issued Date */}
+          <p
+            style={{
+              fontSize: '10px',
+              color: '#000000',
+              fontFamily: 'Arial, sans-serif',
+              textAlign: 'center',
+            }}
+          >
+            Issued on: <span style={{ borderBottom: '1px solid #000', paddingBottom: '1px' }}>{issuedDateFormatted}</span>
+          </p>
         </div>
         
         {/* Disclaimer */}
         <p
           style={{
             fontSize: '9px',
-            color: '#666666',
+            color: '#999999',
             textAlign: 'center',
-            marginTop: '5mm',
+            marginTop: '3mm',
             fontFamily: 'Arial, sans-serif',
+            flexShrink: 0,
           }}
         >
-          This is an auto-generated certificate and does not require a physical
-          signature.
+          This is an auto-generated certificate and does not require a physical signature.
         </p>
       </div>
     </div>

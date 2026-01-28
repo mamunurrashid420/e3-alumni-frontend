@@ -58,13 +58,22 @@ export async function generateCertificate(user: User): Promise<void> {
     
     await Promise.all(imagePromises)
 
-    // Add a style element to override any oklch colors and ensure compatibility
+    // Add a style element to preserve colors and ensure compatibility
     const styleElement = document.createElement('style')
     styleElement.textContent = `
-      #membership-certificate, #membership-certificate * {
+      #membership-certificate {
         color: inherit !important;
         background-color: inherit !important;
         border-color: inherit !important;
+      }
+      #membership-certificate h1,
+      #membership-certificate h2,
+      #membership-certificate h3 {
+        color: rgb(26, 95, 63) !important;
+      }
+      #membership-certificate p[style*="#1a5f3f"],
+      #membership-certificate p[style*="rgb(26, 95, 63)"] {
+        color: rgb(26, 95, 63) !important;
       }
     `
     container.appendChild(styleElement)
@@ -79,6 +88,8 @@ export async function generateCertificate(user: User): Promise<void> {
         useCORS: true,
         logging: false,
         letterRendering: true,
+        backgroundColor: '#ffffff',
+        allowTaint: false,
 
         onclone: (clonedDoc) => {
           // Remove any problematic CSS that might contain oklch
@@ -104,9 +115,42 @@ export async function generateCertificate(user: User): Promise<void> {
                 // Cross-origin stylesheets may throw errors, ignore them
               }
             }
+            
+            // Add style element to preserve green color
+            const styleElement = clonedDoc.createElement('style')
+            styleElement.textContent = `
+              #membership-certificate h1,
+              #membership-certificate h2,
+              #membership-certificate h3 {
+                color: rgb(26, 95, 63) !important;
+              }
+              #membership-certificate p[style*="#1a5f3f"] {
+                color: rgb(26, 95, 63) !important;
+              }
+            `
+            clonedDoc.head.appendChild(styleElement)
+            
+            // Ensure green color is preserved - explicitly set it using RGB format
+            const certificate = clonedDoc.getElementById('membership-certificate')
+            if (certificate) {
+              const greenColorRgb = 'rgb(26, 95, 63)'
+              
+              // Find all h1, h2, h3, and p elements that should have green color
+              const elementsToCheck = certificate.querySelectorAll('h1, h2, h3, p')
+              elementsToCheck.forEach((el) => {
+                const htmlEl = el as HTMLElement
+                const inlineStyle = htmlEl.getAttribute('style') || ''
+                
+                // If the element has green color in its inline style, ensure it's preserved
+                if (inlineStyle.includes('#1a5f3f') || inlineStyle.includes('rgb(26, 95, 63)')) {
+                  // Set color explicitly using RGB format (html2canvas handles RGB better)
+                  htmlEl.style.color = greenColorRgb
+                }
+              })
+            }
           } catch (e) {
             // If anything fails, continue anyway
-            console.warn('Error cleaning oklch colors from stylesheets:', e)
+            console.warn('Error processing certificate styles:', e)
           }
         },
       },
