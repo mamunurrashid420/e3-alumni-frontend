@@ -326,9 +326,10 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
     setIsDragging(false)
   }
 
-  const calculateTotalAmount = () => {
-    const amount = parseFloat(paymentAmount) || 0
-    return amount
+  const calculateTotalAmount = (): number => {
+    if (!paymentAmount || paymentAmount.trim() === '') return 0
+    const parsed = parseFloat(paymentAmount)
+    return Number.isNaN(parsed) ? 0 : parsed
   }
 
   const totalAmount = calculateTotalAmount()
@@ -708,10 +709,9 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
             </label>
             <Input
               id="paymentAmount"
-              type="number"
+              type="text"
+              inputMode="decimal"
               placeholder="Enter payment amount"
-              min="0"
-              step="0.01"
               {...register('payment_amount')}
               className={errors.payment_amount || apiErrors.payment_amount ? 'border-red-500' : ''}
             />
