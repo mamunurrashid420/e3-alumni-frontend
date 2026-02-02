@@ -129,6 +129,15 @@ class ApiClient {
     return response.data;
   }
 
+  async updateProfile(data: {
+    name: string;
+    email?: string | null;
+    phone: string;
+  }): Promise<User> {
+    const response = await this.client.put<User>(endpoints.currentUser, data);
+    return response.data;
+  }
+
   // Payment methods
   async getPayments(status?: PaymentStatus): Promise<PaginatedResponse<Payment>> {
     const params = status ? { status } : {};

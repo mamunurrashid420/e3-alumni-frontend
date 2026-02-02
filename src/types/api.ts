@@ -82,7 +82,8 @@ export interface MembershipApplication {
 export interface User {
   id: number;
   name: string;
-  email: string;
+  email: string | null;
+  phone: string | null;
   role: 'super_admin' | 'member';
   primary_member_type: MembershipType | null;
   secondary_member_type_id: number | null;

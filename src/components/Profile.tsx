@@ -62,7 +62,7 @@ export function Profile() {
           presentAddress: membershipApp?.present_address || '',
           permanentAddress: membershipApp?.permanent_address || '',
           email: user.email || '',
-          phone: membershipApp?.mobile_number || '',
+          phone: user.phone ?? membershipApp?.mobile_number ?? '',
           profession: membershipApp?.profession || '',
           instituteName: membershipApp?.institute_name || '',
           designation: membershipApp?.designation || '',
@@ -75,7 +75,7 @@ export function Profile() {
           idNo: user.member_id || '',
           passingYear: membershipApp?.ssc_year?.toString() || '',
           displayEmail: user.email || '',
-          displayPhone: membershipApp?.mobile_number || '',
+          displayPhone: user.phone ?? membershipApp?.mobile_number ?? '',
         }))
       } catch (error: any) {
         console.error('Failed to load profile:', error)
@@ -92,9 +92,40 @@ export function Profile() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSave = () => {
-    // TODO: Implement save functionality
-    setIsEditing(false)
+  const [isSaving, setIsSaving] = useState(false)
+
+  const handleSave = async () => {
+    const name = formData.fullName.trim()
+    const phone = formData.phone.trim()
+    if (!phone) {
+      toast.error('Phone number is required')
+      return
+    }
+    try {
+      setIsSaving(true)
+      await apiClient.updateProfile({
+        name,
+        email: formData.email?.trim() || null,
+        phone,
+      })
+      toast.success('Profile updated successfully')
+      setIsEditing(false)
+      const user = await apiClient.getCurrentUser()
+      const membershipApp = user.membership_application
+      setFormData((prev) => ({
+        ...prev,
+        fullName: membershipApp?.full_name || user.name || '',
+        displayEmail: user.email || '',
+        displayPhone: user.phone ?? membershipApp?.mobile_number ?? '',
+        phone: user.phone ?? membershipApp?.mobile_number ?? '',
+        email: user.email || '',
+      }))
+    } catch (error: any) {
+      const message = error?.errors?.phone?.[0] ?? error?.errors?.email?.[0] ?? error?.errors?.name?.[0] ?? error?.message
+      toast.error(message ?? 'Failed to update profile')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   if (isLoading) {
@@ -504,28 +535,14 @@ export function Profile() {
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-black/70 mb-2">
-                Membership Type
-              </label>
-              {isEditing ? (
-                <Select
-                  value={formData.membershipType}
-                  onValueChange={(value) => handleInputChange('membershipType', value)}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select membership type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Associate member">Associate member</SelectItem>
-                    <SelectItem value="Life member">Life member</SelectItem>
-                    <SelectItem value="Regular member">Regular member</SelectItem>
-                  </SelectContent>
-                </Select>
-              ) : (
+            {!isEditing && (
+              <div>
+                <label className="block text-sm font-medium text-black/70 mb-2">
+                  Membership Type
+                </label>
                 <p className="text-sm text-black">{formData.membershipType || '—'}</p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -534,10 +551,15 @@ export function Profile() {
           <div className="flex justify-end mt-6">
             <Button
               onClick={handleSave}
+              disabled={isSaving}
               className="bg-[#3B60C9] hover:bg-[#2348B2] text-white"
             >
-              <Save className="w-4 h-4 mr-2" />
-              Save changes
+              {isSaving ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
+              {isSaving ? 'Saving...' : 'Save changes'}
             </Button>
           </div>
         )}
