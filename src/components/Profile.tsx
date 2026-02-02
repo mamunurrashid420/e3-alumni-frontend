@@ -115,10 +115,7 @@ export function Profile() {
         gender: formData.gender
           ? (formData.gender.toUpperCase() as 'MALE' | 'FEMALE' | 'OTHER')
           : null,
-        jsc_year: null as number | null,
-        ssc_year: formData.sscMatricYear?.trim()
-          ? parseInt(formData.sscMatricYear, 10)
-          : null,
+        // SSC/JSC batch are not editable on profile update
         highest_educational_degree: formData.highestDegree?.trim() || null,
         present_address: formData.presentAddress?.trim() || null,
         permanent_address: formData.permanentAddress?.trim() || null,
@@ -316,20 +313,14 @@ export function Profile() {
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-black/70 mb-2">
-                SSC/Matric Year
-              </label>
-              {isEditing ? (
-                <Input
-                  value={formData.sscMatricYear}
-                  onChange={(e) => handleInputChange('sscMatricYear', e.target.value)}
-                  className="w-full"
-                />
-              ) : (
+            {!isEditing && (
+              <div>
+                <label className="block text-sm font-medium text-black/70 mb-2">
+                  SSC/Matric Year
+                </label>
                 <p className="text-sm text-black">{formData.sscMatricYear || '—'}</p>
-              )}
-            </div>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-black/70 mb-2">
