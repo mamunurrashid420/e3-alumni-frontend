@@ -20,6 +20,8 @@ import type {
   Event,
   EventListResponse,
   EventDetailResponse,
+  ScholarshipListResponse,
+  ScholarshipApplicationSubmitResponse,
 } from '@/types/api';
 import { endpoints } from './endpoints';
 
@@ -37,12 +39,15 @@ class ApiClient {
       },
     });
 
-    // Request interceptor to add auth token
+    // Request interceptor: add auth token; drop Content-Type for FormData so multipart is used
     this.client.interceptors.request.use(
       (config) => {
         const token = this.getToken();
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
+        }
+        if (config.data instanceof FormData) {
+          delete config.headers['Content-Type'];
         }
         return config;
       },
@@ -313,6 +318,25 @@ class ApiClient {
     const response = await this.client.get<PaginatedResponse<PublicMember>>(
       endpoints.members,
       { params }
+    );
+    return response.data;
+  }
+
+  /** Public scholarships list (active only, no auth required). */
+  async getScholarships(): Promise<ScholarshipListResponse> {
+    const response = await this.client.get<ScholarshipListResponse>(
+      endpoints.scholarships
+    );
+    return response.data;
+  }
+
+  /** Submit scholarship application (public; auth optional for user_id). */
+  async submitScholarshipApplication(
+    formData: FormData
+  ): Promise<ScholarshipApplicationSubmitResponse> {
+    const response = await this.client.post<ScholarshipApplicationSubmitResponse>(
+      endpoints.scholarshipApplications,
+      formData
     );
     return response.data;
   }

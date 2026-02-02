@@ -39,4 +39,8 @@ export const endpoints = {
   eventRegister: (id: number) => `${API_BASE}/events/${id}/register`,
   eventUnregister: (id: number) => `${API_BASE}/events/${id}/register`,
   eventRegisterGuest: (id: number) => `${API_BASE}/events/${id}/register-guest`,
+
+  // Scholarships (public)
+  scholarships: `${API_BASE}/scholarships`,
+  scholarshipApplications: `${API_BASE}/scholarship-applications`,
 } as const;

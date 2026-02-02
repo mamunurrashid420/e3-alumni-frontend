@@ -1,7 +1,22 @@
+import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import scholarshipBg from '@/assets/scholarship-background.png'
+import { useAuthStore } from '@/stores/authStore'
+import { useScholarshipApplyModal } from '@/contexts/ScholarshipApplyModalContext'
 
 export function ScholarshipSection() {
+  const navigate = useNavigate()
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const { openModal } = useScholarshipApplyModal()
+
+  const handleApplyClick = () => {
+    if (isAuthenticated) {
+      navigate({ to: '/scholarship-apply' })
+    } else {
+      openModal()
+    }
+  }
+
   return (
     <section 
       className="w-full py-12 md:py-16 lg:py-20 relative flex flex-col items-center gap-12 md:gap-16 lg:gap-20 px-4 md:px-8 lg:px-10"
@@ -33,6 +48,8 @@ export function ScholarshipSection() {
         </div>
 
         <Button
+          type="button"
+          onClick={handleApplyClick}
           className="w-full sm:w-[198px] h-[50px] md:h-[56px] text-lg md:text-xl lg:text-2xl font-semibold rounded-md"
           style={{ 
             background: '#3B60C9',

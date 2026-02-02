@@ -1,33 +1,11 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { GraduationCap, Award, BookOpen, Users, Heart, CheckCircle2 } from 'lucide-react'
-
-const scholarshipTypes = [
-  {
-    title: 'JSSAA Scholarship for Class (VI-IX) & SSC of Jahapur Secondary School',
-    category: 'Current Students',
-    description: 'Scholarship for current students of Jahapur Secondary School from classes VI to IX and SSC level.',
-  },
-  {
-    title: 'JSSAA Scholarship for Class (VI-X) of Other Schools',
-    category: 'Current Students',
-    description: 'Scholarship for current students of other schools (Inter Union, Upazilla & Zilla) from classes VI to X.',
-  },
-  {
-    title: 'Scholarship for Ex-students (Studying Right Now)',
-    category: 'Ex-students',
-    description: 'Scholarship support for ex-students of Jahapur Secondary School who are currently pursuing further education.',
-  },
-  {
-    title: 'Scholarship for Children of Alumni Members',
-    category: 'Alumni Children',
-    description: 'Educational support for children of registered alumni members of Jahapur Secondary School.',
-  },
-  {
-    title: 'Scholarship - Past Year Class',
-    category: 'Past Students',
-    description: 'Scholarship opportunities for students from previous academic years.',
-  },
-]
+import { apiClient } from '@/api/client'
+import type { Scholarship } from '@/types/api'
+import { useAuthStore } from '@/stores/authStore'
+import { useScholarshipApplyModal } from '@/contexts/ScholarshipApplyModalContext'
 
 const objectives = [
   'Provide financial assistance to deserving students',
@@ -76,6 +54,29 @@ const responsibilities = [
 ]
 
 export function Scholarship() {
+  const navigate = useNavigate()
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const { openModal } = useScholarshipApplyModal()
+  const [scholarships, setScholarships] = useState<Scholarship[]>([])
+  const [loadingScholarships, setLoadingScholarships] = useState(true)
+  const [errorScholarships, setErrorScholarships] = useState<string | null>(null)
+
+  useEffect(() => {
+    apiClient
+      .getScholarships()
+      .then((res) => setScholarships(res.data))
+      .catch(() => setErrorScholarships('Failed to load scholarships'))
+      .finally(() => setLoadingScholarships(false))
+  }, [])
+
+  const handleApplyClick = () => {
+    if (isAuthenticated) {
+      navigate({ to: '/scholarship-apply' })
+    } else {
+      openModal()
+    }
+  }
+
   return (
     <div className="w-full">
       {/* Hero Section */}
@@ -120,48 +121,63 @@ export function Scholarship() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {scholarshipTypes.map((scholarship, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-4 p-6 md:p-8 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow"
-                  style={{
-                    background: '#FFFFFF',
-                    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)',
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
-                      style={{ background: '#3B60C9' }}
-                    >
-                      <Award className="w-6 h-6 text-white" />
+            {loadingScholarships && (
+              <p className="text-center text-black-600">Loading scholarships…</p>
+            )}
+            {errorScholarships && (
+              <p className="text-center text-red-600">{errorScholarships}</p>
+            )}
+            {!loadingScholarships && !errorScholarships && scholarships.length === 0 && (
+              <p className="text-center text-black-600">No scholarships available at the moment.</p>
+            )}
+            {!loadingScholarships && !errorScholarships && scholarships.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {scholarships.map((scholarship) => (
+                  <div
+                    key={scholarship.id}
+                    className="flex flex-col gap-4 p-6 md:p-8 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow"
+                    style={{
+                      background: '#FFFFFF',
+                      boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)',
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: '#3B60C9' }}
+                      >
+                        <Award className="w-6 h-6 text-white" />
+                      </div>
+                      {scholarship.category && (
+                        <span 
+                          className="text-xs md:text-sm font-semibold px-3 py-1 rounded-full"
+                          style={{ 
+                            background: '#3B60C9',
+                            color: '#FFFFFF'
+                          }}
+                        >
+                          {scholarship.category}
+                        </span>
+                      )}
                     </div>
-                    <span 
-                      className="text-xs md:text-sm font-semibold px-3 py-1 rounded-full"
-                      style={{ 
-                        background: '#3B60C9',
-                        color: '#FFFFFF'
-                      }}
+                    <h3 
+                      className="text-lg md:text-xl font-semibold"
+                      style={{ color: '#021E40' }}
                     >
-                      {scholarship.category}
-                    </span>
+                      {scholarship.title}
+                    </h3>
+                    {scholarship.description && (
+                      <p 
+                        className="text-sm md:text-base leading-relaxed"
+                        style={{ color: '#696868' }}
+                      >
+                        {scholarship.description}
+                      </p>
+                    )}
                   </div>
-                  <h3 
-                    className="text-lg md:text-xl font-semibold"
-                    style={{ color: '#021E40' }}
-                  >
-                    {scholarship.title}
-                  </h3>
-                  <p 
-                    className="text-sm md:text-base leading-relaxed"
-                    style={{ color: '#696868' }}
-                  >
-                    {scholarship.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -503,6 +519,8 @@ export function Scholarship() {
             </p>
             <div className="flex justify-center mt-4">
               <Button
+                type="button"
+                onClick={handleApplyClick}
                 className="w-full sm:w-auto px-8 h-[50px] md:h-[56px] text-base md:text-lg font-semibold rounded-md"
                 style={{ 
                   background: '#FFFFFF',

@@ -191,6 +191,7 @@ import { Payment } from '@/components/Payment'
 import { MakePayment } from '@/components/MakePayment'
 import { SelfDeclaration } from '@/components/SelfDeclaration'
 import { Certificate } from '@/components/Certificate'
+import { ScholarshipApplicationFormPage } from '@/components/ScholarshipApplicationFormPage'
 
 // Dashboard route
 const dashboardRoute = createRoute({
@@ -276,6 +277,19 @@ const certificateRoute = createRoute({
     <ProtectedRoute>
       <UserSpaceLayout title="Membership Certificate" subtitle="View and download your membership certificate">
         <Certificate />
+      </UserSpaceLayout>
+    </ProtectedRoute>
+  ),
+})
+
+// Scholarship apply route (member dashboard)
+const scholarshipApplyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/scholarship-apply',
+  component: () => (
+    <ProtectedRoute>
+      <UserSpaceLayout title="Apply for Scholarship" subtitle="Submit your scholarship application">
+        <ScholarshipApplicationFormPage />
       </UserSpaceLayout>
     </ProtectedRoute>
   ),
@@ -434,6 +448,7 @@ const routeTree = rootRoute.addChildren([
   makePaymentPublicRoute,
   selfDeclarationRoute,
   certificateRoute,
+  scholarshipApplyRoute,
 ])
 
 // Create router

@@ -176,6 +176,32 @@ export interface ApiError {
   errors?: Record<string, string[]>;
 }
 
+// Scholarships (public)
+export interface Scholarship {
+  id: number;
+  title: string;
+  description: string | null;
+  category: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ScholarshipListResponse {
+  data: Scholarship[];
+}
+
+export interface ScholarshipApplicationSubmitResponse {
+  data: {
+    id: number;
+    scholarship_id: number;
+    applicant_name: string;
+    status: string;
+    created_at: string;
+  };
+}
+
 // About Us (public)
 export type HonorBoardRole = 'President' | 'GeneralSecretary';
 
