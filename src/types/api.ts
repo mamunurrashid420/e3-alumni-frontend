@@ -230,6 +230,15 @@ export interface AboutListResponse<T> {
   data: T[];
 }
 
+export interface Download {
+  id: number;
+  title: string;
+  description: string | null;
+  file_url: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
 /** Public member list item (no sensitive data) */
 export interface PublicMember {
   id: number;

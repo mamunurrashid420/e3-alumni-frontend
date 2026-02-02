@@ -16,6 +16,7 @@ import type {
   HonorBoardEntry,
   BatchRepresentative,
   AboutListResponse,
+  Download,
 } from '@/types/api';
 import { endpoints } from './endpoints';
 
@@ -236,6 +237,14 @@ class ApiClient {
   async getBatchRepresentatives(): Promise<AboutListResponse<BatchRepresentative>> {
     const response = await this.client.get<AboutListResponse<BatchRepresentative>>(
       endpoints.batchRepresentatives
+    );
+    return response.data;
+  }
+
+  /** Public downloads list (no auth required). */
+  async getDownloads(): Promise<AboutListResponse<Download>> {
+    const response = await this.client.get<AboutListResponse<Download>>(
+      endpoints.downloads
     );
     return response.data;
   }

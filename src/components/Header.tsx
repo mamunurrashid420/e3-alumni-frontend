@@ -17,10 +17,11 @@ export function Header() {
   const navItems = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about', hasDropdown: true },
-    { label: 'Constitution', href: '/constitution' },
+    // { label: 'Constitution', href: '/constitution' },
     { label: 'Scholarship', href: '/scholarship' },
     { label: 'News & Events', href: '/news-events' },
     { label: 'Membership', href: '/membership' },
+    { label: 'Downloads', href: '/downloads' },
     { label: 'Contact Us', href: '/contact' },
   ]
 

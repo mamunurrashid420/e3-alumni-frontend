@@ -22,6 +22,7 @@ import { ConveningCommittee } from '@/components/ConveningCommittee'
 import { AdvisoryBody } from '@/components/AdvisoryBody'
 import { HonorBoard } from '@/components/HonorBoard'
 import { BatchRepresentatives } from '@/components/BatchRepresentatives'
+import { Downloads } from '@/components/Downloads'
 
 // Root route
 const rootRoute = createRootRoute({
@@ -308,6 +309,17 @@ const membershipRoute = createRoute({
   ),
 })
 
+// Downloads route
+const downloadsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/downloads',
+  component: () => (
+    <HomepageLayout>
+      <Downloads />
+    </HomepageLayout>
+  ),
+})
+
 // Contact route
 const contactRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -347,6 +359,7 @@ const routeTree = rootRoute.addChildren([
   scholarshipRoute,
   newsEventsRoute,
   membershipRoute,
+  downloadsRoute,
   contactRoute,
   privacyPolicyRoute,
   loginRoute,

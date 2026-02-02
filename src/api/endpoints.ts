@@ -29,4 +29,7 @@ export const endpoints = {
   advisoryBody: `${API_BASE}/about/advisory-body`,
   honorBoard: `${API_BASE}/about/honor-board`,
   batchRepresentatives: `${API_BASE}/about/batch-representatives`,
+
+  // Downloads (public)
+  downloads: `${API_BASE}/downloads`,
 } as const;
