@@ -118,15 +118,12 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
         setValue('name', user.name)
       }
       
-      // Set address and mobile from membership application if available
-      if (user.membership_application) {
-        const app = user.membership_application
-        if (app.present_address) {
-          setValue('address', app.present_address)
-        }
-        if (app.mobile_number) {
-          setValue('mobile_number', app.mobile_number)
-        }
+      // Set address and mobile from profile or user if available
+      if (user.profile?.present_address) {
+        setValue('address', user.profile.present_address)
+      }
+      if (user.phone) {
+        setValue('mobile_number', user.phone)
       }
       
       // Set member_id if available
@@ -368,9 +365,11 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       if (isAuthUser && user) {
         // Use provided data or fallback to user data
         name = name || user.name || ''
-        if (user.membership_application) {
-          address = address || user.membership_application.present_address || ''
-          mobile_number = mobile_number || user.membership_application.mobile_number || ''
+        if (user.profile?.present_address) {
+          address = address || user.profile.present_address || ''
+        }
+        if (user.phone) {
+          mobile_number = mobile_number || user.phone || ''
         }
       }
       

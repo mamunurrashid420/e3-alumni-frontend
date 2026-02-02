@@ -46,36 +46,36 @@ export function Profile() {
         // Fetch fresh user data
         const user = await apiClient.getCurrentUser()
         
-        // Map user data to form fields
-        const membershipApp = user.membership_application
-        
+        // Map user + profile to form fields (profile from member_profiles)
+        const profile = user.profile
+        const genderDisplay = profile?.gender
+          ? profile.gender.charAt(0) + profile.gender.slice(1).toLowerCase()
+          : ''
         setFormData((prev) => ({
           ...prev,
-          fullName: membershipApp?.full_name || user.name || '',
-          nameInBengali: membershipApp?.name_bangla || '',
-          fathersName: membershipApp?.father_name || '',
-          gender: membershipApp?.gender 
-            ? membershipApp.gender.charAt(0) + membershipApp.gender.slice(1).toLowerCase()
-            : '',
-          sscMatricYear: membershipApp?.ssc_year?.toString() || '',
-          highestDegree: membershipApp?.highest_educational_degree || '',
-          presentAddress: membershipApp?.present_address || '',
-          permanentAddress: membershipApp?.permanent_address || '',
+          fullName: user.name || '',
+          nameInBengali: profile?.name_bangla || '',
+          fathersName: profile?.father_name || '',
+          gender: genderDisplay,
+          sscMatricYear: profile?.ssc_year?.toString() || '',
+          highestDegree: profile?.highest_educational_degree || '',
+          presentAddress: profile?.present_address || '',
+          permanentAddress: profile?.permanent_address || '',
           email: user.email || '',
-          phone: user.phone ?? membershipApp?.mobile_number ?? '',
-          profession: membershipApp?.profession || '',
-          instituteName: membershipApp?.institute_name || '',
-          designation: membershipApp?.designation || '',
-          tShirtSize: membershipApp?.t_shirt_size || '',
-          bloodGroup: membershipApp?.blood_group || '',
-          membershipType: user.primary_member_type 
+          phone: user.phone || '',
+          profession: profile?.profession || '',
+          instituteName: profile?.institute_name || '',
+          designation: profile?.designation || '',
+          tShirtSize: profile?.t_shirt_size || '',
+          bloodGroup: profile?.blood_group || '',
+          membershipType: user.primary_member_type
             ? user.primary_member_type.charAt(0) + user.primary_member_type.slice(1).toLowerCase() + ' member'
             : '',
           password: '***********',
           idNo: user.member_id || '',
-          passingYear: membershipApp?.ssc_year?.toString() || '',
+          passingYear: profile?.ssc_year?.toString() || '',
           displayEmail: user.email || '',
-          displayPhone: user.phone ?? membershipApp?.mobile_number ?? '',
+          displayPhone: user.phone || '',
         }))
       } catch (error: any) {
         console.error('Failed to load profile:', error)
@@ -108,20 +108,64 @@ export function Profile() {
         email: formData.email?.trim() || null,
         phone,
       })
+      const profilePayload = {
+        name_bangla: formData.nameInBengali?.trim() || null,
+        father_name: formData.fathersName?.trim() || null,
+        mother_name: null as string | null,
+        gender: formData.gender
+          ? (formData.gender.toUpperCase() as 'MALE' | 'FEMALE' | 'OTHER')
+          : null,
+        jsc_year: null as number | null,
+        ssc_year: formData.sscMatricYear?.trim()
+          ? parseInt(formData.sscMatricYear, 10)
+          : null,
+        highest_educational_degree: formData.highestDegree?.trim() || null,
+        present_address: formData.presentAddress?.trim() || null,
+        permanent_address: formData.permanentAddress?.trim() || null,
+        profession: formData.profession?.trim() || null,
+        designation: formData.designation?.trim() || null,
+        institute_name: formData.instituteName?.trim() || null,
+        t_shirt_size: formData.tShirtSize?.trim() || null,
+        blood_group: formData.bloodGroup?.trim() || null,
+      }
+      try {
+        await apiClient.updateMemberProfile(profilePayload)
+      } catch {
+        // User may not have a member profile yet (e.g. not approved)
+      }
       toast.success('Profile updated successfully')
       setIsEditing(false)
       const user = await apiClient.getCurrentUser()
-      const membershipApp = user.membership_application
+      const profile = user.profile
+      const genderDisplay = profile?.gender
+        ? profile.gender.charAt(0) + profile.gender.slice(1).toLowerCase()
+        : ''
       setFormData((prev) => ({
         ...prev,
-        fullName: membershipApp?.full_name || user.name || '',
-        displayEmail: user.email || '',
-        displayPhone: user.phone ?? membershipApp?.mobile_number ?? '',
-        phone: user.phone ?? membershipApp?.mobile_number ?? '',
+        fullName: user.name || '',
+        nameInBengali: profile?.name_bangla || '',
+        fathersName: profile?.father_name || '',
+        gender: genderDisplay,
+        sscMatricYear: profile?.ssc_year?.toString() || '',
+        highestDegree: profile?.highest_educational_degree || '',
+        presentAddress: profile?.present_address || '',
+        permanentAddress: profile?.permanent_address || '',
         email: user.email || '',
+        phone: user.phone || '',
+        profession: profile?.profession || '',
+        instituteName: profile?.institute_name || '',
+        designation: profile?.designation || '',
+        tShirtSize: profile?.t_shirt_size || '',
+        bloodGroup: profile?.blood_group || '',
+        displayEmail: user.email || '',
+        displayPhone: user.phone || '',
       }))
     } catch (error: any) {
-      const message = error?.errors?.phone?.[0] ?? error?.errors?.email?.[0] ?? error?.errors?.name?.[0] ?? error?.message
+      const message =
+        error?.errors?.phone?.[0] ??
+        error?.errors?.email?.[0] ??
+        error?.errors?.name?.[0] ??
+        error?.message
       toast.error(message ?? 'Failed to update profile')
     } finally {
       setIsSaving(false)

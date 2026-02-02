@@ -8,6 +8,7 @@ export const endpoints = {
   logout: `${API_BASE}/logout`,
   register: `${API_BASE}/register`,
   currentUser: `${API_BASE}/user`,
+  currentUserProfile: `${API_BASE}/user/profile`,
 
   // Payments
   payments: `${API_BASE}/payments`,

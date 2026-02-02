@@ -21,12 +21,12 @@ export function Certificate() {
     }
     hasInitializedRef.current = true
 
-    // If user already exists and has membership_application, don't fetch
-    if (user?.membership_application) {
+    // If user already exists and has profile, don't fetch
+    if (user?.profile) {
       return
     }
 
-    // If we have a token, fetch fresh user data (to get membership_application)
+    // If we have a token, fetch fresh user data (to get profile)
     if (apiClient.isAuthenticated() && !isLoading) {
       fetchUser().catch(() => {
         navigate({ to: '/login' })

@@ -79,6 +79,28 @@ export interface MembershipApplication {
   updated_at: string;
 }
 
+export interface MemberProfile {
+  id: number;
+  name_bangla: string | null;
+  father_name: string | null;
+  mother_name: string | null;
+  gender: string | null;
+  jsc_year: number | null;
+  ssc_year: number | null;
+  highest_educational_degree: string | null;
+  present_address: string | null;
+  permanent_address: string | null;
+  profession: string | null;
+  designation: string | null;
+  institute_name: string | null;
+  t_shirt_size: string | null;
+  blood_group: string | null;
+  photo: string | null;
+  signature: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -93,7 +115,7 @@ export interface User {
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;
-  membership_application: MembershipApplication | null;
+  profile: MemberProfile | null;
 }
 
 export interface LoginResponse {

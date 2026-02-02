@@ -7,32 +7,20 @@ interface MembershipCertificateProps {
 }
 
 export function MembershipCertificate({ user }: MembershipCertificateProps) {
-  // Extract certificate data from user
-  const membershipApp = user.membership_application
-  
-  // Debug logging (remove in production)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('User Data:', user)
-    console.log('Membership Application:', membershipApp)
-    console.log('Membership Application Type:', typeof membershipApp)
-    console.log('Membership Application Keys:', membershipApp ? Object.keys(membershipApp) : 'null/undefined')
-    console.log('Approved At:', membershipApp?.approved_at)
-  }
-  
+  const profile = user.profile
+
   const memberName = user.name || 'N/A'
   const memberId = user.member_id || 'N/A'
   const membershipType = user.primary_member_type || 'GENERAL'
-  
-  // Determine gender prefix (optional - use if available from membership_application)
-  const gender = membershipApp?.gender
+
+  const gender = profile?.gender
   const namePrefix = gender === 'FEMALE' ? 'Ms.' : gender === 'MALE' ? 'Mr.' : ''
-  
-  // Determine batch year - try to extract from member_id format (e.g., "G-2000-0001") or use membership_application
+
   let batchYear: string | number = 'N/A'
-  if (membershipApp?.ssc_year) {
-    batchYear = membershipApp.ssc_year
-  } else if (membershipApp?.jsc_year) {
-    batchYear = membershipApp.jsc_year
+  if (profile?.ssc_year) {
+    batchYear = profile.ssc_year
+  } else if (profile?.jsc_year) {
+    batchYear = profile.jsc_year
   } else if (memberId && memberId !== 'N/A') {
     // Try to extract year from member_id format: "G-2000-0001" or "LT-2020-0002"
     const parts = memberId.split('-')
@@ -48,50 +36,27 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
     ? 'ASSOCIATE' 
     : 'GENERAL'
   
-  // Calculate valid until date
-  // Use approved_at as the start date, or fallback to current date if not available
+  // Calculate valid until date: use user.created_at (member since) or current date
   let startDate: Date
-  if (membershipApp?.approved_at) {
-    try {
-      const parsedDate = new Date(membershipApp.approved_at)
-      // Check if date is valid
-      if (isNaN(parsedDate.getTime())) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('Invalid approved_at date:', membershipApp.approved_at, 'Using current date')
-        }
-        startDate = new Date()
-      } else {
-        startDate = parsedDate
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Parsed approved_at date:', startDate.toISOString(), 'Original:', membershipApp.approved_at)
-        }
-      }
-    } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error parsing approved_at date:', error, membershipApp.approved_at)
-      }
-      startDate = new Date()
-    }
-  } else {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('No approved_at date found in membership application. Available fields:', Object.keys(membershipApp || {}))
-    }
+  try {
+    const parsedDate = user.created_at ? new Date(user.created_at) : new Date()
+    startDate = isNaN(parsedDate.getTime()) ? new Date() : parsedDate
+  } catch {
     startDate = new Date()
   }
-  
+
   const issuedDateFormatted = startDate.toLocaleDateString('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric'
   })
-  
+
   let validUntilText = ''
   if (membershipType === 'LIFETIME') {
     validUntilText = 'Lifetime'
   } else {
-    // For GENERAL/ASSOCIATE, calculate based on payment_years or default to 1 year
-    // payment_years might be a string (e.g., "1") or number
-    const paymentYearsRaw = membershipApp?.payment_years
+    // For GENERAL/ASSOCIATE, default to 1 year (payment_years not on profile)
+    const paymentYearsRaw = undefined
     let paymentYears = 1
     
     if (paymentYearsRaw !== null && paymentYearsRaw !== undefined) {
