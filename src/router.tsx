@@ -23,6 +23,8 @@ import { AdvisoryBody } from '@/components/AdvisoryBody'
 import { HonorBoard } from '@/components/HonorBoard'
 import { BatchRepresentatives } from '@/components/BatchRepresentatives'
 import { Downloads } from '@/components/Downloads'
+import { EventsList } from '@/components/EventsList'
+import { EventDetail } from '@/components/EventDetail'
 
 // Root route
 const rootRoute = createRootRoute({
@@ -166,10 +168,13 @@ const constitutionRoute = createRoute({
   ),
 })
 
-// Login route
+// Login route (optional search: ?redirect=/path to go after login)
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/login',
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search?.redirect === 'string' ? search.redirect : undefined,
+  }),
   component: () => <Login />,
 })
 
@@ -276,6 +281,35 @@ const certificateRoute = createRoute({
   ),
 })
 
+// Dashboard Events list route
+const dashboardEventsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/dashboard/events',
+  component: () => (
+    <ProtectedRoute>
+      <UserSpaceLayout title="Events" subtitle="View and register for events">
+        <EventsList dashboardContext />
+      </UserSpaceLayout>
+    </ProtectedRoute>
+  ),
+})
+
+// Dashboard Event detail route (optional search: ?register=1 to open registration form)
+const dashboardEventDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/dashboard/events/$id',
+  validateSearch: (search: Record<string, unknown>) => ({
+    register: typeof search?.register === 'string' ? search.register : undefined,
+  }),
+  component: () => (
+    <ProtectedRoute>
+      <UserSpaceLayout title="Event" subtitle="Event details and registration">
+        <EventDetail dashboardContext />
+      </UserSpaceLayout>
+    </ProtectedRoute>
+  ),
+})
+
 // Scholarship route
 const scholarshipRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -294,6 +328,31 @@ const newsEventsRoute = createRoute({
   component: () => (
     <HomepageLayout>
       <NewsAndEvents />
+    </HomepageLayout>
+  ),
+})
+
+// Events list route
+const eventsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/events',
+  component: () => (
+    <HomepageLayout>
+      <EventsList />
+    </HomepageLayout>
+  ),
+})
+
+// Event detail route (optional search: ?register=1 to open registration form)
+const eventDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/events/$id',
+  validateSearch: (search: Record<string, unknown>) => ({
+    register: typeof search?.register === 'string' ? search.register : undefined,
+  }),
+  component: () => (
+    <HomepageLayout>
+      <EventDetail />
     </HomepageLayout>
   ),
 })
@@ -358,6 +417,8 @@ const routeTree = rootRoute.addChildren([
   constitutionRoute,
   scholarshipRoute,
   newsEventsRoute,
+  eventsRoute,
+  eventDetailRoute,
   membershipRoute,
   downloadsRoute,
   contactRoute,
@@ -365,6 +426,8 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   registerRoute,
   dashboardRoute,
+  dashboardEventsRoute,
+  dashboardEventDetailRoute,
   profileRoute,
   paymentRoute,
   makePaymentRoute,

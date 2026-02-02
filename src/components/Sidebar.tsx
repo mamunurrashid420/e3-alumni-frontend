@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Menu, X, Home, User, Settings, LogOut } from 'lucide-react'
+import { Menu, X, Home, User, Settings, LogOut, Calendar } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 
@@ -12,6 +12,7 @@ export function Sidebar({ className }: SidebarProps) {
 
   const menuItems = [
     { icon: Home, label: 'Dashboard', href: '/dashboard' },
+    { icon: Calendar, label: 'Events', href: '/dashboard/events' },
     { icon: User, label: 'Profile', href: '/profile' },
     { icon: Settings, label: 'Settings', href: '/settings' },
   ]

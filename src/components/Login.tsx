@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import oldCoachingImage from '@/assets/alumni/old-coaching.jpeg'
 
 export function Login() {
   const navigate = useNavigate()
+  const search = useSearch({ strict: false }) as { redirect?: string }
   const { login, isLoading } = useAuthStore()
   const [emailOrPhone, setEmailOrPhone] = useState('')
   const [password, setPassword] = useState('')
@@ -30,7 +31,8 @@ export function Login() {
     try {
       await login(emailOrPhone, password)
       toast.success('Login successful!')
-      navigate({ to: '/dashboard' })
+      const redirectTo = search?.redirect && search.redirect.startsWith('/') ? search.redirect : '/dashboard'
+      navigate({ to: redirectTo })
     } catch (err: any) {
       const errorMessage = err?.message || err?.errors?.email?.[0] || 'Login failed. Please try again.'
       setError(errorMessage)

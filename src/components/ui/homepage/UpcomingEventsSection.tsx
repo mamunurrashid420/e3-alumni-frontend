@@ -1,153 +1,267 @@
+import { useEffect, useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { Clock, MapPin } from 'lucide-react'
-import event1 from '@/assets/alumni/event/1.jpg'
-import event2 from '@/assets/alumni/event/2.jpg'
-import event3 from '@/assets/alumni/event/3.jpeg'
-import event4 from '@/assets/alumni/event/4.jpeg'
+import { apiClient } from '@/api/client'
+import type { Event } from '@/types/api'
+import { useAuthStore } from '@/stores/authStore'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 
-interface EventItemProps {
-  date: string
-  month: string
-  title: string
-  time: string
-  location: string
+function formatEventDate(iso: string) {
+  const d = new Date(iso)
+  return {
+    date: d.getDate().toString(),
+    month: d.toLocaleString('en-US', { month: 'short' }),
+    time: d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+  }
 }
 
-function EventItem({ date, month, title, time, location }: EventItemProps) {
-  return (
-    <div className="w-[406px] h-[90px] relative mb-8">
-      {/* Date Box */}
-      <div 
-        className="absolute left-0 top-0 w-[70px] h-full flex flex-col items-center justify-center"
-        style={{ background: '#F2F2F2' }}
-      >
-        <div 
-          className="text-2xl font-bold leading-[30px]"
-          style={{ color: '#000000' }}
-        >
-          {date}
-        </div>
-        <div 
-          className="text-xs leading-[22px] capitalize"
-          style={{ color: '#000000' }}
-        >
-          {month}
-        </div>
-      </div>
+interface EventItemProps {
+  event: Event
+  isAuthenticated: boolean
+  onGuestRegister?: (event: Event) => void
+}
 
-      {/* Content */}
-      <div className="absolute left-[90px] top-0 right-0">
-        <h3 
-          className="text-base font-semibold leading-[24px] capitalize mb-2"
-          style={{ color: '#000000' }}
-        >
-          {title}
-        </h3>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Clock className="w-[14px] h-[14px]" style={{ color: '#000000' }} />
-            <span 
-              className="text-sm leading-[20px] lowercase"
-              style={{ color: '#666666' }}
-            >
-              {time}
-            </span>
+function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) {
+  const start = formatEventDate(event.start_at)
+  const registerTo = isAuthenticated
+    ? { to: '/dashboard/events/$id' as const, params: { id: String(event.id) }, search: { register: '1' } }
+    : null
+
+  return (
+    <div className="w-full max-w-[406px] min-h-[90px] flex gap-5 mb-8">
+      <Link
+        to={isAuthenticated ? '/dashboard/events/$id' : '/events/$id'}
+        params={{ id: String(event.id) }}
+        search={{ register: undefined }}
+        className="flex-1 flex gap-5 no-underline text-inherit hover:opacity-90 min-w-0"
+      >
+        <div className="shrink-0 w-[70px] h-[90px] flex flex-col items-center justify-center bg-[#F2F2F2]">
+          <div className="text-2xl font-bold leading-[30px] text-black">
+            {start.date}
           </div>
-          <div className="flex items-center gap-2">
-            <MapPin className="w-[14px] h-[14px]" style={{ color: '#000000' }} />
-            <span 
-              className="text-sm leading-[20px]"
-              style={{ color: '#666666' }}
-            >
-              {location}
-            </span>
+          <div className="text-xs leading-[22px] capitalize text-black">
+            {start.month}
           </div>
         </div>
-      </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base font-semibold leading-[24px] capitalize mb-2 text-black">
+            {event.title}
+          </h3>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <Clock className="w-[14px] h-[14px] text-black shrink-0" />
+              <span className="text-sm leading-[20px] text-[#666666]">
+                {start.time}
+              </span>
+            </div>
+            {event.location && (
+              <div className="flex items-center gap-2">
+                <MapPin className="w-[14px] h-[14px] text-black shrink-0" />
+                <span className="text-sm leading-[20px] text-[#666666] truncate">
+                  {event.location}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </Link>
+      {registerTo ? (
+        <Link
+          to={registerTo.to}
+          params={registerTo.params}
+          search={registerTo.search}
+          className="shrink-0 self-center text-sm font-medium text-primary-custom hover:underline"
+        >
+          Register
+        </Link>
+      ) : (
+        <button
+          type="button"
+          onClick={() => onGuestRegister?.(event)}
+          className="shrink-0 self-center text-sm font-medium text-primary-custom hover:underline bg-transparent border-none cursor-pointer"
+        >
+          Register
+        </button>
+      )}
     </div>
   )
 }
 
 export function UpcomingEventsSection() {
-  const events = [
-    {
-      date: '23',
-      month: 'Dec',
-      title: 'Learn to Write Flash Fiction',
-      time: '12:00 am - 5:00 pm',
-      location: 'Birmingham, UK'
-    },
-    {
-      date: '23',
-      month: 'Dec',
-      title: 'Change career to teaching',
-      time: '8:00 am - 5:00 pm',
-      location: 'Chicago, US'
-    },
-    {
-      date: '23',
-      month: 'Dec',
-      title: 'Build Education WordPress Website',
-      time: '8:00 am - 5:00 pm',
-      location: 'Vancouver, Canada'
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const [events, setEvents] = useState<Event[]>([])
+  const [loading, setLoading] = useState(true)
+  const [guestModalEvent, setGuestModalEvent] = useState<Event | null>(null)
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [sscJsc, setSscJsc] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    apiClient
+      .getEvents({ status: 'open', upcoming: true })
+      .then((res) => setEvents(res.data))
+      .catch(() => setEvents([]))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleGuestRegisterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!guestModalEvent || submitting) return
+    setSubmitting(true)
+    try {
+      await apiClient.registerGuestForEvent(guestModalEvent.id, {
+        name: name.trim(),
+        phone: phone.trim(),
+        address: address.trim(),
+        ssc_jsc: sscJsc.trim() || undefined,
+      })
+      toast.success('Registered successfully.')
+      closeGuestModal()
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'message' in err ? (err as { message: string }).message : 'Registration failed'
+      toast.error(msg)
+    } finally {
+      setSubmitting(false)
     }
-  ]
+  }
+
+  const closeGuestModal = () => {
+    setGuestModalEvent(null)
+    setName('')
+    setPhone('')
+    setAddress('')
+    setSscJsc('')
+  }
 
   return (
-    <section 
-      className="w-full py-16"
+    <section
+      className="w-full py-16 px-4 md:px-8 lg:px-16"
       style={{
-        paddingLeft: '320px',
-        paddingRight: '320px',
+        paddingLeft: 'clamp(1rem, 10vw, 320px)',
+        paddingRight: 'clamp(1rem, 10vw, 320px)',
       }}
     >
-      <div className="flex items-center gap-5">
-        {/* Left Side - Events List */}
-        <div className="flex flex-col gap-10 w-[406px]">
-          <h2 
-            className="text-[28px] font-semibold leading-[40px] uppercase"
-            style={{ color: '#000000' }}
-          >
+      {/* Guest registration modal (homepage) */}
+      {guestModalEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold text-black mb-2">{guestModalEvent.title}</h3>
+            <p className="text-sm text-gray-600 mb-4">Register as a guest. Fill in your details below.</p>
+            <form onSubmit={handleGuestRegisterSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="guest_name_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  Name <span className="text-red-600">*</span>
+                </label>
+                <Input
+                  id="guest_name_modal"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your full name"
+                  required
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="guest_phone_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  Phone <span className="text-red-600">*</span>
+                </label>
+                <Input
+                  id="guest_phone_modal"
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Phone number"
+                  required
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="guest_address_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  Address <span className="text-red-600">*</span>
+                </label>
+                <textarea
+                  id="guest_address_modal"
+                  rows={2}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Your address"
+                  required
+                  className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+              </div>
+              <div>
+                <label htmlFor="guest_ssc_jsc_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  SSC / JSC (optional)
+                </label>
+                <Input
+                  id="guest_ssc_jsc_modal"
+                  type="text"
+                  value={sscJsc}
+                  onChange={(e) => setSscJsc(e.target.value)}
+                  placeholder="e.g. SSC 2010, JSC 2012"
+                  className="w-full"
+                />
+              </div>
+              <div className="flex gap-2 pt-2">
+                <Button type="submit" disabled={submitting}>
+                  {submitting ? 'Submitting...' : 'Submit registration'}
+                </Button>
+                <Button type="button" variant="outline" onClick={closeGuestModal} disabled={submitting}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col lg:flex-row items-stretch gap-10">
+        <div className="flex flex-col gap-10 w-full max-w-[406px]">
+          <h2 className="text-[28px] font-semibold leading-[40px] uppercase text-black">
             Upcoming Events
           </h2>
-
-          <div className="flex flex-col gap-8">
-            {events.map((event, index) => (
-              <EventItem key={index} {...event} />
-            ))}
-          </div>
-
-          <a 
-            href="#"
-            className="text-base font-semibold capitalize"
-            style={{ color: '#000000' }}
+          {loading ? (
+            <p className="text-gray-600">Loading...</p>
+          ) : events.length === 0 ? (
+            <p className="text-gray-600">No upcoming events.</p>
+          ) : (
+            <div className="flex flex-col gap-8">
+              {events.slice(0, 3).map((event) => (
+                <EventItem
+                  key={event.id}
+                  event={event}
+                  isAuthenticated={isAuthenticated}
+                  onGuestRegister={setGuestModalEvent}
+                />
+              ))}
+            </div>
+          )}
+          <Link
+            to="/events"
+            className="text-base font-semibold capitalize text-black hover:underline"
           >
             View all
-          </a>
+          </Link>
         </div>
-
-        {/* Right Side - Event Images Grid */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="grid grid-cols-2 gap-4">
-            <img 
-              src={event1}
-              alt="Event 1"
-              className="w-full h-[230px] object-cover rounded-lg"
-            />
-            <img 
-              src={event2}
-              alt="Event 2"
-              className="w-full h-[230px] object-cover rounded-lg"
-            />
-            <img 
-              src={event3}
-              alt="Event 3"
-              className="w-full h-[230px] object-cover rounded-lg"
-            />
-            <img 
-              src={event4}
-              alt="Event 4"
-              className="w-full h-[230px] object-cover rounded-lg"
-            />
+            {events
+              .filter((e) => e.cover_photo)
+              .slice(0, 4)
+              .map((event) => (
+                <img
+                  key={event.id}
+                  src={event.cover_photo!}
+                  alt={event.title}
+                  className="w-full h-[230px] object-cover rounded-lg"
+                />
+              ))}
           </div>
         </div>
       </div>

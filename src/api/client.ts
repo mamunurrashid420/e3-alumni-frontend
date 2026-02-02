@@ -17,6 +17,9 @@ import type {
   BatchRepresentative,
   AboutListResponse,
   Download,
+  Event,
+  EventListResponse,
+  EventDetailResponse,
 } from '@/types/api';
 import { endpoints } from './endpoints';
 
@@ -245,6 +248,55 @@ class ApiClient {
   async getDownloads(): Promise<AboutListResponse<Download>> {
     const response = await this.client.get<AboutListResponse<Download>>(
       endpoints.downloads
+    );
+    return response.data;
+  }
+
+  /** Public events list (no auth required). */
+  async getEvents(params?: {
+    status?: 'open' | 'closed';
+    upcoming?: boolean;
+  }): Promise<EventListResponse> {
+    const response = await this.client.get<EventListResponse>(
+      endpoints.events,
+      { params }
+    );
+    return response.data;
+  }
+
+  /** Public event detail (no auth required for open/closed). */
+  async getEvent(id: number): Promise<EventDetailResponse> {
+    const response = await this.client.get<EventDetailResponse>(
+      endpoints.event(id)
+    );
+    return response.data;
+  }
+
+  /** Register current user for event (auth required, member only). */
+  async registerForEvent(
+    id: number,
+    data?: { notes?: string | null; guest_count?: number }
+  ): Promise<{ message: string }> {
+    const response = await this.client.post<{ message: string }>(
+      endpoints.eventRegister(id),
+      data ?? {}
+    );
+    return response.data;
+  }
+
+  /** Unregister current user from event (auth required). */
+  async unregisterFromEvent(id: number): Promise<void> {
+    await this.client.delete(endpoints.eventUnregister(id));
+  }
+
+  /** Register guest for event (no auth). */
+  async registerGuestForEvent(
+    id: number,
+    data: { name: string; phone: string; address: string; ssc_jsc?: string | null }
+  ): Promise<{ message: string }> {
+    const response = await this.client.post<{ message: string }>(
+      endpoints.eventRegisterGuest(id),
+      { name: data.name, phone: data.phone, address: data.address, ssc_jsc: data.ssc_jsc ?? null }
     );
     return response.data;
   }

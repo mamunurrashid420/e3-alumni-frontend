@@ -32,4 +32,11 @@ export const endpoints = {
 
   // Downloads (public)
   downloads: `${API_BASE}/downloads`,
+
+  // Events (public)
+  events: `${API_BASE}/events`,
+  event: (id: number) => `${API_BASE}/events/${id}`,
+  eventRegister: (id: number) => `${API_BASE}/events/${id}/register`,
+  eventUnregister: (id: number) => `${API_BASE}/events/${id}/register`,
+  eventRegisterGuest: (id: number) => `${API_BASE}/events/${id}/register-guest`,
 } as const;

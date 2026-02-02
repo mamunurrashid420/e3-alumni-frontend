@@ -8,11 +8,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useAuthStore } from '@/stores/authStore'
 import logoImage from '@/assets/alumni/logo.jpg'
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
+  const { user, isAuthenticated } = useAuthStore()
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -62,16 +64,24 @@ export function Header() {
             <span className="sm:hidden">Payment</span>
           </Button>
         </Link>
-        <Link to="/login">
-          <Button
-            variant="outline"
-            size="sm"
-            className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
-          >
-            <span className="hidden sm:inline">Log In</span>
-            <span className="sm:hidden">Login</span>
-          </Button>
-        </Link>
+        {isAuthenticated && user ? (
+          <Link to="/dashboard">
+            <span className="text-white text-[10px] sm:text-xs font-medium hover:underline">
+              Welcome, {user.name}
+            </span>
+          </Link>
+        ) : (
+          <Link to="/login" search={{ redirect: undefined }}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
+            >
+              <span className="hidden sm:inline">Log In</span>
+              <span className="sm:hidden">Login</span>
+            </Button>
+          </Link>
+        )}
       </div>
 
       {/* Main Navigation Bar */}
