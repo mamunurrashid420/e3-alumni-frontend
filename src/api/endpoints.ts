@@ -21,4 +21,10 @@ export const endpoints = {
 
   // Member Types
   memberTypes: `${API_BASE}/member-types`,
+
+  // About Us (public)
+  conveningCommittee: `${API_BASE}/about/convening-committee`,
+  advisoryBody: `${API_BASE}/about/advisory-body`,
+  honorBoard: `${API_BASE}/about/honor-board`,
+  batchRepresentatives: `${API_BASE}/about/batch-representatives`,
 } as const;

@@ -10,6 +10,11 @@ import type {
   ApiError,
   SelfDeclaration,
   MemberType,
+  ConveningCommitteeMember,
+  AdvisoryBodyMember,
+  HonorBoardEntry,
+  BatchRepresentative,
+  AboutListResponse,
 } from '@/types/api';
 import { endpoints } from './endpoints';
 
@@ -169,6 +174,35 @@ class ApiClient {
   async getMemberTypes(): Promise<{ data: MemberType[] }> {
     const response = await this.client.get<{ data: MemberType[] }>(
       endpoints.memberTypes
+    );
+    return response.data;
+  }
+
+  // About Us (public)
+  async getConveningCommittee(): Promise<AboutListResponse<ConveningCommitteeMember>> {
+    const response = await this.client.get<AboutListResponse<ConveningCommitteeMember>>(
+      endpoints.conveningCommittee
+    );
+    return response.data;
+  }
+
+  async getAdvisoryBody(): Promise<AboutListResponse<AdvisoryBodyMember>> {
+    const response = await this.client.get<AboutListResponse<AdvisoryBodyMember>>(
+      endpoints.advisoryBody
+    );
+    return response.data;
+  }
+
+  async getHonorBoard(): Promise<AboutListResponse<HonorBoardEntry>> {
+    const response = await this.client.get<AboutListResponse<HonorBoardEntry>>(
+      endpoints.honorBoard
+    );
+    return response.data;
+  }
+
+  async getBatchRepresentatives(): Promise<AboutListResponse<BatchRepresentative>> {
+    const response = await this.client.get<AboutListResponse<BatchRepresentative>>(
+      endpoints.batchRepresentatives
     );
     return response.data;
   }

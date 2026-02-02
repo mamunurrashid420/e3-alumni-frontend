@@ -31,6 +31,10 @@ export function Header() {
     { label: 'Message from the President', href: '/about/president' },
     { label: 'Message from the General Secretary', href: '/about/secretary' },
     { label: 'Executive Members', href: '/about/executive-members' },
+    { label: 'Convening Committee', href: '/about/convening-committee' },
+    { label: 'Advisory Body', href: '/about/advisory-body' },
+    { label: 'Honor Board', href: '/about/honor-board' },
+    { label: 'Batch Representatives', href: '/about/batch-representatives' },
   ]
 
   return (
