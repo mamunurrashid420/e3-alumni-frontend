@@ -214,6 +214,8 @@ class ApiClient {
     per_page?: number;
     search?: string;
     primary_member_type?: string;
+    has_secondary_type?: boolean;
+    secondary_member_type_id?: number;
   }): Promise<PaginatedResponse<PublicMember>> {
     const response = await this.client.get<PaginatedResponse<PublicMember>>(
       endpoints.members,

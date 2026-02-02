@@ -213,6 +213,7 @@ export interface PublicMember {
   name: string;
   member_id: string | null;
   primary_member_type: MembershipType | null;
+  secondary_member_type?: MemberType | null;
   designation: string | null;
   profession: string | null;
   photo: string | null;
