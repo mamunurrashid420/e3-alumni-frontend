@@ -1,120 +1,30 @@
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { apiClient } from '@/api/client'
+import type { PublicMember } from '@/types/api'
 
-interface Member {
-  id: string
-  name: string
-  title: string
-  kuId: string
-  membershipNo: string
-  membershipStatus: 'General Member' | 'Life Member' | 'Executive Member'
+const PER_PAGE = 12
+
+function getStatusLabel(type: string | null): string {
+  switch (type) {
+    case 'GENERAL':
+      return 'General Member'
+    case 'LIFETIME':
+      return 'Life Member'
+    case 'ASSOCIATE':
+      return 'Associate Member'
+    default:
+      return 'Member'
+  }
 }
 
-const demoMembers: Member[] = [
-  {
-    id: '1',
-    name: 'Rakibul Islam',
-    title: 'Lecturer',
-    kuId: 'Ms240807',
-    membershipNo: 'GM005403',
-    membershipStatus: 'General Member',
-  },
-  {
-    id: '2',
-    name: 'Fatima Ahmed',
-    title: 'Software Engineer',
-    kuId: 'Ms230512',
-    membershipNo: 'LM002145',
-    membershipStatus: 'Life Member',
-  },
-  {
-    id: '3',
-    name: 'Mohammad Hasan',
-    title: 'Doctor',
-    kuId: 'Ms220301',
-    membershipNo: 'EM001234',
-    membershipStatus: 'Executive Member',
-  },
-  {
-    id: '4',
-    name: 'Ayesha Rahman',
-    title: 'Teacher',
-    kuId: 'Ms250609',
-    membershipNo: 'GM005404',
-    membershipStatus: 'General Member',
-  },
-  {
-    id: '5',
-    name: 'Karim Uddin',
-    title: 'Business Analyst',
-    kuId: 'Ms240115',
-    membershipNo: 'LM002146',
-    membershipStatus: 'Life Member',
-  },
-  {
-    id: '6',
-    name: 'Nusrat Jahan',
-    title: 'Engineer',
-    kuId: 'Ms230825',
-    membershipNo: 'GM005405',
-    membershipStatus: 'General Member',
-  },
-  {
-    id: '7',
-    name: 'Shahidul Islam',
-    title: 'Professor',
-    kuId: 'Ms210420',
-    membershipNo: 'EM001235',
-    membershipStatus: 'Executive Member',
-  },
-  {
-    id: '8',
-    name: 'Rashida Begum',
-    title: 'Nurse',
-    kuId: 'Ms250101',
-    membershipNo: 'GM005406',
-    membershipStatus: 'General Member',
-  },
-  {
-    id: '9',
-    name: 'Tariqul Hasan',
-    title: 'Accountant',
-    kuId: 'Ms240708',
-    membershipNo: 'LM002147',
-    membershipStatus: 'Life Member',
-  },
-  {
-    id: '10',
-    name: 'Sultana Khatun',
-    title: 'Lawyer',
-    kuId: 'Ms230203',
-    membershipNo: 'GM005407',
-    membershipStatus: 'General Member',
-  },
-  {
-    id: '11',
-    name: 'Abdul Kader',
-    title: 'Manager',
-    kuId: 'Ms220615',
-    membershipNo: 'EM001236',
-    membershipStatus: 'Executive Member',
-  },
-  {
-    id: '12',
-    name: 'Nasima Akter',
-    title: 'Designer',
-    kuId: 'Ms250312',
-    membershipNo: 'GM005408',
-    membershipStatus: 'General Member',
-  },
-]
-
-const getStatusButtonColor = (status: Member['membershipStatus']) => {
-  switch (status) {
-    case 'General Member':
+function getStatusButtonColor(type: string | null): string {
+  switch (type) {
+    case 'GENERAL':
       return 'bg-[#3B60C9] hover:bg-[#2d4ba3]'
-    case 'Life Member':
+    case 'LIFETIME':
       return 'bg-green-600 hover:bg-green-700'
-    case 'Executive Member':
+    case 'ASSOCIATE':
       return 'bg-purple-600 hover:bg-purple-700'
     default:
       return 'bg-[#3B60C9] hover:bg-[#2d4ba3]'
@@ -122,6 +32,40 @@ const getStatusButtonColor = (status: Member['membershipStatus']) => {
 }
 
 export function Membership() {
+  const [page, setPage] = useState(1)
+  const [data, setData] = useState<{
+    members: PublicMember[]
+    meta: { current_page: number; last_page: number; total: number; per_page: number }
+    links: { prev: string | null; next: string | null }
+  } | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    apiClient
+      .getMembers({ page, per_page: PER_PAGE })
+      .then((res) => {
+        setData({
+          members: res.data,
+          meta: res.meta,
+          links: res.links,
+        })
+      })
+      .catch((err) => {
+        setError(err?.message ?? 'Failed to load members.')
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [page])
+
+  const meta = data?.meta
+  const members = data?.members ?? []
+  const hasPrev = !!data?.links.prev
+  const hasNext = !!data?.links.next
+
   return (
     <div className="container mx-auto px-4 py-8 md:py-12 lg:py-16 max-w-7xl">
       <div className="flex flex-col gap-6 mb-8">
@@ -138,57 +82,107 @@ export function Membership() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        {demoMembers.map((member) => (
-          <div
-            key={member.id}
-            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200 border border-gray-100"
-          >
-            <div className="flex items-start gap-4">
-              {/* Avatar */}
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
-                <svg
-                  className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
+      {loading && (
+        <div className="flex justify-center py-12">
+          <p className="text-[#021E40]">Loading members…</p>
+        </div>
+      )}
 
-              {/* Member Details */}
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg sm:text-xl font-bold text-[#021E40] mb-1 truncate">
-                  {member.name}
-                </h3>
-                <p className="text-sm sm:text-base text-[#021E40] mb-2">
-                  {member.title}
-                </p>
-                <div className="space-y-1 mb-3">
-                  <p className="text-xs sm:text-sm text-[#021E40]">
-                    <span className="text-[#021E40]">KU ID :</span>{' '}
-                    <span className="text-[#021E40] font-medium">{member.kuId}</span>
-                  </p>
-                  <p className="text-xs sm:text-sm text-[#021E40]">
-                    <span className="text-[#021E40]">Membership No :</span>{' '}
-                    <span className="text-[#021E40] font-medium">{member.membershipNo}</span>
-                  </p>
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          {error}
+        </div>
+      )}
+
+      {!loading && !error && members.length === 0 && (
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center text-[#021E40]">
+          No members to display.
+        </div>
+      )}
+
+      {!loading && !error && members.length > 0 && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {members.map((member) => (
+              <div
+                key={member.id}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-100 flex flex-col"
+              >
+                <div className="w-full h-64 bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                  {member.photo ? (
+                    <img
+                      src={member.photo}
+                      alt={member.name}
+                      className="max-w-full max-h-full w-auto h-auto object-contain"
+                    />
+                  ) : (
+                    <svg
+                      className="w-16 h-16 sm:w-20 sm:h-20 text-gray-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
                 </div>
+                <div className="p-4 flex-1 flex flex-col">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#021E40] mb-1 truncate">
+                    {member.name}
+                  </h3>
+                  <p className="text-sm sm:text-base text-[#021E40] mb-2">
+                    {member.designation ?? member.profession ?? '—'}
+                  </p>
+                  <div className="space-y-1 mb-3">
+                    <p className="text-xs sm:text-sm text-[#021E40]">
+                      <span className="text-[#021E40]">Membership No :</span>{' '}
+                      <span className="text-[#021E40] font-medium">{member.member_id ?? '—'}</span>
+                    </p>
+                  </div>
+                  <Button
+                    className={`${getStatusButtonColor(member.primary_member_type)} text-white text-xs sm:text-sm px-3 py-1.5 h-auto rounded-md font-medium mt-auto w-fit`}
+                  >
+                    {getStatusLabel(member.primary_member_type)}
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {meta && (meta.last_page > 1 || meta.total > PER_PAGE) && (
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-sm text-[#021E40]">
+                Showing {(meta.current_page - 1) * meta.per_page + 1}–{Math.min(meta.current_page * meta.per_page, meta.total)} of {meta.total}
+              </p>
+              <div className="flex items-center gap-2">
                 <Button
-                  className={`${getStatusButtonColor(member.membershipStatus)} text-white text-xs sm:text-sm px-3 py-1.5 h-auto rounded-md font-medium`}
+                  variant="outline"
+                  size="sm"
+                  disabled={!hasPrev}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
                 >
-                  {member.membershipStatus}
+                  Previous
+                </Button>
+                <span className="text-sm text-[#021E40] px-2">
+                  Page {meta.current_page} of {meta.last_page}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!hasNext}
+                  onClick={() => setPage((p) => Math.min(meta.last_page, p + 1))}
+                >
+                  Next
                 </Button>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          )}
+        </>
+      )}
     </div>
   )
 }

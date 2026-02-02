@@ -23,6 +23,7 @@ export const endpoints = {
   memberTypes: `${API_BASE}/member-types`,
 
   // About Us (public)
+  members: `${API_BASE}/about/members`,
   conveningCommittee: `${API_BASE}/about/convening-committee`,
   advisoryBody: `${API_BASE}/about/advisory-body`,
   honorBoard: `${API_BASE}/about/honor-board`,

@@ -206,3 +206,14 @@ export interface BatchRepresentative {
 export interface AboutListResponse<T> {
   data: T[];
 }
+
+/** Public member list item (no sensitive data) */
+export interface PublicMember {
+  id: number;
+  name: string;
+  member_id: string | null;
+  primary_member_type: MembershipType | null;
+  designation: string | null;
+  profession: string | null;
+  photo: string | null;
+}

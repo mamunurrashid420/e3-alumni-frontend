@@ -10,6 +10,7 @@ import type {
   ApiError,
   SelfDeclaration,
   MemberType,
+  PublicMember,
   ConveningCommitteeMember,
   AdvisoryBodyMember,
   HonorBoardEntry,
@@ -203,6 +204,20 @@ class ApiClient {
   async getBatchRepresentatives(): Promise<AboutListResponse<BatchRepresentative>> {
     const response = await this.client.get<AboutListResponse<BatchRepresentative>>(
       endpoints.batchRepresentatives
+    );
+    return response.data;
+  }
+
+  /** Public paginated member list (no auth required). */
+  async getMembers(params?: {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    primary_member_type?: string;
+  }): Promise<PaginatedResponse<PublicMember>> {
+    const response = await this.client.get<PaginatedResponse<PublicMember>>(
+      endpoints.members,
+      { params }
     );
     return response.data;
   }
