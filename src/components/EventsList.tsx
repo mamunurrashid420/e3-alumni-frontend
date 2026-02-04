@@ -41,22 +41,22 @@ function EventCard({
       >
         <div className="shrink-0 w-14 text-center bg-gray-100 rounded py-2">
           <div className="text-xl font-bold text-black">{start.date}</div>
-          <div className="text-xs text-gray-600 uppercase">{start.month}</div>
+          <div className="text-xs text-black-600 uppercase">{start.month}</div>
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-black mb-1 truncate">{event.title}</h3>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
+          <div className="flex items-center gap-2 text-xs text-black-600">
             <Clock className="w-3 h-3 shrink-0" />
             <span>{start.time}</span>
           </div>
           {event.location && (
-            <div className="flex items-center gap-2 text-xs text-gray-600 mt-0.5">
+            <div className="flex items-center gap-2 text-xs text-black-600 mt-0.5">
               <MapPin className="w-3 h-3 shrink-0" />
               <span className="truncate">{event.location}</span>
             </div>
           )}
           {event.registration_count !== undefined && isOpen && (
-            <p className="text-xs text-gray-500 mt-1">{event.registration_count} registered</p>
+            <p className="text-xs text-black-500 mt-1">{event.registration_count} registered</p>
           )}
         </div>
       </Link>
@@ -103,9 +103,9 @@ export function EventsList({ dashboardContext = false }: EventsListProps) {
       <section className="w-full py-16 px-4 md:px-8 lg:px-16 max-w-6xl mx-auto">
         <h2 className="text-2xl font-semibold text-black mb-6">Upcoming events</h2>
         {loading ? (
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-black-600">Loading...</p>
         ) : upcoming.length === 0 ? (
-          <p className="text-gray-600">No upcoming events.</p>
+          <p className="text-black-600">No upcoming events.</p>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {upcoming.map((event) => (
@@ -121,7 +121,7 @@ export function EventsList({ dashboardContext = false }: EventsListProps) {
 
         <h2 className="text-2xl font-semibold text-black mt-12 mb-6">Past events</h2>
         {loading ? null : past.length === 0 ? (
-          <p className="text-gray-600">No past events.</p>
+          <p className="text-black-600">No past events.</p>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {past.map((event) => (

@@ -98,6 +98,19 @@ export function Scholarship() {
             >
               Supporting meritorious and financially deserving students through the Alumni Scholarship Program
             </p>
+            <div className="flex justify-center mt-2">
+              <Button
+                type="button"
+                onClick={handleApplyClick}
+                className="w-full sm:w-auto px-8 h-[50px] md:h-[56px] text-base md:text-lg font-semibold rounded-md"
+                style={{ 
+                  background: '#3B60C9',
+                  color: '#FFFFFF',
+                }}
+              >
+                Apply for Scholarship
+              </Button>
+            </div>
           </div>
         </div>
       </section>

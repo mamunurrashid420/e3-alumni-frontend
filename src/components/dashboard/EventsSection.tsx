@@ -34,9 +34,9 @@ export function EventsSection() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-gray-600">Loading...</p>
+        <p className="text-sm text-black-600">Loading...</p>
       ) : events.length === 0 ? (
-        <p className="text-sm text-gray-600">No upcoming events.</p>
+        <p className="text-sm text-black-600">No upcoming events.</p>
       ) : (
         <div className="space-y-4">
           {events.slice(0, 4).map((event) => {
@@ -72,7 +72,7 @@ export function EventsSection() {
                       </div>
                     )}
                     {event.registration_count !== undefined && (
-                      <p className="text-xs text-gray-500 mt-1">{event.registration_count} registered</p>
+                      <p className="text-xs text-black-500 mt-1">{event.registration_count} registered</p>
                     )}
                   </div>
                 </Link>

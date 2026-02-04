@@ -151,7 +151,7 @@ export function UpcomingEventsSection() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold text-black mb-2">{guestModalEvent.title}</h3>
-            <p className="text-sm text-gray-600 mb-4">Register as a guest. Fill in your details below.</p>
+            <p className="text-sm text-black-600 mb-4">Register as a guest. Fill in your details below.</p>
             <form onSubmit={handleGuestRegisterSubmit} className="space-y-4">
               <div>
                 <label htmlFor="guest_name_modal" className="block text-sm font-medium text-black-700 mb-1">
@@ -227,9 +227,9 @@ export function UpcomingEventsSection() {
             Upcoming Events
           </h2>
           {loading ? (
-            <p className="text-gray-600">Loading...</p>
+            <p className="text-black-600">Loading...</p>
           ) : events.length === 0 ? (
-            <p className="text-gray-600">No upcoming events.</p>
+            <p className="text-black-600">No upcoming events.</p>
           ) : (
             <div className="flex flex-col gap-8">
               {events.slice(0, 3).map((event) => (
