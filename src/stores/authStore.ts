@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { User } from '@/types/api';
 import { apiClient } from '@/api/client';
+import { authCookieStorage } from '@/lib/cookie';
 
 interface AuthState {
   user: User | null;
@@ -86,6 +87,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
+      storage: createJSONStorage(() => authCookieStorage),
       // Only persist user data, not loading state
       partialize: (state) => ({ 
         user: state.user, 

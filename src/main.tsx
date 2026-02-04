@@ -5,6 +5,10 @@ import './index.css'
 import { router } from './router'
 import { useAuthStore } from './stores/authStore'
 import { apiClient } from './api/client'
+import { migrateAuthFromLocalStorage } from '@/lib/migrateAuthFromLocalStorage'
+
+// Clear legacy auth from localStorage (auth now in cookies). TODO: remove when safe.
+migrateAuthFromLocalStorage()
 
 // Initialize auth on app startup
 function App() {

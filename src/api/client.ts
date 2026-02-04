@@ -24,6 +24,9 @@ import type {
   ScholarshipApplicationSubmitResponse,
 } from '@/types/api';
 import { endpoints } from './endpoints';
+import { getCookie, setCookie, removeCookie } from '@/lib/cookie';
+
+const AUTH_TOKEN_COOKIE = 'auth_token';
 
 class ApiClient {
   private client: AxiosInstance;
@@ -82,16 +85,16 @@ class ApiClient {
     );
   }
 
-  private getToken(): string | null {
-    return localStorage.getItem('auth_token');
+  getToken(): string | null {
+    return getCookie(AUTH_TOKEN_COOKIE);
   }
 
   setToken(token: string): void {
-    localStorage.setItem('auth_token', token);
+    setCookie(AUTH_TOKEN_COOKIE, token);
   }
 
   clearToken(): void {
-    localStorage.removeItem('auth_token');
+    removeCookie(AUTH_TOKEN_COOKIE);
   }
 
   isAuthenticated(): boolean {

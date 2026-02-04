@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/authStore'
+import { apiClient } from '@/api/client'
 
 interface MemberInfo {
   member_id: string
@@ -397,7 +398,7 @@ export function MakePayment({ showMemberId = true }: MakePaymentProps = {}) {
       
       // Add authorization token if user is authenticated
       if (isAuthUser) {
-        const token = localStorage.getItem('auth_token')
+        const token = apiClient.getToken()
         if (token) {
           headers['Authorization'] = `Bearer ${token}`
         }
