@@ -170,7 +170,12 @@ export function Header() {
                           <ChevronDown className="w-4 h-4" />
                         </button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="min-w-[200px] ml-2">
+                      <DropdownMenuContent 
+                        align="start" 
+                        side="bottom"
+                        className="min-w-[200px] w-[calc(100vw-2rem)] max-w-[280px] ml-0"
+                        sideOffset={4}
+                      >
                         {aboutMenuItems.map((menuItem) => (
                           <DropdownMenuItem
                             key={menuItem.href}

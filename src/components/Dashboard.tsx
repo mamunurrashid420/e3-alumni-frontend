@@ -39,14 +39,14 @@ export function Dashboard() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
+    <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
       {/* Main Content */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 space-y-4 md:space-y-6">
         {/* Welcome Banner */}
         <WelcomeBanner />
 
         {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <InfoCard
             icon={
               <Award className="w-12 h-12 text-yellow-500" />
@@ -73,14 +73,14 @@ export function Dashboard() {
         </div>
 
         {/* Bottom Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           <NotificationsSection />
           <SubscriptionSection />
         </div>
       </div>
 
       {/* Right Sidebar */}
-      <aside className="w-full lg:w-96 space-y-6">
+      <aside className="w-full lg:w-96 space-y-4 md:space-y-6">
         <ProfileCard />
         <EventsSection />
       </aside>

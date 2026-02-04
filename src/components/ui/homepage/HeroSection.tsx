@@ -22,7 +22,7 @@ export function HeroSection() {
       </div>
 
       {/* Social Media Icons - Left Side */}
-      <div className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 md:gap-4 z-10">
+      <div className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 md:gap-4 z-10 hidden sm:flex">
         <a 
           href="https://linkedin.com" 
           target="_blank" 

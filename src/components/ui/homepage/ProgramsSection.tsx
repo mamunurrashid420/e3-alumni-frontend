@@ -26,9 +26,8 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
   const uniqueId = useId().replace(/:/g, '_')
   return (
     <div 
-      className="relative shrink-0 rounded-[10px] overflow-hidden"
+      className="relative shrink-0 rounded-[10px] overflow-hidden w-full max-w-[370px] mx-auto"
       style={{
-        width: '370px',
         height: '393px',
         background: '#FFFFFF',
         boxShadow: '2px 4px 30px rgba(0, 0, 0, 0.08)',
@@ -47,18 +46,18 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
 
       {/* Colored Stripe */}
       <div 
-        className="absolute w-[78px] h-[88px] left-[40px] top-[162px] rounded-bl-[10px] flex items-end"
+        className="absolute w-12 md:w-16 lg:w-[78px] h-16 md:h-20 lg:h-[88px] left-4 md:left-6 lg:left-[40px] top-[162px] rounded-bl-[10px] flex items-end"
         style={{ background: '#7166F5' }}
       >
-        <div className="absolute left-[17px] bottom-0 w-[44px] h-[44px] text-white">
+        <div className="absolute left-2 md:left-3 lg:left-[17px] bottom-0 w-8 h-8 md:w-10 md:h-10 lg:w-[44px] lg:h-[44px] text-white">
           {icon}
         </div>
       </div>
 
       {/* Content */}
-      <div className="absolute left-[134px] top-[199px] right-[40px]">
+      <div className="absolute left-20 md:left-28 lg:left-[134px] top-[199px] right-4 md:right-6 lg:right-[40px]">
         <h3 
-          className="text-xl font-extrabold"
+          className="text-base md:text-lg lg:text-xl font-extrabold"
           style={{ color: '#211F38' }}
         >
           {title}
@@ -67,7 +66,7 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
       
       {/* Line aligned with icon bottom */}
       <div 
-        className="absolute left-[134px] w-[212px] h-px"
+        className="absolute left-20 md:left-28 lg:left-[134px] right-4 md:right-6 lg:w-[212px] h-px"
         style={{ 
           background: '#D0CCFF',
           top: '249px'
@@ -75,9 +74,9 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
       />
       
       {/* Description */}
-      <div className="absolute left-[134px] top-[254px] right-[40px]">
+      <div className="absolute left-20 md:left-28 lg:left-[134px] top-[254px] right-4 md:right-6 lg:right-[40px]">
         <p 
-          className="text-base font-semibold leading-[30px]"
+          className="text-sm md:text-base font-semibold leading-6 md:leading-7 lg:leading-[30px]"
           style={{ color: '#737092' }}
         >
           {description}
@@ -168,18 +167,16 @@ export function ProgramsSection() {
 
   return (
     <section 
-      className="w-full py-20 relative"
+      className="w-full py-12 md:py-16 lg:py-20 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[375px] relative"
       style={{
         background: '#F5F5F5',
-        paddingLeft: '375px',
-        paddingRight: '375px',
       }}
     >
-      <div className="flex flex-col gap-14">
+      <div className="flex flex-col gap-8 md:gap-12 lg:gap-14">
         {/* Header */}
-        <div className="flex flex-row justify-between items-start">
-          <div className="flex flex-col gap-3">
-            <h2 className="text-[40px] leading-[48px]">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+          <div className="flex flex-col gap-2 md:gap-3">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-[40px] leading-tight md:leading-[40px] lg:leading-[48px]">
               <div>
                 <span 
                   className="font-normal"
@@ -196,10 +193,9 @@ export function ProgramsSection() {
                   Programs for Students
                 </span>
                 <div 
-                  className="absolute bottom-[-8px] left-0 h-[2px]"
+                  className="absolute bottom-[-8px] left-0 h-[2px] w-32 md:w-40 lg:w-[200px]"
                   style={{ 
                     background: '#7166F5',
-                    width: '200px'
                   }}
                 />
               </div>
@@ -210,23 +206,23 @@ export function ProgramsSection() {
           <div className="flex gap-2">
             <button
               onClick={prevSlide}
-              className="w-[52px] h-[52px] rounded-full bg-white flex items-center justify-center border"
+              className="w-10 h-10 md:w-12 md:h-12 lg:w-[52px] lg:h-[52px] rounded-full bg-white flex items-center justify-center border shrink-0"
               style={{ 
                 color: '#211F38',
                 borderColor: '#E5E5E5'
               }}
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
             </button>
             <button
               onClick={nextSlide}
-              className="w-[52px] h-[52px] rounded-full bg-white flex items-center justify-center border"
+              className="w-10 h-10 md:w-12 md:h-12 lg:w-[52px] lg:h-[52px] rounded-full bg-white flex items-center justify-center border shrink-0"
               style={{ 
                 color: '#211F38',
                 borderColor: '#E5E5E5'
               }}
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
             </button>
           </div>
         </div>
@@ -238,8 +234,8 @@ export function ProgramsSection() {
         />
 
         {/* Programs Carousel */}
-        <div className="relative mb-32 z-10">
-          <div className="flex gap-8 overflow-hidden">
+        <div className="relative mb-16 md:mb-24 lg:mb-32 z-10">
+          <div className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto pb-4 scrollbar-hide">
             {visiblePrograms.map((program, index) => (
               <ProgramCard key={currentIndex + index} {...program} />
             ))}

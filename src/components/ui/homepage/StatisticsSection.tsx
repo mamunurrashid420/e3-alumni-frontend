@@ -8,19 +8,19 @@ interface StatBlockProps {
 
 function StatBlock({ icon, number, label }: StatBlockProps) {
   return (
-    <div className="flex flex-row items-center gap-4">
-      <div className="w-[92px] h-[92px] flex items-center justify-center">
+    <div className="flex flex-row items-center gap-2 md:gap-4">
+      <div className="w-12 h-12 md:w-16 md:h-16 lg:w-[92px] lg:h-[92px] flex items-center justify-center shrink-0">
         {icon}
       </div>
       <div className="flex flex-col">
         <div 
-          className="text-5xl font-semibold leading-[56px]"
+          className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold leading-tight md:leading-[40px] lg:leading-[56px]"
           style={{ color: '#D8DAE4', letterSpacing: '0.04em' }}
         >
           {number}
         </div>
         <div 
-          className="text-2xl leading-[36px]"
+          className="text-sm md:text-base lg:text-xl xl:text-2xl leading-tight md:leading-[24px] lg:leading-[36px]"
           style={{ color: '#D8DAE4' }}
         >
           {label}
@@ -56,14 +56,12 @@ export function StatisticsSection() {
 
   return (
     <section 
-      className="w-full py-20"
+      className="w-full py-8 md:py-12 lg:py-20 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px]"
       style={{
         background: '#161F37',
-        paddingLeft: '320px',
-        paddingRight: '320px',
       }}
     >
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col sm:flex-row flex-wrap justify-center sm:justify-between items-center gap-6 md:gap-8 lg:gap-12">
         {stats.map((stat, index) => (
           <StatBlock
             key={index}

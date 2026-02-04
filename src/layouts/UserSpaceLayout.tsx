@@ -16,9 +16,9 @@ export function UserSpaceLayout({
   return (
     <div className="min-h-screen flex bg-gray-50">
       <Navigation />
-      <div className="flex-1 lg:ml-64 flex flex-col">
+      <div className="flex-1 pl-14 lg:pl-0 lg:ml-64 flex flex-col min-w-0">
         <DashboardHeader title={title} subtitle={subtitle} />
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 p-2 md:p-4 lg:p-6 overflow-auto">
           {children}
         </main>
       </div>

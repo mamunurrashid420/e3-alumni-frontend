@@ -25,9 +25,8 @@ interface NewsCardProps {
 function NewsCard({ image, date, title, description, author }: NewsCardProps) {
   return (
     <div 
-      className="flex flex-col rounded-[9.26px] overflow-hidden"
+      className="flex flex-col rounded-[9.26px] overflow-hidden w-full max-w-[411px] mx-auto"
       style={{
-        width: '411px',
         background: '#FFFFFF',
         boxShadow: '0px 9.26px 13.89px rgba(8, 14, 28, 0.06)',
       }}
@@ -43,13 +42,13 @@ function NewsCard({ image, date, title, description, author }: NewsCardProps) {
       />
 
       {/* Content */}
-      <div className="p-[37px] flex flex-col gap-6">
+      <div className="p-4 md:p-6 lg:p-[37px] flex flex-col gap-4 md:gap-6">
         {/* Date */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Calendar className="w-[11px] h-[13px]" style={{ color: '#737887' }} />
+            <Calendar className="w-3 h-3 md:w-[11px] md:h-[13px]" style={{ color: '#737887' }} />
             <span 
-              className="text-[13px] leading-[24px]"
+              className="text-xs md:text-sm lg:text-[13px] leading-5 md:leading-6 lg:leading-[24px]"
               style={{ color: '#737887' }}
             >
               {date}
@@ -59,7 +58,7 @@ function NewsCard({ image, date, title, description, author }: NewsCardProps) {
 
         {/* Title */}
         <h3 
-          className="text-[22px] font-bold leading-[31px]"
+          className="text-lg md:text-xl lg:text-[22px] font-bold leading-6 md:leading-7 lg:leading-[31px]"
           style={{ color: '#141D38' }}
         >
           {title}
@@ -67,7 +66,7 @@ function NewsCard({ image, date, title, description, author }: NewsCardProps) {
 
         {/* Description */}
         <p 
-          className="text-[15px] leading-[26px]"
+          className="text-sm md:text-base lg:text-[15px] leading-5 md:leading-6 lg:leading-[26px]"
           style={{ color: '#737887' }}
         >
           {description}
@@ -141,20 +140,16 @@ export function RecentNewsSection() {
 
   return (
     <section 
-      className="w-full py-16 flex flex-col items-center gap-6"
-      style={{
-        paddingLeft: '320px',
-        paddingRight: '320px',
-      }}
+      className="w-full py-12 md:py-16 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px] flex flex-col items-center gap-6 md:gap-8"
     >
       <h2 
-        className="text-5xl font-semibold leading-[72px] text-center"
+        className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
         style={{ color: '#021E40' }}
       >
         Recent News
       </h2>
 
-      <div className="flex flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full justify-center">
         {news.map((item, index) => (
           <NewsCard key={index} {...item} />
         ))}
