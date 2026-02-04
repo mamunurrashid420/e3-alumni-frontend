@@ -58,55 +58,58 @@ export function GallerySection() {
           ))}
         </div>
 
-        {/* Image Grid */}
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 md:gap-6 w-full mt-6 md:mt-8">
-          {/* Large Image */}
+        {/* Image Grid - simple 1-2 column on mobile/tablet to prevent overflow */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 w-full mt-6 md:mt-8 lg:hidden">
+          {galleryImages.map((img) => (
+            <img
+              key={img.id}
+              src={img.url}
+              alt="Gallery"
+              className="w-full h-[200px] sm:h-[220px] md:h-[240px] rounded-2xl object-cover"
+            />
+          ))}
+        </div>
+
+        {/* Desktop: custom 5-column flex layout */}
+        <div className="hidden lg:flex flex-row items-center justify-center gap-4 md:gap-6 w-full mt-6 md:mt-8">
           <img 
             src={galleryImages[0].url}
             alt="Gallery"
-            className="w-full max-w-[228px] h-[200px] md:h-[240px] lg:h-[260px] rounded-2xl object-cover"
+            className="w-full max-w-[228px] h-[260px] rounded-2xl object-cover"
           />
-
-          {/* Middle Column */}
-          <div className="flex flex-row lg:flex-col gap-4 md:gap-6">
+          <div className="flex flex-col gap-4 md:gap-6">
             <img 
               src={galleryImages[1].url}
               alt="Gallery"
-              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+              className="w-full max-w-[200px] h-[248px] rounded-2xl object-cover"
             />
             <img 
               src={galleryImages[2].url}
               alt="Gallery"
-              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+              className="w-full max-w-[200px] h-[248px] rounded-2xl object-cover"
             />
           </div>
-
-          {/* Large Center Image */}
           <img 
             src={galleryImages[3].url}
             alt="Gallery"
-            className="w-full max-w-[296px] h-[300px] md:h-[400px] lg:h-[520px] rounded-2xl object-cover"
+            className="w-full max-w-[296px] h-[520px] rounded-2xl object-cover"
           />
-
-          {/* Right Column */}
-          <div className="flex flex-row lg:flex-col gap-4 md:gap-6">
+          <div className="flex flex-col gap-4 md:gap-6">
             <img 
               src={galleryImages[4].url}
               alt="Gallery"
-              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+              className="w-full max-w-[200px] h-[248px] rounded-2xl object-cover"
             />
             <img 
               src={galleryImages[5].url}
               alt="Gallery"
-              className="w-full max-w-[200px] h-[180px] md:h-[220px] lg:h-[248px] rounded-2xl object-cover"
+              className="w-full max-w-[200px] h-[248px] rounded-2xl object-cover"
             />
           </div>
-
-          {/* Last Image */}
           <img 
             src={galleryImages[6].url}
             alt="Gallery"
-            className="w-full max-w-[228px] h-[200px] md:h-[240px] lg:h-[260px] rounded-2xl object-cover"
+            className="w-full max-w-[228px] h-[260px] rounded-2xl object-cover"
           />
         </div>
 

@@ -61,7 +61,7 @@ export function StatisticsSection() {
         background: '#161F37',
       }}
     >
-      <div className="flex flex-col sm:flex-row flex-wrap justify-center sm:justify-between items-center gap-6 md:gap-8 lg:gap-12">
+      <div className="grid grid-cols-2 sm:flex sm:flex-row flex-wrap justify-center sm:justify-between items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12">
         {stats.map((stat, index) => (
           <StatBlock
             key={index}

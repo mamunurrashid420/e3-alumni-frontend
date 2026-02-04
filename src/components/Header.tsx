@@ -87,7 +87,7 @@ export function Header() {
       {/* Main Navigation Bar */}
       <div className="min-h-[70px] sm:h-[90px] lg:h-[100px] bg-white shadow-lg w-full flex items-center justify-between px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80 gap-4 sm:gap-6 lg:gap-10">
         {/* Logo and School Name */}
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0">
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 md:gap-4 shrink-0 no-underline">
           <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full border-2 sm:border-3 md:border-4 border-[#3B60C9] bg-white flex items-center justify-center shrink-0 overflow-hidden">
             <img 
               src={logoImage} 
@@ -101,7 +101,7 @@ export function Header() {
             </h1>
             <p className="text-[#3B60C9] text-[10px] sm:text-xs md:text-sm">ALUMNI ASSOCIATION</p>
           </div>
-        </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-4 xl:gap-6">

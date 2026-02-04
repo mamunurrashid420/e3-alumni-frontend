@@ -30,12 +30,12 @@ function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) 
     : null
 
   return (
-    <div className="w-full max-w-[406px] min-h-[90px] flex gap-5 mb-8">
+    <div className="w-full max-w-[406px] min-h-[90px] flex flex-col sm:flex-row gap-3 sm:gap-5 mb-6 sm:mb-8">
       <Link
         to={isAuthenticated ? '/dashboard/events/$id' : '/events/$id'}
         params={{ id: String(event.id) }}
         search={{ register: undefined }}
-        className="flex-1 flex gap-5 no-underline text-inherit hover:opacity-90 min-w-0"
+        className="flex-1 flex gap-3 sm:gap-5 no-underline text-inherit hover:opacity-90 min-w-0"
       >
         <div className="shrink-0 w-[70px] h-[90px] flex flex-col items-center justify-center bg-[#F2F2F2]">
           <div className="text-2xl font-bold leading-[30px] text-black">
@@ -46,7 +46,7 @@ function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) 
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold leading-[24px] capitalize mb-2 text-black">
+          <h3 className="text-base font-semibold leading-[24px] capitalize mb-2 text-black wrap-break-word">
             {event.title}
           </h3>
           <div className="flex flex-col gap-2">
@@ -72,7 +72,7 @@ function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) 
           to={registerTo.to}
           params={registerTo.params}
           search={registerTo.search}
-          className="shrink-0 self-center text-sm font-medium text-primary-custom hover:underline"
+          className="shrink-0 self-center sm:self-center text-sm font-medium text-primary-custom hover:underline py-2"
         >
           Register
         </Link>
@@ -80,7 +80,7 @@ function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) 
         <button
           type="button"
           onClick={() => onGuestRegister?.(event)}
-          className="shrink-0 self-center text-sm font-medium text-primary-custom hover:underline bg-transparent border-none cursor-pointer"
+          className="shrink-0 self-center sm:self-center text-sm font-medium text-primary-custom hover:underline bg-transparent border-none cursor-pointer py-2"
         >
           Register
         </button>
@@ -139,13 +139,7 @@ export function UpcomingEventsSection() {
   }
 
   return (
-    <section
-      className="w-full py-16 px-4 md:px-8 lg:px-16"
-      style={{
-        paddingLeft: 'clamp(1rem, 10vw, 320px)',
-        paddingRight: 'clamp(1rem, 10vw, 320px)',
-      }}
-    >
+    <section className="w-full py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-[320px]">
       {/* Guest registration modal (homepage) */}
       {guestModalEvent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
@@ -221,9 +215,9 @@ export function UpcomingEventsSection() {
         </div>
       )}
 
-      <div className="flex flex-col lg:flex-row items-stretch gap-10">
-        <div className="flex flex-col gap-10 w-full max-w-[406px]">
-          <h2 className="text-[28px] font-semibold leading-[40px] uppercase text-black">
+      <div className="flex flex-col lg:flex-row items-stretch gap-8 md:gap-10 min-w-0">
+        <div className="flex flex-col gap-8 md:gap-10 w-full min-w-0 max-w-[406px]">
+          <h2 className="text-xl sm:text-2xl md:text-[28px] font-semibold leading-tight md:leading-[40px] uppercase text-black">
             Upcoming Events
           </h2>
           {loading ? (

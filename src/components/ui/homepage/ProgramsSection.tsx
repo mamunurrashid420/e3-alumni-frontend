@@ -1,4 +1,4 @@
-import { useState, useId, useMemo } from 'react'
+import { useState, useId, useMemo, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, GraduationCap, Heart, BookOpen, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import event1 from '@/assets/alumni/event/1.jpg'
@@ -26,16 +26,15 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
   const uniqueId = useId().replace(/:/g, '_')
   return (
     <div 
-      className="relative shrink-0 rounded-[10px] overflow-hidden w-full max-w-[370px] mx-auto"
+      className="relative shrink-0 rounded-[10px] overflow-hidden w-full max-w-[370px] mx-auto min-h-[320px] md:min-h-[360px] lg:h-[393px]"
       style={{
-        height: '393px',
         background: '#FFFFFF',
         boxShadow: '2px 4px 30px rgba(0, 0, 0, 0.08)',
       }}
     >
       {/* Header Image */}
       <div 
-        className="absolute h-[199px] w-full top-0 left-0 rounded-t-[10px] overflow-hidden"
+        className="absolute h-[50%] min-h-[160px] lg:h-[199px] w-full top-0 left-0 rounded-t-[10px] overflow-hidden"
         style={{
           backgroundImage: `url(${image})`,
           backgroundSize: 'cover',
@@ -46,7 +45,7 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
 
       {/* Colored Stripe */}
       <div 
-        className="absolute w-12 md:w-16 lg:w-[78px] h-16 md:h-20 lg:h-[88px] left-4 md:left-6 lg:left-[40px] top-[162px] rounded-bl-[10px] flex items-end"
+        className="absolute w-12 md:w-16 lg:w-[78px] h-16 md:h-20 lg:h-[88px] left-4 md:left-6 lg:left-[40px] top-[calc(50%-44px)] lg:top-[162px] rounded-bl-[10px] flex items-end"
         style={{ background: '#7166F5' }}
       >
         <div className="absolute left-2 md:left-3 lg:left-[17px] bottom-0 w-8 h-8 md:w-10 md:h-10 lg:w-[44px] lg:h-[44px] text-white">
@@ -55,7 +54,7 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
       </div>
 
       {/* Content */}
-      <div className="absolute left-20 md:left-28 lg:left-[134px] top-[199px] right-4 md:right-6 lg:right-[40px]">
+      <div className="absolute left-20 md:left-28 lg:left-[134px] top-[50%] lg:top-[199px] right-4 md:right-6 lg:right-[40px]">
         <h3 
           className="text-base md:text-lg lg:text-xl font-extrabold"
           style={{ color: '#211F38' }}
@@ -66,15 +65,14 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
       
       {/* Line aligned with icon bottom */}
       <div 
-        className="absolute left-20 md:left-28 lg:left-[134px] right-4 md:right-6 lg:w-[212px] h-px"
+        className="absolute left-20 md:left-28 lg:left-[134px] right-4 md:right-6 lg:w-[212px] h-px top-[calc(50%+28px)] lg:top-[249px]"
         style={{ 
           background: '#D0CCFF',
-          top: '249px'
         }}
       />
       
       {/* Description */}
-      <div className="absolute left-20 md:left-28 lg:left-[134px] top-[254px] right-4 md:right-6 lg:right-[40px]">
+      <div className="absolute left-20 md:left-28 lg:left-[134px] top-[calc(50%+32px)] lg:top-[254px] right-4 md:right-6 lg:right-[40px]">
         <p 
           className="text-sm md:text-base font-semibold leading-6 md:leading-7 lg:leading-[30px]"
           style={{ color: '#737092' }}
@@ -115,8 +113,30 @@ function ProgramCard({ image, icon, title, description }: ProgramCardProps) {
   )
 }
 
+function useCardsPerView() {
+  const [cardsPerView, setCardsPerView] = useState(3)
+  useEffect(() => {
+    const lg = window.matchMedia('(min-width: 1024px)')
+    const md = window.matchMedia('(min-width: 768px)')
+    const update = () => {
+      if (lg.matches) setCardsPerView(3)
+      else if (md.matches) setCardsPerView(2)
+      else setCardsPerView(1)
+    }
+    update()
+    lg.addEventListener('change', update)
+    md.addEventListener('change', update)
+    return () => {
+      lg.removeEventListener('change', update)
+      md.removeEventListener('change', update)
+    }
+  }, [])
+  return cardsPerView
+}
+
 export function ProgramsSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const cardsPerView = useCardsPerView()
 
   const programs = useMemo(() => [
     {
@@ -155,14 +175,16 @@ export function ProgramsSection() {
     }
   ], [])
 
-  const visiblePrograms = programs.slice(currentIndex, currentIndex + 3)
+  const maxIndex = Math.max(0, programs.length - cardsPerView)
+  const clampedIndex = Math.min(currentIndex, maxIndex)
+  const visiblePrograms = programs.slice(clampedIndex, clampedIndex + cardsPerView)
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % (programs.length - 2))
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1))
   }
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + (programs.length - 2)) % (programs.length - 2))
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1))
   }
 
   return (
@@ -235,9 +257,9 @@ export function ProgramsSection() {
 
         {/* Programs Carousel */}
         <div className="relative mb-16 md:mb-24 lg:mb-32 z-10">
-          <div className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto pb-4 scrollbar-hide">
+          <div className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto pb-4 scrollbar-hide touch-pan-x">
             {visiblePrograms.map((program, index) => (
-              <ProgramCard key={currentIndex + index} {...program} />
+              <ProgramCard key={clampedIndex + index} {...program} />
             ))}
           </div>
         </div>

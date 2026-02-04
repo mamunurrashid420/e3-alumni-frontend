@@ -8,19 +8,19 @@ interface ResponsibilityCardProps {
 
 function ResponsibilityCard({ icon, title, description }: ResponsibilityCardProps) {
   return (
-    <div className="flex flex-col items-center gap-10 w-[302px]">
-      <div className="w-[100px] h-[100px] flex items-center justify-center">
+    <div className="flex flex-col items-center gap-6 md:gap-10 w-full min-w-0 max-w-[302px]">
+      <div className="w-16 h-16 md:w-[100px] md:h-[100px] flex items-center justify-center shrink-0">
         {icon}
       </div>
-      <div className="flex flex-col items-center gap-4 w-full">
+      <div className="flex flex-col items-center gap-3 md:gap-4 w-full">
         <h3 
-          className="text-2xl font-semibold text-center"
+          className="text-xl md:text-2xl font-semibold text-center"
           style={{ color: '#121212' }}
         >
           {title}
         </h3>
         <p 
-          className="text-base leading-[26px] text-center"
+          className="text-sm md:text-base leading-relaxed md:leading-[26px] text-center"
           style={{ color: '#000000' }}
         >
           {description}
@@ -56,21 +56,19 @@ export function OurResponsibilitySection() {
 
   return (
     <section 
-      className="w-full py-20 flex flex-col items-center gap-16"
+      className="w-full py-12 md:py-16 lg:py-20 flex flex-col items-center gap-10 md:gap-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-[320px]"
       style={{
         background: '#F5F7F9',
-        paddingLeft: '320px',
-        paddingRight: '320px',
       }}
     >
       <h2 
-        className="text-5xl font-semibold leading-[72px] text-center"
+        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
         style={{ color: '#021E40' }}
       >
         Our Responsibility
       </h2>
 
-      <div className="flex flex-row items-center gap-6 w-full justify-center">
+      <div className="flex flex-wrap justify-center gap-6 md:gap-8 w-full max-w-[1920px]">
         {responsibilities.map((item, index) => (
           <ResponsibilityCard
             key={index}

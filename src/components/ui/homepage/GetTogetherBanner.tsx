@@ -36,7 +36,7 @@ export function GetTogetherBanner() {
 
   return (
     <section 
-      className="relative z-20 w-full max-w-[1280px] mx-auto -mt-[190px] md:-mt-[200px] lg:-mt-[190px] px-4 md:px-6 lg:px-8"
+      className="relative z-20 w-full max-w-[1280px] mx-auto mt-0 sm:-mt-16 md:-mt-[140px] lg:-mt-[190px] px-4 md:px-6 lg:px-8"
       style={{
         background: '#3B60C9',
         boxShadow: '0px 0px 20px rgba(29, 29, 29, 0.25)',
@@ -45,7 +45,7 @@ export function GetTogetherBanner() {
     >
       <div className="flex flex-col md:flex-row min-h-[300px] md:min-h-[350px] lg:min-h-[380px] max-h-[500px] md:max-h-[550px]">
         {/* Left Side - Event Cover Photo */}
-        <div className="w-full md:w-[40%] h-[200px] md:h-full max-h-[500px] overflow-hidden rounded-t-[4px] md:rounded-l-[4px] md:rounded-t-none flex-shrink-0">
+        <div className="w-full md:w-[40%] h-[200px] md:h-full max-h-[500px] overflow-hidden rounded-t-[4px] md:rounded-l-[4px] md:rounded-t-none shrink-0">
           <img 
             src={coverPhoto}
             alt={imageAlt}

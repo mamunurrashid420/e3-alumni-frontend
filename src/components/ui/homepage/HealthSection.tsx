@@ -28,14 +28,8 @@ export function HealthSection() {
   const collaborationImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
   
   return (
-    <section 
-      className="w-full py-20 px-4 lg:px-0"
-      style={{
-        paddingLeft: 'max(16px, calc(50% - 625px))',
-        paddingRight: 'max(16px, calc(50% - 625px))',
-      }}
-    >
-      <div className="flex flex-col lg:flex-row items-center gap-[62px]">
+    <section className="w-full py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:max-w-[1920px] 2xl:mx-auto 2xl:px-20">
+      <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12 lg:gap-[62px]">
         {/* Left Side - Image Collage with Stats */}
         <div 
           className="relative shrink-0 w-full lg:w-[684px] h-[500px] md:h-[600px] lg:h-[760px]"
@@ -98,18 +92,7 @@ export function HealthSection() {
         </div>
 
         {/* Right Side - Content */}
-        <div 
-          className="w-full lg:w-[500px] flex flex-col items-start"
-          style={{
-            padding: '0px',
-            gap: '40px',
-            flex: 'none',
-            order: 1,
-            flexGrow: 0,
-            height: 'auto',
-            minHeight: '711px'
-          }}
-        >
+        <div className="w-full lg:w-[500px] flex flex-col items-start gap-8 md:gap-10 min-h-0 lg:min-h-[711px]">
             {/* Header */}
             <div className="flex flex-col gap-3 md:gap-4">
               <h2 
