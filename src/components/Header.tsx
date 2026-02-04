@@ -14,7 +14,7 @@ import logoImage from '@/assets/alumni/logo.jpg'
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
-  const { user, isAuthenticated } = useAuthStore()
+  const { user, isAuthenticated, logout } = useAuthStore()
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -44,16 +44,18 @@ export function Header() {
     <header className="relative w-full">
       {/* Top Blue Bar */}
       <div className="h-7 sm:h-8 bg-[#3B60C9] w-full flex items-center justify-end gap-2 px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80">
-        <Link to="/register">
-          <Button
-            variant="outline"
-            size="sm"
-            className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
-          >
-            <span className="hidden sm:inline">Apply for Membership</span>
-            <span className="sm:hidden">Apply</span>
-          </Button>
-        </Link>
+        {!isAuthenticated && (
+          <Link to="/register">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
+            >
+              <span className="hidden sm:inline">Apply for Membership</span>
+              <span className="sm:hidden">Apply</span>
+            </Button>
+          </Link>
+        )}
         <Link to="/donate">
           <Button
             variant="outline"
@@ -65,11 +67,22 @@ export function Header() {
           </Button>
         </Link>
         {isAuthenticated && user ? (
-          <Link to="/dashboard">
-            <span className="text-white text-[10px] sm:text-xs font-medium hover:underline">
-              Welcome, {user.name}
-            </span>
-          </Link>
+          <>
+            <Link to="/dashboard">
+              <span className="text-white text-[10px] sm:text-xs font-medium hover:underline">
+                Welcome, {user.name}
+              </span>
+            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white text-[#3B60C9] hover:bg-gray-100 border-0 h-5 sm:h-6 text-[10px] sm:text-xs px-2 sm:px-3"
+              onClick={() => logout()}
+            >
+              <span className="hidden sm:inline">Log Out</span>
+              <span className="sm:hidden">Logout</span>
+            </Button>
+          </>
         ) : (
           <Link to="/login" search={{ redirect: undefined }}>
             <Button
