@@ -162,10 +162,26 @@ class ApiClient {
     institute_name?: string | null;
     t_shirt_size?: string | null;
     blood_group?: string | null;
+    photo?: File | null;
   }): Promise<User> {
+    const { photo, ...rest } = data;
+    if (photo) {
+      const formData = new FormData();
+      Object.entries(rest).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          formData.append(key, String(value));
+        }
+      });
+      formData.append('photo', photo);
+      const response = await this.client.post<User>(
+        endpoints.currentUserProfile,
+        formData
+      );
+      return response.data;
+    }
     const response = await this.client.put<User>(
       endpoints.currentUserProfile,
-      data
+      rest
     );
     return response.data;
   }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Camera, Edit, Save, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import {
@@ -10,11 +10,17 @@ import {
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { apiClient } from '@/api/client'
+import { useAuthStore } from '@/stores/authStore'
+import { AuthenticatedImage } from '@/components/AuthenticatedImage'
 import { toast } from 'sonner'
 
 export function Profile() {
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null)
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
+  const photoInputRef = useRef<HTMLInputElement>(null)
+  const { setUser } = useAuthStore()
   const [formData, setFormData] = useState({
     fullName: '',
     nameInBengali: '',
@@ -77,6 +83,7 @@ export function Profile() {
           displayEmail: user.email || '',
           displayPhone: user.phone || '',
         }))
+        setProfilePhotoUrl(profile?.photo ?? null)
       } catch (error: any) {
         console.error('Failed to load profile:', error)
         toast.error(error.message || 'Failed to load profile data')
@@ -90,6 +97,38 @@ export function Profile() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handlePhotoClick = () => {
+    if (!isUploadingPhoto) photoInputRef.current?.click()
+  }
+
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+      toast.error('Please choose a JPG or PNG image')
+      e.target.value = ''
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be under 5MB')
+      e.target.value = ''
+      return
+    }
+    try {
+      setIsUploadingPhoto(true)
+      const updated = await apiClient.updateMemberProfile({ photo: file })
+      setProfilePhotoUrl(updated.profile?.photo ?? null)
+      setUser(updated)
+      toast.success('Photo updated')
+    } catch (err: unknown) {
+      const message = err && typeof err === 'object' && 'message' in err ? String((err as { message: unknown }).message) : 'Failed to update photo'
+      toast.error(message)
+    } finally {
+      setIsUploadingPhoto(false)
+      e.target.value = ''
+    }
   }
 
   const [isSaving, setIsSaving] = useState(false)
@@ -157,6 +196,7 @@ export function Profile() {
         displayEmail: user.email || '',
         displayPhone: user.phone || '',
       }))
+      setProfilePhotoUrl(profile?.photo ?? null)
     } catch (error: any) {
       const message =
         error?.errors?.phone?.[0] ??
@@ -201,15 +241,40 @@ export function Profile() {
           <div className="flex flex-col md:flex-row gap-6">
             {/* Left Section - Profile Picture and Name */}
             <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-                  <span className="text-2xl font-bold text-black/70">
-                    {getInitials(formData.fullName)}
-                  </span>
-                </div>
-                <button className="absolute bottom-0 right-0 w-8 h-8 bg-[#3B60C9] rounded-full flex items-center justify-center hover:bg-[#2348B2] transition-colors">
-                  <Camera className="w-4 h-4 text-white" />
+              <div className="relative w-24 h-24">
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png"
+                  className="hidden"
+                  onChange={handlePhotoChange}
+                  disabled={isUploadingPhoto}
+                />
+                <button
+                  type="button"
+                  onClick={handlePhotoClick}
+                  disabled={isUploadingPhoto}
+                  className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#3B60C9] focus:ring-offset-2 disabled:opacity-60"
+                >
+                  {profilePhotoUrl ? (
+                    <AuthenticatedImage
+                      src={profilePhotoUrl}
+                      alt={formData.fullName || 'Profile'}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-2xl font-bold text-black/70">
+                      {getInitials(formData.fullName)}
+                    </span>
+                  )}
                 </button>
+                <span className="absolute -bottom-0.5 -right-0.5 w-8 h-8 bg-[#3B60C9] rounded-full flex items-center justify-center pointer-events-none shrink-0">
+                  {isUploadingPhoto ? (
+                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                  ) : (
+                    <Camera className="w-4 h-4 text-white" />
+                  )}
+                </span>
               </div>
               <div className="text-center md:text-left flex-1">
                 <h2 className="text-xl font-bold text-black mb-1">
