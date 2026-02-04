@@ -1,110 +1,259 @@
-import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react'
+import { apiClient } from '@/api/client'
+import type { Event } from '@/types/api'
+import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 
-export function GetTogetherSection() {
-  const [days, setDays] = useState(60)
-  const [hours, setHours] = useState(12)
-  const [minutes, setMinutes] = useState(25)
-  const [seconds, setSeconds] = useState(30)
+function formatEventDate(iso: string) {
+  const d = new Date(iso)
+  return {
+    date: d.getDate().toString(),
+    month: d.toLocaleString('en-US', { month: 'short' }),
+    time: d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+  }
+}
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds((prev) => {
-        if (prev > 0) return prev - 1
-        setMinutes((prev) => {
-          if (prev > 0) return prev - 1
-          setHours((prev) => {
-            if (prev > 0) return prev - 1
-            setDays((prev) => (prev > 0 ? prev - 1 : 0))
-            return 23
-          })
-          return 59
-        })
-        return 59
+interface GetTogetherSectionProps {
+  events: Event[]
+  loading: boolean
+  currentIndex: number
+  onPrev: () => void
+  onNext: () => void
+}
+
+export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNext }: GetTogetherSectionProps) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const [guestModalEvent, setGuestModalEvent] = useState<Event | null>(null)
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [sscJsc, setSscJsc] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  const currentEvent = events[currentIndex]
+  const hasMultiple = events.length > 1
+
+  const handleGuestRegisterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!guestModalEvent || submitting) return
+    setSubmitting(true)
+    try {
+      await apiClient.registerGuestForEvent(guestModalEvent.id, {
+        name: name.trim(),
+        phone: phone.trim(),
+        address: address.trim(),
+        ssc_jsc: sscJsc.trim() || undefined,
       })
-    }, 1000)
+      toast.success('Registered successfully.')
+      closeGuestModal()
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'message' in err
+          ? (err as { message: string }).message
+          : 'Registration failed'
+      toast.error(msg)
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
-    return () => clearInterval(interval)
-  }, [])
+  const closeGuestModal = () => {
+    setGuestModalEvent(null)
+    setName('')
+    setPhone('')
+    setAddress('')
+    setSscJsc('')
+  }
 
   return (
     <div className="flex flex-col h-full justify-center px-4 md:px-6 lg:px-8 py-4 md:py-6">
-      {/* Countdown Timer */}
-      <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-4 md:mb-6">
-        <div className="flex gap-1 md:gap-2">
-          <div className="flex flex-col items-center">
-            <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
-              {String(days).padStart(2, '0')}
-            </div>
-            <span className="text-white text-[10px] md:text-xs mt-1">Days</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
-              {String(hours).padStart(2, '0')}
-            </div>
-            <span className="text-white text-[10px] md:text-xs mt-1">Hr</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
-              {String(minutes).padStart(2, '0')}
-            </div>
-            <span className="text-white text-[10px] md:text-xs mt-1">Min</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
-              {String(seconds).padStart(2, '0')}
-            </div>
-            <span className="text-white text-[10px] md:text-xs mt-1">Sec</span>
+      {/* Guest registration modal */}
+      {guestModalEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold text-black mb-2">{guestModalEvent.title}</h3>
+            <p className="text-sm text-black/70 mb-4">Register as a guest. Fill in your details below.</p>
+            <form onSubmit={handleGuestRegisterSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="gettogether_guest_name" className="block text-sm font-medium text-black mb-1">
+                  Name <span className="text-red-600">*</span>
+                </label>
+                <Input
+                  id="gettogether_guest_name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your full name"
+                  required
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="gettogether_guest_phone" className="block text-sm font-medium text-black mb-1">
+                  Phone <span className="text-red-600">*</span>
+                </label>
+                <Input
+                  id="gettogether_guest_phone"
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Phone number"
+                  required
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="gettogether_guest_address" className="block text-sm font-medium text-black mb-1">
+                  Address <span className="text-red-600">*</span>
+                </label>
+                <textarea
+                  id="gettogether_guest_address"
+                  rows={2}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Your address"
+                  required
+                  className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+              </div>
+              <div>
+                <label htmlFor="gettogether_guest_ssc_jsc" className="block text-sm font-medium text-black mb-1">
+                  SSC / JSC (optional)
+                </label>
+                <Input
+                  id="gettogether_guest_ssc_jsc"
+                  type="text"
+                  value={sscJsc}
+                  onChange={(e) => setSscJsc(e.target.value)}
+                  placeholder="e.g. SSC 2010, JSC 2012"
+                  className="w-full"
+                />
+              </div>
+              <div className="flex gap-2 pt-2">
+                <Button type="submit" disabled={submitting}>
+                  {submitting ? 'Submitting...' : 'Submit registration'}
+                </Button>
+                <Button type="button" variant="outline" onClick={closeGuestModal} disabled={submitting}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
-        <span className="text-white text-xs md:text-sm ml-1 md:ml-2">Remaining</span>
-      </div>
+      )}
 
-      {/* Headline */}
-      <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4">
-        We Are Going To Arrange A Get Together!
+      <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold mb-1 md:mb-2">
+        Upcoming events
       </h2>
-
-      {/* Event Slogan */}
-      <p className="text-white text-base md:text-lg lg:text-xl font-semibold mb-3 md:mb-4 italic">
-        Let bonds be strength, memories be inspiration.
+      <p className="text-white text-sm md:text-base opacity-90 mb-4 md:mb-5">
+        Join us — register for an event below.
       </p>
 
-      {/* Description */}
-      <div className="text-white text-xs md:text-sm leading-relaxed mb-4 md:mb-6 opacity-90 space-y-3 md:space-y-4">
-        <p>
-          The Alumni Association is pleased to announce an upcoming event designed to bring our alumni community together for connection, celebration, and collaboration. This special gathering will provide an excellent opportunity for former students to reconnect with classmates, interact with faculty members, and strengthen the bond with their alma mater.
-        </p>
-        <p>
-          The event will feature engaging activities, inspiring discussions, networking sessions, and moments to relive cherished memories. It will also serve as a platform to share updates on alumni initiatives and future plans of the association.
-        </p>
-        <p>
-          We warmly invite all alumni to join us and be a part of this memorable occasion. Your presence and participation will make the event truly meaningful and successful.
-        </p>
-      </div>
+      {loading ? (
+        <p className="text-white text-sm opacity-85">Loading events...</p>
+      ) : events.length === 0 ? (
+        <p className="text-white text-sm opacity-85">No upcoming events at the moment. Check back later.</p>
+      ) : currentEvent ? (
+        <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">
+          <div className="flex gap-3 md:gap-4 items-start mb-3">
+            <div className="shrink-0 w-14 h-16 md:w-16 md:h-20 flex flex-col items-center justify-center bg-[#1A1A1A] rounded">
+              <span className="text-white text-xl md:text-2xl font-bold leading-tight">
+                {formatEventDate(currentEvent.start_at).date}
+              </span>
+              <span className="text-white text-xs md:text-sm capitalize opacity-90">
+                {formatEventDate(currentEvent.start_at).month}
+              </span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <Link
+                to={isAuthenticated ? '/dashboard/events/$id' : '/events/$id'}
+                params={{ id: String(currentEvent.id) }}
+                search={{ register: undefined }}
+                className="no-underline text-inherit hover:opacity-90"
+              >
+                <h3 className="text-white text-lg md:text-xl lg:text-2xl font-semibold hover:underline">
+                  {currentEvent.title}
+                </h3>
+              </Link>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-white text-sm opacity-90">
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 shrink-0" />
+                  {formatEventDate(currentEvent.start_at).time}
+                </span>
+              </div>
+            </div>
+          </div>
+          {currentEvent.location && (
+            <div className="flex items-center gap-2 mb-3 text-white text-sm md:text-base opacity-90">
+              <MapPin className="w-4 h-4 shrink-0" />
+              <span>{currentEvent.location}</span>
+            </div>
+          )}
+          {currentEvent.description && (
+            <div className="mb-4 flex-shrink-0">
+              <p className="text-white text-xs md:text-sm opacity-90 leading-relaxed whitespace-pre-wrap break-words">
+                {currentEvent.description}
+              </p>
+            </div>
+          )}
+          <div className="flex flex-wrap items-center gap-3 mt-auto flex-shrink-0">
+            {isAuthenticated ? (
+              <Link
+                to="/dashboard/events/$id"
+                params={{ id: String(currentEvent.id) }}
+                search={{ register: '1' }}
+                className="inline-flex items-center justify-center bg-primary-accent hover:bg-[#1d3a9a] text-white px-4 md:px-6 py-2 md:py-3 rounded text-sm md:text-base font-medium no-underline"
+              >
+                Register for this event
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setGuestModalEvent(currentEvent)}
+                className="inline-flex items-center justify-center bg-primary-accent hover:bg-[#1d3a9a] text-white px-4 md:px-6 py-2 md:py-3 rounded text-sm md:text-base font-medium border-0 cursor-pointer"
+              >
+                Register for this event
+              </button>
+            )}
+            <Link
+              to="/events"
+              className="text-white text-sm font-medium opacity-90 hover:underline"
+            >
+              View all events
+            </Link>
+          </div>
+        </div>
+      ) : null}
 
-      {/* Call to Action Button */}
-      <Button 
-        className="bg-primary-accent hover:bg-[#1d3a9a] text-white px-4 md:px-6 py-2 md:py-3 rounded w-full md:w-fit text-sm md:text-base"
-      >
-        Join With Us
-      </Button>
-
-      {/* Navigation Arrows */}
-      <div className="flex gap-2 mt-4 md:mt-auto justify-end">
-        <button 
-          className="w-10 h-10 bg-primary-accent hover:bg-[#1d3a9a] text-white rounded flex items-center justify-center transition-colors"
-          aria-label="Previous"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button 
-          className="w-10 h-10 bg-primary-accent hover:bg-[#1d3a9a] text-white rounded flex items-center justify-center transition-colors"
-          aria-label="Next"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
+      {/* Carousel navigation */}
+      <div className="flex items-center justify-between gap-2 mt-4 md:mt-4">
+        <span className="text-white text-xs md:text-sm opacity-80">
+          {hasMultiple ? `${currentIndex + 1} of ${events.length}` : '\u00A0'}
+        </span>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={onPrev}
+            disabled={!hasMultiple}
+            className="w-10 h-10 bg-white/20 hover:bg-white/30 disabled:opacity-50 disabled:pointer-events-none text-white rounded flex items-center justify-center transition-colors"
+            aria-label="Previous event"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={!hasMultiple}
+            className="w-10 h-10 bg-white/20 hover:bg-white/30 disabled:opacity-50 disabled:pointer-events-none text-white rounded flex items-center justify-center transition-colors"
+            aria-label="Next event"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </div>
   )
