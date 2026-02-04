@@ -27,6 +27,16 @@ export function ProfileCard() {
   const secondaryMemberType = user?.secondary_member_type
   const photoUrl = user?.profile?.photo ?? null
 
+  const membershipExpiresLabel = user?.membership_expires_at
+    ? new Date(user.membership_expires_at).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      })
+    : user?.primary_member_type === 'LIFETIME'
+      ? 'Never'
+      : 'N/A'
+
   const handlePhotoClick = () => {
     if (isUploading) return
     fileInputRef.current?.click()
@@ -108,6 +118,9 @@ export function ProfileCard() {
         </button>
         <h4 className="text-base md:text-lg font-bold text-black mb-1">{userName}</h4>
         <p className="text-xs md:text-sm text-black/70 mb-1">Member ID: {memberId}</p>
+        <p className="text-xs md:text-sm text-black/70 mb-1">
+          Membership expires: {membershipExpiresLabel}
+        </p>
         <div className="text-xs md:text-sm text-black/60">
           <p>{primaryMemberType}</p>
           {secondaryMemberType && (

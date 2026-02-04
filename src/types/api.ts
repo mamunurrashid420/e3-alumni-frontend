@@ -112,6 +112,7 @@ export interface User {
   secondary_member_type?: MemberType | null;
   latest_self_declaration?: SelfDeclaration | null;
   member_id: string | null;
+  membership_expires_at: string | null;
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;
