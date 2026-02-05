@@ -38,6 +38,7 @@ export function Header() {
     { label: 'Advisory Body', href: '/about/advisory-body' },
     { label: 'Honor Board', href: '/about/honor-board' },
     { label: 'Batch Representatives', href: '/about/batch-representatives' },
+    { label: 'Instructions to apply for membership', href: '/about/membership-instructions' },
   ]
 
   return (

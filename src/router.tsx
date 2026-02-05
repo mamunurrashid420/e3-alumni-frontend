@@ -22,6 +22,7 @@ import { ConveningCommittee } from '@/components/ConveningCommittee'
 import { AdvisoryBody } from '@/components/AdvisoryBody'
 import { HonorBoard } from '@/components/HonorBoard'
 import { BatchRepresentatives } from '@/components/BatchRepresentatives'
+import { MembershipInstructions } from '@/components/MembershipInstructions'
 import { Downloads } from '@/components/Downloads'
 import { EventsList } from '@/components/EventsList'
 import { EventDetail } from '@/components/EventDetail'
@@ -153,6 +154,17 @@ const batchRepresentativesRoute = createRoute({
   component: () => (
     <HomepageLayout>
       <BatchRepresentatives />
+    </HomepageLayout>
+  ),
+})
+
+// Membership Instructions route
+const membershipInstructionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/about/membership-instructions',
+  component: () => (
+    <HomepageLayout>
+      <MembershipInstructions />
     </HomepageLayout>
   ),
 })
@@ -428,6 +440,7 @@ const routeTree = rootRoute.addChildren([
   advisoryBodyRoute,
   honorBoardRoute,
   batchRepresentativesRoute,
+  membershipInstructionsRoute,
   constitutionRoute,
   scholarshipRoute,
   newsEventsRoute,
