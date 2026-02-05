@@ -1,3 +1,6 @@
+import { Link } from '@tanstack/react-router'
+import { Button } from '@/components/ui/button'
+
 export function MembershipInstructions() {
   return (
     <div className="container mx-auto px-4 py-8 md:py-12 lg:py-16 max-w-4xl">
@@ -95,6 +98,18 @@ export function MembershipInstructions() {
             </p>
           </div>
 
+          {/* Call to Action Button */}
+          <div className="mt-8 flex justify-center">
+            <Link to="/register">
+              <Button 
+                size="lg" 
+                className="bg-[#3B60C9] hover:bg-[#3B60C9]/90 text-white px-8 py-6 text-base md:text-lg font-semibold"
+              >
+                Apply for Membership Now
+              </Button>
+            </Link>
+          </div>
+
           {/* Bengali Section */}
           <div className="mt-8 pt-8 border-t border-gray-200">
             <h2 className="text-2xl md:text-3xl font-semibold mb-6" style={{ color: '#021E40' }}>
@@ -182,6 +197,18 @@ export function MembershipInstructions() {
                 <strong>***</strong> ফরমে প্রদত্ত তথ্য যাচাই এবং প্রকৃত অর্থ পরিশোধ নিশ্চিত হওয়ার পর, নিবন্ধনের অ্যাডমিন প্যানেল থেকে আবেদনকারীর মোবাইল নম্বর বা ই-মেইল ঠিকানায় সদস্য নম্বর (Membership Number) প্রেরণ করা হবে।
               </p>
             </div>
+          </div>
+
+          {/* Bengali Call to Action Button */}
+          <div className="mt-8 flex justify-center">
+            <Link to="/register">
+              <Button 
+                size="lg" 
+                className="bg-[#3B60C9] hover:bg-[#3B60C9]/90 text-white px-8 py-6 text-base md:text-lg font-semibold"
+              >
+                এখনই সদস্যপদের জন্য আবেদন করুন
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

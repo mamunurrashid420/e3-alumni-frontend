@@ -745,9 +745,18 @@ export function Registration() {
                 <h1 className="text-3xl lg:text-4xl font-bold  mb-2">
                   Create Your Account
                 </h1>
-                <p className="text-sm lg:text-base">
+                <p className="text-sm lg:text-base mb-4">
                   Register your information to join Alumni
                 </p>
+                <div className="mb-4">
+                  <Link 
+                    to="/about/membership-instructions" 
+                    className="inline-flex items-center gap-2 text-sm text-[#3B60C9] hover:underline font-medium"
+                  >
+                    <span>📋</span>
+                    <span>Read instructions before filling the form</span>
+                  </Link>
+                </div>
               </div>
 
               {/* General Error Message */}
