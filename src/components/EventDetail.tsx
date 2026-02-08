@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/stores/authStore'
+import { PhotoViewer } from '@/components/PhotoViewer'
 
 
 function formatDateTime(iso: string) {
@@ -39,6 +40,9 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
   const [guestPhone, setGuestPhone] = useState('')
   const [guestAddress, setGuestAddress] = useState('')
   const [guestSscJsc, setGuestSscJsc] = useState('')
+  const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
+  const [photoViewerSrc, setPhotoViewerSrc] = useState<string | null>(null)
+  const [photoViewerAlt, setPhotoViewerAlt] = useState('')
 
   const eventsBasePath = dashboardContext ? '/dashboard/events' : '/events'
 
@@ -167,12 +171,28 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
       </Link>
 
       {event.cover_photo && (
-        <img
-          src={event.cover_photo}
-          alt={event.title}
-          className="w-full h-64 object-cover rounded-lg mb-6"
-        />
+        <button
+          type="button"
+          onClick={() => {
+            setPhotoViewerSrc(event.cover_photo ?? null)
+            setPhotoViewerAlt(event.title)
+            setPhotoViewerOpen(true)
+          }}
+          className="block w-full rounded-lg overflow-hidden text-left mb-6"
+        >
+          <img
+            src={event.cover_photo}
+            alt={event.title}
+            className="w-full h-64 object-cover rounded-lg cursor-pointer hover:opacity-95"
+          />
+        </button>
       )}
+      <PhotoViewer
+        open={photoViewerOpen}
+        onClose={() => setPhotoViewerOpen(false)}
+        src={photoViewerSrc}
+        alt={photoViewerAlt}
+      />
 
       <h1 className="text-2xl font-semibold text-black mb-4">{event.title}</h1>
 
@@ -353,12 +373,22 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
           <h2 className="text-lg font-semibold text-black mb-4">Event gallery</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {event.photos.map((photo) => (
-              <img
+              <button
                 key={photo.id}
-                src={photo.url}
-                alt=""
-                className="w-full h-48 object-cover rounded-lg"
-              />
+                type="button"
+                onClick={() => {
+                  setPhotoViewerSrc(photo.url)
+                  setPhotoViewerAlt('')
+                  setPhotoViewerOpen(true)
+                }}
+                className="w-full rounded-lg overflow-hidden text-left"
+              >
+                <img
+                  src={photo.url}
+                  alt=""
+                  className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-95"
+                />
+              </button>
             ))}
           </div>
         </div>

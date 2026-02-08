@@ -5,6 +5,7 @@ import { apiClient } from '@/api/client'
 import type { Event } from '@/types/api'
 import { useAuthStore } from '@/stores/authStore'
 import { RecentNewsSection } from '@/components/ui/homepage/RecentNewsSection'
+import { PhotoViewer } from '@/components/PhotoViewer'
 
 function formatEventDate(iso: string) {
   const d = new Date(iso)
@@ -23,10 +24,12 @@ function EventCard({
   event,
   dashboardContext,
   isAuthenticated,
+  onViewPhoto,
 }: {
   event: Event
   dashboardContext: boolean
   isAuthenticated: boolean
+  onViewPhoto?: (src: string, alt: string) => void
 }) {
   const eventDate = formatEventDate(event.event_at)
   const isOpen = event.status === 'open'
@@ -46,8 +49,18 @@ function EventCard({
           to={toPath}
           params={{ id: String(event.id) }}
           search={{ register: undefined }}
-          className="no-underline"
+          className="no-underline block relative"
         >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onViewPhoto?.(event.cover_photo!, event.title)
+            }}
+            className="absolute inset-0 w-full h-full z-10 cursor-pointer hover:opacity-95 transition-opacity"
+            aria-label="View full size photo"
+          />
           <div 
             className="w-full h-[263px] relative"
             style={{
@@ -112,6 +125,15 @@ export function EventsList({ dashboardContext = false }: EventsListProps) {
   const [upcoming, setUpcoming] = useState<Event[]>([])
   const [past, setPast] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
+  const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
+  const [photoViewerSrc, setPhotoViewerSrc] = useState<string | null>(null)
+  const [photoViewerAlt, setPhotoViewerAlt] = useState('')
+
+  const handleViewPhoto = (src: string, alt: string) => {
+    setPhotoViewerSrc(src)
+    setPhotoViewerAlt(alt)
+    setPhotoViewerOpen(true)
+  }
 
   useEffect(() => {
     Promise.all([
@@ -148,6 +170,7 @@ export function EventsList({ dashboardContext = false }: EventsListProps) {
                 event={event}
                 dashboardContext={dashboardContext}
                 isAuthenticated={isAuthenticated}
+                onViewPhoto={handleViewPhoto}
               />
             ))}
           </div>
@@ -164,12 +187,19 @@ export function EventsList({ dashboardContext = false }: EventsListProps) {
                 event={event}
                 dashboardContext={dashboardContext}
                 isAuthenticated={isAuthenticated}
+                onViewPhoto={handleViewPhoto}
               />
             ))}
           </div>
         )}
       </section>
       {!dashboardContext && <RecentNewsSection />}
+      <PhotoViewer
+        open={photoViewerOpen}
+        onClose={() => setPhotoViewerOpen(false)}
+        src={photoViewerSrc}
+        alt={photoViewerAlt}
+      />
     </div>
   )
 }

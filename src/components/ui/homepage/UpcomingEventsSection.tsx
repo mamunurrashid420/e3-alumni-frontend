@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
+import { PhotoViewer } from '@/components/PhotoViewer'
 
 function formatEventDate(iso: string) {
   const d = new Date(iso)
@@ -115,6 +116,9 @@ export function UpcomingEventsSection() {
   const [address, setAddress] = useState('')
   const [sscJsc, setSscJsc] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
+  const [photoViewerSrc, setPhotoViewerSrc] = useState<string | null>(null)
+  const [photoViewerAlt, setPhotoViewerAlt] = useState('')
 
   useEffect(() => {
     apiClient
@@ -265,16 +269,32 @@ export function UpcomingEventsSection() {
               .filter((e) => e.cover_photo)
               .slice(0, 4)
               .map((event) => (
-                <img
+                <button
                   key={event.id}
-                  src={event.cover_photo!}
-                  alt={event.title}
-                  className="w-full h-[230px] object-cover rounded-lg"
-                />
+                  type="button"
+                  onClick={() => {
+                    setPhotoViewerSrc(event.cover_photo ?? null)
+                    setPhotoViewerAlt(event.title)
+                    setPhotoViewerOpen(true)
+                  }}
+                  className="w-full rounded-lg overflow-hidden text-left"
+                >
+                  <img
+                    src={event.cover_photo!}
+                    alt={event.title}
+                    className="w-full h-[230px] object-cover rounded-lg cursor-pointer hover:opacity-95"
+                  />
+                </button>
               ))}
           </div>
         </div>
       </div>
+      <PhotoViewer
+        open={photoViewerOpen}
+        onClose={() => setPhotoViewerOpen(false)}
+        src={photoViewerSrc}
+        alt={photoViewerAlt}
+      />
     </section>
   )
 }

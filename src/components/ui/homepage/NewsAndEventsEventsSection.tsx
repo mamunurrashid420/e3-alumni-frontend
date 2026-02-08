@@ -4,6 +4,7 @@ import { Clock, MapPin } from 'lucide-react'
 import { apiClient } from '@/api/client'
 import type { Event } from '@/types/api'
 import { useAuthStore } from '@/stores/authStore'
+import { PhotoViewer } from '@/components/PhotoViewer'
 
 function formatEventDate(iso: string) {
   const d = new Date(iso)
@@ -21,9 +22,11 @@ function eventDetailPath(isAuthenticated: boolean): '/dashboard/events/$id' | '/
 function EventCard({
   event,
   isAuthenticated,
+  onViewPhoto,
 }: {
   event: Event
   isAuthenticated: boolean
+  onViewPhoto?: (src: string, alt: string) => void
 }) {
   const eventDate = formatEventDate(event.event_at)
   const isOpen = event.status === 'open'
@@ -42,8 +45,18 @@ function EventCard({
           to={toPath}
           params={{ id: String(event.id) }}
           search={{}}
-          className="no-underline"
+          className="no-underline block relative"
         >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onViewPhoto?.(event.cover_photo!, event.title)
+            }}
+            className="absolute inset-0 w-full h-full z-10 cursor-pointer hover:opacity-95 transition-opacity"
+            aria-label="View full size photo"
+          />
           <div
             className="w-full h-[263px] relative"
             style={{
@@ -103,6 +116,15 @@ export function NewsAndEventsEventsSection() {
   const [upcoming, setUpcoming] = useState<Event[]>([])
   const [past, setPast] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
+  const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
+  const [photoViewerSrc, setPhotoViewerSrc] = useState<string | null>(null)
+  const [photoViewerAlt, setPhotoViewerAlt] = useState('')
+
+  const handleViewPhoto = (src: string, alt: string) => {
+    setPhotoViewerSrc(src)
+    setPhotoViewerAlt(alt)
+    setPhotoViewerOpen(true)
+  }
 
   useEffect(() => {
     Promise.all([
@@ -147,6 +169,7 @@ export function NewsAndEventsEventsSection() {
                       key={event.id}
                       event={event}
                       isAuthenticated={isAuthenticated}
+                      onViewPhoto={handleViewPhoto}
                     />
                   ))}
                 </div>
@@ -161,6 +184,7 @@ export function NewsAndEventsEventsSection() {
                       key={event.id}
                       event={event}
                       isAuthenticated={isAuthenticated}
+                      onViewPhoto={handleViewPhoto}
                     />
                   ))}
                 </div>
@@ -169,6 +193,12 @@ export function NewsAndEventsEventsSection() {
           </div>
         )}
       </div>
+      <PhotoViewer
+        open={photoViewerOpen}
+        onClose={() => setPhotoViewerOpen(false)}
+        src={photoViewerSrc}
+        alt={photoViewerAlt}
+      />
     </section>
   )
 }
