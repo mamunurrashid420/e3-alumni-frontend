@@ -139,30 +139,27 @@ export function SelfDeclaration() {
     loadMemberTypes()
   }, [])
 
-  // Fetch user only if not already loaded
+  // Always refetch user when visiting this page to get fresh latest_self_declaration status
+  // (e.g. after admin approves/rejects - persisted store would otherwise have stale data)
   useEffect(() => {
-    if (hasFetchedUser.current) return
-    if (user) {
-      hasFetchedUser.current = true
-      return
-    }
     if (!apiClient.isAuthenticated()) return
-    
+    if (hasFetchedUser.current) return
+
     hasFetchedUser.current = true
     useAuthStore.getState().fetchUser().catch((error) => {
       console.error('Error fetching user:', error)
-      hasFetchedUser.current = false // Reset on error so we can retry
+      hasFetchedUser.current = false
     })
-  }, [user])
+  }, [])
 
   // Refresh user data after successful submission to get updated self-declaration
   useEffect(() => {
-    if (success && user) {
+    if (success) {
       useAuthStore.getState().fetchUser().catch((error) => {
         console.error('Error refreshing user:', error)
       })
     }
-  }, [success, user])
+  }, [success])
 
   // Check if user already has secondary member type (only show once)
   useEffect(() => {

@@ -59,7 +59,11 @@ export const useAuthStore = create<AuthState>()(
         }
 
         try {
-          set({ isLoading: true });
+          // Only show loading when we have no user (initial auth check)
+          // Background refreshes when user exists should not unmount children
+          if (!get().user) {
+            set({ isLoading: true });
+          }
           const user = await apiClient.getCurrentUser();
           set({
             user,
