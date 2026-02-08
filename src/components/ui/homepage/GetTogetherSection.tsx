@@ -194,9 +194,9 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
       <h2 className="text-white text-xl md:text-2xl lg:text-3xl font-bold mb-1 md:mb-2">
         Upcoming events
       </h2>
-      <p className="text-white text-sm md:text-base opacity-90 mb-4 md:mb-5">
+      {/* <p className="text-white text-sm md:text-base opacity-90 mb-4 md:mb-5">
         Join us — register for an event below.
-      </p>
+      </p> */}
 
       {currentEvent && currentEvent.registration_closes_at && new Date(currentEvent.registration_closes_at) > new Date() && (
         <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-4 md:mb-5">
