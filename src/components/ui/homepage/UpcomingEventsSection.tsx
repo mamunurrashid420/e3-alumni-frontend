@@ -17,6 +17,19 @@ function formatEventDate(iso: string) {
   }
 }
 
+function getCountdownToDeadline(deadlineIso: string): string {
+  const deadline = new Date(deadlineIso).getTime()
+  const now = Date.now()
+  const diff = deadline - now
+  if (diff <= 0) return 'Registration closed'
+  const days = Math.floor(diff / (24 * 60 * 60 * 1000))
+  const hours = Math.floor((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000))
+  if (days > 0) return `${days}d ${hours}h left to register`
+  if (hours > 0) return `${hours}h left to register`
+  const mins = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000))
+  return `${mins}m left to register`
+}
+
 interface EventItemProps {
   event: Event
   isAuthenticated: boolean
@@ -24,7 +37,7 @@ interface EventItemProps {
 }
 
 function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) {
-  const start = formatEventDate(event.start_at)
+  const eventDate = formatEventDate(event.event_at)
   const registerTo = isAuthenticated
     ? { to: '/dashboard/events/$id' as const, params: { id: String(event.id) }, search: { register: '1' } }
     : null
@@ -39,10 +52,10 @@ function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) 
       >
         <div className="shrink-0 w-[70px] h-[90px] flex flex-col items-center justify-center bg-[#F2F2F2]">
           <div className="text-2xl font-bold leading-[30px] text-black">
-            {start.date}
+            {eventDate.date}
           </div>
           <div className="text-xs leading-[22px] capitalize text-black">
-            {start.month}
+            {eventDate.month}
           </div>
         </div>
         <div className="flex-1 min-w-0">
@@ -53,8 +66,11 @@ function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) 
             <div className="flex items-center gap-2">
               <Clock className="w-[14px] h-[14px] text-black shrink-0" />
               <span className="text-sm leading-[20px] text-[#666666]">
-                {start.time}
+                {eventDate.time}
               </span>
+            </div>
+            <div className="text-xs font-medium text-primary-custom leading-[20px]">
+              {getCountdownToDeadline(event.registration_closes_at)}
             </div>
             {event.location && (
               <div className="flex items-center gap-2">

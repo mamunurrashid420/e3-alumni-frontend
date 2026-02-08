@@ -4,7 +4,6 @@ import { Clock, MapPin } from 'lucide-react'
 import { apiClient } from '@/api/client'
 import type { Event } from '@/types/api'
 import { useAuthStore } from '@/stores/authStore'
-import { RecentNewsSection } from '@/components/ui/homepage/RecentNewsSection'
 
 function formatEventDate(iso: string) {
   const d = new Date(iso)
@@ -15,56 +14,52 @@ function formatEventDate(iso: string) {
   }
 }
 
-function eventDetailPath(dashboardContext: boolean, isAuthenticated: boolean): '/dashboard/events/$id' | '/events/$id' {
-  return dashboardContext || isAuthenticated ? '/dashboard/events/$id' : '/events/$id'
+function eventDetailPath(isAuthenticated: boolean): '/dashboard/events/$id' | '/events/$id' {
+  return isAuthenticated ? '/dashboard/events/$id' : '/events/$id'
 }
 
 function EventCard({
   event,
-  dashboardContext,
   isAuthenticated,
 }: {
   event: Event
-  dashboardContext: boolean
   isAuthenticated: boolean
 }) {
   const eventDate = formatEventDate(event.event_at)
   const isOpen = event.status === 'open'
-  const toPath = eventDetailPath(dashboardContext, isAuthenticated)
+  const toPath = eventDetailPath(isAuthenticated)
+
   return (
-    <div 
-      className="border border-gray-200 rounded-[9.26px] overflow-hidden hover:border-gray-300 transition-colors flex flex-col"
+    <div
+      className="border border-gray-200 rounded-[9.26px] overflow-hidden hover:border-gray-300 transition-colors flex flex-col w-full max-w-[411px]"
       style={{
-        width: '411px',
         background: '#FFFFFF',
         boxShadow: '0px 9.26px 13.89px rgba(8, 14, 28, 0.06)',
       }}
     >
-      {/* Cover Photo */}
       {event.cover_photo && (
         <Link
           to={toPath}
           params={{ id: String(event.id) }}
-          search={{ register: undefined }}
+          search={{}}
           className="no-underline"
         >
-          <div 
+          <div
             className="w-full h-[263px] relative"
             style={{
               backgroundImage: `url(${event.cover_photo})`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center'
+              backgroundPosition: 'center',
             }}
           />
         </Link>
       )}
-      
-      {/* Content */}
+
       <div className="p-4 flex flex-col gap-3">
         <Link
           to={toPath}
           params={{ id: String(event.id) }}
-          search={{ register: undefined }}
+          search={{}}
           className="flex-1 flex gap-4 min-w-0 no-underline text-inherit"
         >
           <div className="shrink-0 w-14 text-center bg-gray-100 rounded py-2">
@@ -103,11 +98,7 @@ function EventCard({
   )
 }
 
-interface EventsListProps {
-  dashboardContext?: boolean
-}
-
-export function EventsList({ dashboardContext = false }: EventsListProps) {
+export function NewsAndEventsEventsSection() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const [upcoming, setUpcoming] = useState<Event[]>([])
   const [past, setPast] = useState<Event[]>([])
@@ -120,56 +111,64 @@ export function EventsList({ dashboardContext = false }: EventsListProps) {
     ])
       .then(([upRes, pastRes]) => {
         setUpcoming(upRes.data)
-        setPast(pastRes.data)
+        setPast(pastRes.data.slice(0, 3))
       })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 
   return (
-    <div className="relative w-full overflow-x-hidden">
-      <section 
-        className="w-full py-16 flex flex-col items-center"
-        style={{
-          paddingLeft: '320px',
-          paddingRight: '320px',
-        }}
-      >
-        <h2 className="text-2xl font-semibold text-black mb-6 w-full">Upcoming events</h2>
-        {loading ? (
-          <p className="text-black-600 w-full">Loading...</p>
-        ) : upcoming.length === 0 ? (
-          <p className="text-black-600 w-full">No upcoming events.</p>
-        ) : (
-          <div className="grid gap-6 grid-cols-3 w-full">
-            {upcoming.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                dashboardContext={dashboardContext}
-                isAuthenticated={isAuthenticated}
-              />
-            ))}
-          </div>
-        )}
+    <section className="w-full py-12 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-[320px]">
+      <div className="flex flex-col gap-8 w-full">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <h2 className="text-xl sm:text-2xl md:text-[28px] font-semibold leading-tight md:leading-[40px] uppercase text-black">
+            Events
+          </h2>
+          <Link
+            to="/events"
+            className="text-base font-semibold capitalize text-primary-custom hover:underline"
+          >
+            View all
+          </Link>
+        </div>
 
-        <h2 className="text-2xl font-semibold text-black mt-12 mb-6 w-full">Past events</h2>
-        {loading ? null : past.length === 0 ? (
-          <p className="text-black-600 w-full">No past events.</p>
+        {loading ? (
+          <p className="text-black-600">Loading...</p>
+        ) : upcoming.length === 0 && past.length === 0 ? (
+          <p className="text-black-600">No events.</p>
         ) : (
-          <div className="grid gap-6 grid-cols-3 w-full">
-            {past.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                dashboardContext={dashboardContext}
-                isAuthenticated={isAuthenticated}
-              />
-            ))}
+          <div className="flex flex-col gap-12">
+            {upcoming.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-black mb-6">Upcoming events</h3>
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+                  {upcoming.slice(0, 3).map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isAuthenticated={isAuthenticated}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {past.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-black mb-6">Past events</h3>
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+                  {past.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isAuthenticated={isAuthenticated}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
-      </section>
-      {!dashboardContext && <RecentNewsSection />}
-    </div>
+      </div>
+    </section>
   )
 }

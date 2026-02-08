@@ -40,7 +40,7 @@ export function EventsSection() {
       ) : (
         <div className="space-y-4">
           {events.slice(0, 4).map((event) => {
-            const start = formatEventDate(event.start_at)
+            const eventDate = formatEventDate(event.event_at)
             return (
               <div
                 key={event.id}
@@ -56,14 +56,14 @@ export function EventsSection() {
                   className="flex-1 flex gap-4 min-w-0 no-underline text-inherit"
                 >
                   <div className="shrink-0 text-center">
-                    <div className="text-2xl font-bold text-black">{start.date}</div>
-                    <div className="text-xs text-black/70 uppercase">{start.month}</div>
+                    <div className="text-2xl font-bold text-black">{eventDate.date}</div>
+                    <div className="text-xs text-black/70 uppercase">{eventDate.month}</div>
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-black mb-1 truncate">{event.title}</h4>
                     <div className="flex items-center gap-2 text-xs text-black/70 mb-1">
                       <Clock className="w-3 h-3 shrink-0" />
-                      <span>{start.time}</span>
+                      <span>{eventDate.time}</span>
                     </div>
                     {event.location && (
                       <div className="flex items-center gap-2 text-xs text-black/70">

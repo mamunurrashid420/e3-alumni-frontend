@@ -156,8 +156,7 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
     )
   }
 
-  const start = formatDateTime(event.start_at)
-  const end = formatDateTime(event.end_at)
+  const eventDateTime = formatDateTime(event.event_at)
   const isOpen = event.status === 'open'
   const isClosed = event.status === 'closed'
 
@@ -180,12 +179,14 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
       <div className="flex flex-wrap gap-4 text-sm text-black-600 mb-4">
         <span className="flex items-center gap-2">
           <Calendar className="w-4 h-4" />
-          {start.date} {start.month} – {end.date} {end.month}
+          {eventDateTime.date} {eventDateTime.month}, {eventDateTime.time}
         </span>
-        <span className="flex items-center gap-2">
-          <Clock className="w-4 h-4" />
-          {start.time} – {end.time}
-        </span>
+        {isOpen && new Date(event.registration_closes_at) > new Date() && (
+          <span className="flex items-center gap-2 text-primary-custom font-medium">
+            <Clock className="w-4 h-4" />
+            Register by {new Date(event.registration_closes_at).toLocaleString()}
+          </span>
+        )}
         {event.location && (
           <span className="flex items-center gap-2">
             <MapPin className="w-4 h-4" />

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react'
 import { apiClient } from '@/api/client'
@@ -36,6 +36,51 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
 
   const currentEvent = events[currentIndex]
   const hasMultiple = events.length > 1
+
+  const [days, setDays] = useState(0)
+  const [hours, setHours] = useState(0)
+  const [minutes, setMinutes] = useState(0)
+  const [seconds, setSeconds] = useState(0)
+
+  useEffect(() => {
+    if (!currentEvent?.registration_closes_at) return
+    const deadline = new Date(currentEvent.registration_closes_at).getTime()
+
+    const update = () => {
+      const now = Date.now()
+      const diff = Math.max(0, deadline - now)
+      if (diff === 0) {
+        setDays(0)
+        setHours(0)
+        setMinutes(0)
+        setSeconds(0)
+        return
+      }
+      const d = Math.floor(diff / (24 * 60 * 60 * 1000))
+      const h = Math.floor((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000))
+      const m = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000))
+      const s = Math.floor((diff % (60 * 1000)) / 1000)
+      setDays(d)
+      setHours(h)
+      setMinutes(m)
+      setSeconds(s)
+    }
+
+    update()
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') update()
+    }, 1000)
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') update()
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
+  }, [currentEvent?.id, currentEvent?.registration_closes_at])
 
   const handleGuestRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -153,6 +198,38 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
         Join us — register for an event below.
       </p>
 
+      {currentEvent && currentEvent.registration_closes_at && new Date(currentEvent.registration_closes_at) > new Date() && (
+        <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-4 md:mb-5">
+          <div className="flex gap-1 md:gap-2">
+            <div className="flex flex-col items-center">
+              <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
+                {String(days).padStart(2, '0')}
+              </div>
+              <span className="text-white text-[10px] md:text-xs mt-1">Days</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
+                {String(hours).padStart(2, '0')}
+              </div>
+              <span className="text-white text-[10px] md:text-xs mt-1">Hr</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
+                {String(minutes).padStart(2, '0')}
+              </div>
+              <span className="text-white text-[10px] md:text-xs mt-1">Min</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
+                {String(seconds).padStart(2, '0')}
+              </div>
+              <span className="text-white text-[10px] md:text-xs mt-1">Sec</span>
+            </div>
+          </div>
+          <span className="text-white text-xs md:text-sm ml-1 md:ml-2">Until registration closes</span>
+        </div>
+      )}
+
       {loading ? (
         <p className="text-white text-sm opacity-85">Loading events...</p>
       ) : events.length === 0 ? (
@@ -162,10 +239,10 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
           <div className="flex gap-3 md:gap-4 items-start mb-3">
             <div className="shrink-0 w-14 h-16 md:w-16 md:h-20 flex flex-col items-center justify-center bg-[#1A1A1A] rounded">
               <span className="text-white text-xl md:text-2xl font-bold leading-tight">
-                {formatEventDate(currentEvent.start_at).date}
+                {formatEventDate(currentEvent.event_at).date}
               </span>
               <span className="text-white text-xs md:text-sm capitalize opacity-90">
-                {formatEventDate(currentEvent.start_at).month}
+                {formatEventDate(currentEvent.event_at).month}
               </span>
             </div>
             <div className="min-w-0 flex-1">
@@ -182,7 +259,7 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-white text-sm opacity-90">
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 shrink-0" />
-                  {formatEventDate(currentEvent.start_at).time}
+                  {formatEventDate(currentEvent.event_at).time}
                 </span>
               </div>
             </div>
@@ -193,10 +270,10 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
               <span>{currentEvent.location}</span>
             </div>
           )}
-          {currentEvent.description && (
-            <div className="mb-4 flex-shrink-0">
-              <p className="text-white text-xs md:text-sm opacity-90 leading-relaxed whitespace-pre-wrap break-words">
-                {currentEvent.description}
+          {(currentEvent.short_description ?? currentEvent.description) && (
+            <div className="mb-4 shrink-0">
+              <p className="text-white text-xs md:text-sm opacity-90 leading-relaxed">
+                {currentEvent.short_description ?? currentEvent.description}
               </p>
             </div>
           )}
