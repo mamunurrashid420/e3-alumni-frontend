@@ -27,6 +27,8 @@ import { endpoints } from './endpoints';
 import { getCookie, setCookie, removeCookie } from '@/lib/cookie';
 
 const AUTH_TOKEN_COOKIE = 'auth_token';
+/** Cookie key used by Zustand persist for auth store (must stay in sync with authStore persist name) */
+const AUTH_STORAGE_COOKIE = 'auth-storage';
 
 class ApiClient {
   private client: AxiosInstance;
@@ -64,7 +66,7 @@ class ApiClient {
         // Handle 401 - Unauthorized (token expired/invalid)
         if (error.response?.status === 401) {
           this.clearToken();
-          // Redirect to login will be handled by the app
+          removeCookie(AUTH_STORAGE_COOKIE);
           window.location.href = '/login';
         }
 
@@ -95,6 +97,7 @@ class ApiClient {
 
   clearToken(): void {
     removeCookie(AUTH_TOKEN_COOKIE);
+    removeCookie(AUTH_STORAGE_COOKIE);
   }
 
   isAuthenticated(): boolean {
