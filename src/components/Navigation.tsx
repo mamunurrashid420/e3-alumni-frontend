@@ -63,7 +63,11 @@ export function Navigation() {
       >
       {/* Header with Logo */}
       <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center gap-3">
+        <Link
+          to="/"
+          onClick={() => setIsOpen(false)}
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+        >
           <div className="w-12 h-12 rounded-full border-2 border-[#3B60C9] bg-white flex items-center justify-center shrink-0 overflow-hidden">
             <img 
               src={logoImage} 
@@ -79,7 +83,7 @@ export function Navigation() {
               ALUMNI ASSOCIATION
             </h3>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Navigation Items */}
