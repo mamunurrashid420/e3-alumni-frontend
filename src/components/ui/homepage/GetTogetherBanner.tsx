@@ -47,9 +47,9 @@ export function GetTogetherBanner() {
         borderRadius: '4px',
       }}
     >
-      <div className="flex flex-col md:flex-row min-h-[240px] md:min-h-[280px] lg:min-h-[300px] max-h-[380px] md:max-h-[420px]">
+      <div className="flex flex-col md:flex-row min-h-0 md:min-h-[280px] lg:min-h-[300px] md:max-h-[420px]">
         {/* Left Side - Event Cover Photo */}
-        <div className="w-full md:w-[35%] h-[160px] md:h-full max-h-[380px] overflow-hidden rounded-t-[4px] md:rounded-l-[4px] md:rounded-t-none shrink-0">
+        <div className="w-full md:w-[35%] h-[140px] sm:h-[160px] md:h-full md:max-h-[420px] overflow-hidden rounded-t-[4px] md:rounded-l-[4px] md:rounded-t-none shrink-0">
           <img 
             src={coverPhoto}
             alt={imageAlt}
@@ -58,7 +58,7 @@ export function GetTogetherBanner() {
         </div>
         
         {/* Right Side - Content */}
-        <div className="w-full md:w-[60%] h-full">
+        <div className="w-full md:w-[60%] min-h-0 md:h-full flex flex-col">
           <GetTogetherSection 
             events={events}
             loading={loading}

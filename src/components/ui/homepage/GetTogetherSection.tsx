@@ -199,7 +199,7 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
       </p> */}
 
       {currentEvent && currentEvent.registration_closes_at && new Date(currentEvent.registration_closes_at) > new Date() && (
-        <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-4 md:mb-5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 md:gap-4 mb-2 md:mb-5">
           <div className="flex gap-1 md:gap-2">
             <div className="flex flex-col items-center">
               <div className="bg-[#1A1A1A] text-white px-2 md:px-3 lg:px-4 py-2 md:py-3 rounded text-lg md:text-xl lg:text-2xl font-bold min-w-[50px] md:min-w-[60px] text-center">
@@ -235,8 +235,8 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
       ) : events.length === 0 ? (
         <p className="text-white text-sm opacity-85">No upcoming events at the moment. Check back later.</p>
       ) : currentEvent ? (
-        <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">
-          <div className="flex gap-3 md:gap-4 items-start mb-3">
+        <div className="flex flex-col min-h-0 flex-1 md:overflow-y-auto">
+          <div className="flex gap-3 md:gap-4 items-start mb-2 md:mb-3">
             <div className="shrink-0 w-14 h-16 md:w-16 md:h-20 flex flex-col items-center justify-center bg-[#1A1A1A] rounded">
               <span className="text-white text-xl md:text-2xl font-bold leading-tight">
                 {formatEventDate(currentEvent.event_at).date}
@@ -265,19 +265,19 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
             </div>
           </div>
           {currentEvent.location && (
-            <div className="flex items-center gap-2 mb-3 text-white text-sm md:text-base opacity-90">
+            <div className="flex items-center gap-2 mb-2 md:mb-3 text-white text-sm md:text-base opacity-90">
               <MapPin className="w-4 h-4 shrink-0" />
-              <span>{currentEvent.location}</span>
+              <span className="line-clamp-1">{currentEvent.location}</span>
             </div>
           )}
           {(currentEvent.short_description ?? currentEvent.description) && (
-            <div className="mb-4 shrink-0">
-              <p className="text-white text-xs md:text-sm opacity-90 leading-relaxed">
+            <div className="mb-2 md:mb-4 shrink-0">
+              <p className="text-white text-xs md:text-sm opacity-90 leading-relaxed line-clamp-2 md:line-clamp-none">
                 {currentEvent.short_description ?? currentEvent.description}
               </p>
             </div>
           )}
-          <div className="flex flex-wrap items-center gap-3 mt-auto flex-shrink-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2 md:mt-auto shrink-0">
             {isAuthenticated ? (
               <Link
                 to="/dashboard/events/$id"
@@ -307,7 +307,7 @@ export function GetTogetherSection({ events, loading, currentIndex, onPrev, onNe
       ) : null}
 
       {/* Carousel navigation */}
-      <div className="flex items-center justify-between gap-2 mt-4 md:mt-4">
+      <div className="flex items-center justify-between gap-2 mt-3 md:mt-4 shrink-0">
         <span className="text-white text-xs md:text-sm opacity-80">
           {hasMultiple ? `${currentIndex + 1} of ${events.length}` : '\u00A0'}
         </span>

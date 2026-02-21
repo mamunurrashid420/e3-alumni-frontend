@@ -42,12 +42,8 @@ export function CommunitySection() {
           <img 
             src={communityImage}
             alt="Community"
-            className="absolute w-[calc(100%-40px)] md:w-[calc(100%-60px)] lg:w-[478px] h-[calc(100%-40px)] md:h-[calc(100%-60px)] lg:h-[567px] rounded-t-[132px] md:rounded-t-[200px] lg:rounded-t-[265px] object-cover"
-            style={{ 
-              zIndex: 1,
-              top: '-30px',
-              left: '-20px'
-            }}
+            className="absolute left-0 lg:left-[-20px] top-[-30px] w-[calc(100%-40px)] md:w-[calc(100%-60px)] lg:w-[478px] h-[calc(100%-40px)] md:h-[calc(100%-60px)] lg:h-[567px] rounded-t-[132px] md:rounded-t-[200px] lg:rounded-t-[265px] object-cover"
+            style={{ zIndex: 1 }}
           />
         </div>
 
