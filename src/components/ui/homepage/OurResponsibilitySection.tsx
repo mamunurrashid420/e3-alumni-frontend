@@ -8,7 +8,7 @@ interface ResponsibilityCardProps {
 
 function ResponsibilityCard({ icon, title, description }: ResponsibilityCardProps) {
   return (
-    <div className="flex flex-col items-center gap-6 md:gap-10 w-full min-w-0 max-w-[302px]">
+    <div className="flex flex-col items-center gap-6 md:gap-10 w-full min-w-0">
       <div className="w-16 h-16 md:w-[100px] md:h-[100px] flex items-center justify-center shrink-0">
         {icon}
       </div>
@@ -34,23 +34,23 @@ export function OurResponsibilitySection() {
   const responsibilities = [
     {
       icon: <GraduationCap className="w-full h-full" style={{ color: '#121212' }} />,
-      title: 'Scholarship',
-      description: 'De create building thinking about your requirment and latest treand on our marketplace area'
+      title: 'Scholarship Program',
+      description: 'The program provides financial support to students who demonstrate academic excellence, financial need, and a commitment to community service.'
     },
     {
       icon: <HandHeart className="w-full h-full" style={{ color: '#121212' }} />,
-      title: 'Help Current Students',
-      description: 'De create building thinking about your requirment and latest treand on our marketplace area'
+      title: 'Aid for the Current Students',
+      description: 'We offer financial assistance, mentoring, and resources to help current students succeed academically and personally.'
     },
     {
       icon: <Building2 className="w-full h-full" style={{ color: '#121212' }} />,
-      title: 'Help Our School',
-      description: 'De create building thinking about your requirment and latest treand on our marketplace area'
+      title: 'Contribution to the Development of the School',
+      description: 'We support the school’s infrastructure, programs, and initiatives to enhance the learning environment and student experience.'
     },
     {
       icon: <Users className="w-full h-full" style={{ color: '#121212' }} />,
-      title: 'Build Our Community',
-      description: 'De create building thinking about your requirment and latest treand on our marketplace area'
+      title: 'Building a vibrant community',
+      description: 'We foster a sense of belonging and pride by connecting alumni with current students, promoting collaboration, and creating opportunities for mentorship and networking.'
     }
   ]
 
@@ -65,10 +65,10 @@ export function OurResponsibilitySection() {
         className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
         style={{ color: '#021E40' }}
       >
-        Our Responsibility
+        Our Priority
       </h2>
 
-      <div className="flex flex-wrap justify-center gap-6 md:gap-8 w-full max-w-[1920px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1920px]">
         {responsibilities.map((item, index) => (
           <ResponsibilityCard
             key={index}
