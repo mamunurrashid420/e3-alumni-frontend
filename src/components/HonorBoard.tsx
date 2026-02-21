@@ -64,7 +64,7 @@ export function HonorBoard() {
           <div className="bg-primary-custom text-white px-6 py-4">
             <h1 className="text-2xl sm:text-3xl font-bold">Honor Board</h1>
             <p className="text-sm sm:text-base mt-1 opacity-90">
-              President and General Secretary
+              President and Secretary General
             </p>
           </div>
           <div className="p-4 sm:p-6 overflow-x-auto">
@@ -82,7 +82,7 @@ export function HonorBoard() {
             {!loading && !error && items.length > 0 && (
               <>
                 {renderCardGrid('President', presidentEntries)}
-                {renderCardGrid('General Secretary', secretaryEntries)}
+                {renderCardGrid('Secretary General', secretaryEntries)}
               </>
             )}
           </div>

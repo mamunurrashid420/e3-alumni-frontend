@@ -340,7 +340,7 @@ export function MembershipCertificate({ user }: MembershipCertificateProps) {
                   fontFamily: 'Arial, sans-serif',
                 }}
               >
-                General Secretary
+                Secretary General
               </p>
               <p
                 style={{

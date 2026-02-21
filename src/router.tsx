@@ -70,7 +70,7 @@ const presidentMessageRoute = createRoute({
   ),
 })
 
-// Message from General Secretary route
+// Message from Secretary General route
 const secretaryMessageRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/about/secretary',

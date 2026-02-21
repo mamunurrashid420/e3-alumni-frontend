@@ -32,7 +32,7 @@ export function Header() {
     { label: 'Our History', href: '/about/history' },
     { label: 'Mission & Vision', href: '/about/mission-vision' },
     { label: 'Message from the President', href: '/about/president' },
-    { label: 'Message from the General Secretary', href: '/about/secretary' },
+    { label: 'Message from the Secretary General', href: '/about/secretary' },
     { label: 'Executive Members', href: '/about/executive-members' },
     { label: 'Convening Committee', href: '/about/convening-committee' },
     { label: 'Advisory Body', href: '/about/advisory-body' },

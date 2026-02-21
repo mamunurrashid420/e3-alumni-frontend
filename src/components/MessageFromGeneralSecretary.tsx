@@ -4,7 +4,7 @@ export function MessageFromGeneralSecretary() {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <p className="text-sm md:text-base font-semibold">
-            Message from the General Secretary
+            Message from the Secretary General
           </p>
         </div>
 
@@ -33,7 +33,7 @@ export function MessageFromGeneralSecretary() {
               Md. Mostafijur Rahman Nanna
             </p>
             <p className="text-sm md:text-base font-semibold leading-relaxed" style={{ color: '#021E40' }}>
-              General Secretary
+              Secretary General
             </p>
             <p className="text-sm md:text-base font-semibold leading-relaxed" style={{ color: '#021E40' }}>
               Jahapur Secondary School Alumni Association
