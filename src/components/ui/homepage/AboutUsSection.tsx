@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import event1 from '@/assets/alumni/event/1.jpg'
 import event2 from '@/assets/alumni/event/2.jpg'
@@ -14,7 +14,18 @@ import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
 // Array of all available images (excluding logo)
 const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
 
+const SHORT_TEXT_LENGTH = 280
+
+const fullText = `The Jahapur Secondary School Alumni Association (JSSAA) serves as the heart of our alumni community, connecting former students from different batches and backgrounds. The association is established with the vision of building strong bridges among the alumni, actively contributing to the welfare and overall development of both the school and its alumni through cooperation and collective initiatives.
+
+For decades, Jahapur Secondary School has shaped future leaders, professionals, and change-makers. We take immense pride in celebrating the achievements and contributions of our alumni across various fields. JSSAA aims to strengthen this proud legacy by organizing meaningful events, creating networking opportunities, and supporting initiatives that benefit both alumni and current students.
+
+Through reunions, mentorship programs, educational support, and community outreach activities, the association strives to ensure that every member feels connected, valued, and empowered to make a positive difference. JSSAA provides a platform where lifelong bonds are nurtured, knowledge is shared and collaboration is encouraged for mutual growth.
+
+Through this platform, alumni will maintain and nurture the bond among themselves and contribute to the overall development of the school & ex-students. JSSAA also deeply respects the contribution of the great persons who established & developed the school. Let's keep the spirit of Jahapur Secondary School alive and soar together toward new horizons.`
+
 export function AboutUsSection() {
+  const [isExpanded, setIsExpanded] = useState(false)
   const mainImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
   const overlappingImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
   return (
@@ -72,37 +83,24 @@ export function AboutUsSection() {
 
             <div className="flex flex-col gap-4 md:gap-6">
               <p 
-                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
+                className="text-sm md:text-base leading-relaxed md:leading-[26px] whitespace-pre-line"
                 style={{ color: '#696868' }}
               >
-                The Jahapur Secondary School Alumni Association (JSSAA) serves as the heart of our alumni community, connecting former students from different batches and backgrounds. The association is established with the vision of building strong bridges among the alumni, actively contributing to the welfare and overall development of both the school and its alumni through cooperation and collective initiatives.
+                {isExpanded
+                  ? fullText
+                  : `${fullText.slice(0, SHORT_TEXT_LENGTH).trim()}${fullText.length > SHORT_TEXT_LENGTH ? '...' : ''}`}
               </p>
-              <p 
-                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
-                style={{ color: '#696868' }}
-              >
-                For decades, Jahapur Secondary School has shaped future leaders, professionals, and change-makers. We take immense pride in celebrating the achievements and contributions of our alumni across various fields. JSSAA aims to strengthen this proud legacy by organizing meaningful events, creating networking opportunities, and supporting initiatives that benefit both alumni and current students.
-              </p>
-              <p 
-                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
-                style={{ color: '#696868' }}
-              >
-                Through reunions, mentorship programs, educational support, and community outreach activities, the association strives to ensure that every member feels connected, valued, and empowered to make a positive difference. JSSAA provides a platform where lifelong bonds are nurtured, knowledge is shared and collaboration is encouraged for mutual growth.
-              </p>
-              <p 
-                className="text-sm md:text-base leading-relaxed md:leading-[26px]"
-                style={{ color: '#696868' }}
-              >
-                Through this platform, alumni will maintain and nurture the bond among themselves and contribute to the overall development of the school & ex-students. JSSAA also deeply respects the contribution of the great persons who established & developed the school. Let's keep the spirit of Jahapur Secondary School alive and soar together toward new horizons.
-              </p>
+              {fullText.length > SHORT_TEXT_LENGTH && (
+                <button
+                  type="button"
+                  onClick={() => setIsExpanded((prev) => !prev)}
+                  className="text-sm font-semibold text-left w-fit hover:underline focus:outline-none focus:underline"
+                  style={{ color: '#3B60C9' }}
+                >
+                  {isExpanded ? 'See less' : 'See more'}
+                </button>
+              )}
             </div>
-
-            <Button 
-              className="w-full sm:w-[184px] h-[45px] md:h-[50px] text-sm md:text-base font-semibold rounded"
-              style={{ background: '#3B60C9', color: '#FFFFFF' }}
-            >
-              Explore More
-            </Button>
           </div>
         </div>
       </div>
