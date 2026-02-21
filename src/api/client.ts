@@ -24,6 +24,8 @@ import type {
   ScholarshipApplicationSubmitResponse,
   HomepageStats,
   GalleryPhotoListResponse,
+  NoticeItem,
+  NoticeListResponse,
   NewsItem,
   NewsListResponse,
   JobListResponse,
@@ -380,6 +382,20 @@ class ApiClient {
     const response = await this.client.get<GalleryPhotoListResponse>(
       endpoints.galleryPhotos,
       { params }
+    );
+    return response.data;
+  }
+
+  /** Notices list, active only (public, for scrolling bar). */
+  async getNotices(): Promise<NoticeListResponse> {
+    const response = await this.client.get<NoticeListResponse>(endpoints.notices);
+    return response.data;
+  }
+
+  /** Single notice by id (public: active only). */
+  async getNotice(id: number): Promise<{ data: NoticeItem }> {
+    const response = await this.client.get<{ data: NoticeItem }>(
+      endpoints.notice(id)
     );
     return response.data;
   }

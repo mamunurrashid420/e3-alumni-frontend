@@ -1,3 +1,4 @@
+import { NoticeBar } from '@/components/ui/homepage/NoticeBar'
 import { HeroSection } from '@/components/ui/homepage/HeroSection'
 import { GetTogetherBanner } from '@/components/ui/homepage/GetTogetherBanner'
 import { AboutUsSection } from '@/components/ui/homepage/AboutUsSection'
@@ -15,6 +16,7 @@ import { ProgramsSection } from '@/components/ui/homepage/ProgramsSection'
 export function Homepage() {
   return (
     <div className="relative w-full overflow-x-hidden">
+      <NoticeBar />
       <HeroSection />
       <GetTogetherBanner />
       {/* Spacer to account for overlapping GetTogetherBanner */}

@@ -333,6 +333,21 @@ export interface GalleryPhotoListResponse {
   data: GalleryPhoto[];
 }
 
+/** Notice (scrolling bar / detail page) */
+export interface NoticeItem {
+  id: number;
+  title: string;
+  body: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NoticeListResponse {
+  data: NoticeItem[];
+}
+
 /** News item (public list / detail) */
 export interface NewsItem {
   id: number;

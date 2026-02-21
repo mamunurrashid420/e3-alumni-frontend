@@ -15,6 +15,7 @@ import { History } from '@/components/History'
 import { MissionAndVision } from '@/components/MissionAndVision'
 import { NewsAndEvents } from '@/components/NewsAndEvents'
 import { NewsDetail } from '@/components/NewsDetail'
+import { NoticeDetail } from '@/components/NoticeDetail'
 import { JobDetail } from '@/components/JobDetail'
 import { Contact } from '@/components/Contact'
 import { Membership } from '@/components/Membership'
@@ -371,6 +372,17 @@ const newsDetailRoute = createRoute({
   ),
 })
 
+// Notice detail by id
+const noticeDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/notice/$id',
+  component: () => (
+    <HomepageLayout>
+      <NoticeDetail />
+    </HomepageLayout>
+  ),
+})
+
 // Job detail by id
 const jobDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -469,6 +481,7 @@ const routeTree = rootRoute.addChildren([
   scholarshipRoute,
   newsEventsRoute,
   newsDetailRoute,
+  noticeDetailRoute,
   jobDetailRoute,
   eventsRoute,
   eventDetailRoute,

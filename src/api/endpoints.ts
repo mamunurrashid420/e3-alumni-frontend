@@ -47,6 +47,8 @@ export const endpoints = {
   // Homepage (public)
   stats: `${API_BASE}/stats`,
   galleryPhotos: `${API_BASE}/gallery-photos`,
+  notices: `${API_BASE}/notices`,
+  notice: (id: number) => `${API_BASE}/notices/${id}`,
   news: `${API_BASE}/news`,
   newsBySlug: (slug: string) => `${API_BASE}/news/slug/${encodeURIComponent(slug)}`,
   jobs: `${API_BASE}/jobs`,
