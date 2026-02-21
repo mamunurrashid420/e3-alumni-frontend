@@ -34,6 +34,10 @@ export function GetTogetherBanner() {
     setCurrentIndex((i) => (i >= events.length - 1 ? 0 : i + 1))
   }
 
+  if (loading || events.length === 0) {
+    return null
+  }
+
   return (
     <section 
       className="relative z-20 w-full max-w-[1280px] mx-auto mt-0 sm:-mt-16 md:-mt-[140px] lg:-mt-[190px] px-4 md:px-6 lg:px-8"
@@ -43,9 +47,9 @@ export function GetTogetherBanner() {
         borderRadius: '4px',
       }}
     >
-      <div className="flex flex-col md:flex-row min-h-[300px] md:min-h-[350px] lg:min-h-[380px] max-h-[500px] md:max-h-[550px]">
+      <div className="flex flex-col md:flex-row min-h-[240px] md:min-h-[280px] lg:min-h-[300px] max-h-[380px] md:max-h-[420px]">
         {/* Left Side - Event Cover Photo */}
-        <div className="w-full md:w-[40%] h-[200px] md:h-full max-h-[500px] overflow-hidden rounded-t-[4px] md:rounded-l-[4px] md:rounded-t-none shrink-0">
+        <div className="w-full md:w-[35%] h-[160px] md:h-full max-h-[380px] overflow-hidden rounded-t-[4px] md:rounded-l-[4px] md:rounded-t-none shrink-0">
           <img 
             src={coverPhoto}
             alt={imageAlt}
