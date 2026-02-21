@@ -33,6 +33,7 @@ export function ScholarshipApplicationFormPage() {
   })
   const [academicProofFile, setAcademicProofFile] = useState<File | null>(null)
   const [otherDocFile, setOtherDocFile] = useState<File | null>(null)
+  const [applicantSignatureFile, setApplicantSignatureFile] = useState<File | null>(null)
 
   useEffect(() => {
     apiClient
@@ -55,8 +56,8 @@ export function ScholarshipApplicationFormPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.scholarship_id || !form.applicant_name || !form.applicant_phone) {
-      toast.error('Please fill required fields: Scholarship, Name, Phone')
+    if (!form.scholarship_id || !form.applicant_name || !form.applicant_phone || !applicantSignatureFile) {
+      toast.error('Please fill required fields: Scholarship, Name, Phone, Applicant Signature')
       return
     }
     setSubmitting(true)
@@ -74,6 +75,7 @@ export function ScholarshipApplicationFormPage() {
       if (form.statement) fd.append('statement', form.statement)
       if (academicProofFile) fd.append('academic_proof_file', academicProofFile)
       if (otherDocFile) fd.append('other_document_file', otherDocFile)
+      fd.append('applicant_signature', applicantSignatureFile)
 
       await apiClient.submitScholarshipApplication(fd)
       toast.success('Application submitted successfully')
@@ -230,6 +232,18 @@ export function ScholarshipApplicationFormPage() {
             type="file"
             accept=".pdf,.jpg,.jpeg,.png"
             onChange={(e) => setOtherDocFile(e.target.files?.[0] ?? null)}
+            className="w-full"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-black-700 mb-1">
+            Applicant Signature <span className="text-red-600">*</span>
+          </label>
+          <Input
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            onChange={(e) => setApplicantSignatureFile(e.target.files?.[0] ?? null)}
+            required
             className="w-full"
           />
         </div>
