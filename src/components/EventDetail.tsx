@@ -30,12 +30,22 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
   const navigate = useNavigate()
   const { pathname, search } = useRouterState({ select: (s) => s.location })
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const user = useAuthStore((s) => s.user)
+  const fetchUser = useAuthStore((s) => s.fetchUser)
   const [event, setEvent] = useState<EventType | null>(null)
   const [loading, setLoading] = useState(true)
   const [registering, setRegistering] = useState(false)
   const [showRegistrationForm, setShowRegistrationForm] = useState(false)
   const [guestCount, setGuestCount] = useState(0)
   const [notes, setNotes] = useState('')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [sscJsc, setSscJsc] = useState('')
+  const [guestDetails, setGuestDetails] = useState('')
+  const [participantFee, setParticipantFee] = useState<number | ''>('')
+  const [totalFees, setTotalFees] = useState<number | ''>('')
+  const [paymentDocument, setPaymentDocument] = useState<File | null>(null)
   const [guestName, setGuestName] = useState('')
   const [guestPhone, setGuestPhone] = useState('')
   const [guestAddress, setGuestAddress] = useState('')
@@ -74,19 +84,55 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
     }
   }, [])
 
+  useEffect(() => {
+    if (!showRegistrationForm || !isAuthenticated || !user || !event || event.is_registered) return
+    // If user was restored from storage without profile, fetch fresh user so we can prefill SSC/JSC
+    if (!user.profile) {
+      fetchUser()
+      return
+    }
+    setName(user.name ?? '')
+    setPhone(user.phone ?? '')
+    setAddress(user.profile.present_address ?? '')
+    const profile = user.profile
+    const sscOrJsc =
+      profile.ssc_year != null
+        ? String(profile.ssc_year)
+        : profile.jsc_year != null
+          ? String(profile.jsc_year)
+          : ''
+    setSscJsc(sscOrJsc)
+  }, [showRegistrationForm, isAuthenticated, user, event, fetchUser])
+
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!event || registering) return
     setRegistering(true)
     try {
       await apiClient.registerForEvent(event.id, {
+        name: name.trim() || undefined,
+        phone: phone.trim() || undefined,
+        address: address.trim() || undefined,
+        ssc_jsc: sscJsc.trim() || undefined,
         guest_count: guestCount || undefined,
         notes: notes.trim() || undefined,
+        guest_details: guestDetails.trim() || undefined,
+        participant_fee: event.fee ?? (participantFee === '' ? undefined : Number(participantFee)),
+        total_fees: event.fee != null ? event.fee * (1 + guestCount) : (totalFees === '' ? undefined : Number(totalFees)),
+        payment_document: paymentDocument ?? undefined,
       })
       toast.success('Registered successfully.')
       setShowRegistrationForm(false)
       setGuestCount(0)
       setNotes('')
+      setName('')
+      setPhone('')
+      setAddress('')
+      setSscJsc('')
+      setGuestDetails('')
+      setParticipantFee('')
+      setTotalFees('')
+      setPaymentDocument(null)
       const res = await apiClient.getEvent(event.id)
       setEvent(res.data)
     } catch (err: unknown) {
@@ -233,13 +279,65 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
                 {registering ? 'Please wait...' : 'Unregister'}
               </Button>
             ) : showRegistrationForm ? (
-              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 max-w-md">
+              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 max-w-lg">
                 <h3 className="font-semibold text-black mb-3">Event registration</h3>
                 <form onSubmit={handleRegisterSubmit} className="space-y-4">
                   <div>
-                    <label htmlFor="guest_count" className="block text-sm font-medium text-black-700 mb-1">
-                      Number of guests (optional)
-                    </label>
+                    <label className="block text-sm font-medium text-black-700 mb-1">Event name</label>
+                    <p className="text-sm text-black-600 bg-muted/50 rounded-md px-3 py-2">{event.title}</p>
+                  </div>
+                  {user?.member_id && (
+                    <div>
+                      <label className="block text-sm font-medium text-black-700 mb-1">Member ID</label>
+                      <p className="text-sm text-black-600 bg-muted/50 rounded-md px-3 py-2">{user.member_id}</p>
+                    </div>
+                  )}
+                  <div>
+                    <label htmlFor="reg_name" className="block text-sm font-medium text-black-700 mb-1">Name</label>
+                    <Input
+                      id="reg_name"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Full name"
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="reg_phone" className="block text-sm font-medium text-black-700 mb-1">Mobile number</label>
+                    <Input
+                      id="reg_phone"
+                      type="text"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Mobile number"
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="reg_ssc" className="block text-sm font-medium text-black-700 mb-1">SSC Batch</label>
+                    <Input
+                      id="reg_ssc"
+                      type="text"
+                      value={sscJsc}
+                      onChange={(e) => setSscJsc(e.target.value)}
+                      placeholder="e.g. SSC 2010"
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="reg_address" className="block text-sm font-medium text-black-700 mb-1">Address</label>
+                    <textarea
+                      id="reg_address"
+                      rows={2}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="Address"
+                      className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="guest_count" className="block text-sm font-medium text-black-700 mb-1">Guest numbers</label>
                     <Input
                       id="guest_count"
                       type="number"
@@ -251,16 +349,69 @@ export function EventDetail({ dashboardContext = false }: EventDetailProps) {
                     />
                   </div>
                   <div>
-                    <label htmlFor="notes" className="block text-sm font-medium text-black-700 mb-1">
-                      Notes (optional)
-                    </label>
+                    <label htmlFor="guest_details" className="block text-sm font-medium text-black-700 mb-1">Guest details</label>
+                    <textarea
+                      id="guest_details"
+                      rows={2}
+                      value={guestDetails}
+                      onChange={(e) => setGuestDetails(e.target.value)}
+                      placeholder="Names or details of guests (optional)"
+                      className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-black-700 mb-1">Event fee (per person)</label>
+                    {event.fee != null ? (
+                      <p className="text-sm text-black-600 bg-muted/50 rounded-md px-3 py-2 max-w-[160px]">{event.fee} (same for you and each guest)</p>
+                    ) : (
+                      <Input
+                        id="participant_fee"
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        value={participantFee === '' ? '' : participantFee}
+                        onChange={(e) => setParticipantFee(e.target.value === '' ? '' : Number(e.target.value))}
+                        placeholder="Optional"
+                        className="max-w-[160px]"
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-black-700 mb-1">Total fees</label>
+                    {event.fee != null ? (
+                      <p className="text-sm text-black-600 bg-muted/50 rounded-md px-3 py-2 max-w-[160px]">{event.fee * (1 + guestCount)} ({event.fee} × {1 + guestCount} person(s))</p>
+                    ) : (
+                      <Input
+                        id="total_fees"
+                        type="number"
+                        min={0}
+                        step={0.01}
+                        value={totalFees === '' ? '' : totalFees}
+                        onChange={(e) => setTotalFees(e.target.value === '' ? '' : Number(e.target.value))}
+                        placeholder="Optional total amount"
+                        className="max-w-[160px]"
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <label htmlFor="payment_document" className="block text-sm font-medium text-black-700 mb-1">Upload payment documents</label>
+                    <Input
+                      id="payment_document"
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) => setPaymentDocument(e.target.files?.[0] ?? null)}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="notes" className="block text-sm font-medium text-black-700 mb-1">Notes (optional)</label>
                     <textarea
                       id="notes"
-                      rows={3}
+                      rows={2}
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="Dietary requirements, special requests..."
-                      className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     />
                   </div>
                   <div className="flex gap-2">

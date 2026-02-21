@@ -118,6 +118,12 @@ export function UpcomingEventsSection({ events, loading }: UpcomingEventsSection
   const [phone, setPhone] = useState('')
   const [address, setAddress] = useState('')
   const [sscJsc, setSscJsc] = useState('')
+  const [guestCount, setGuestCount] = useState(0)
+  const [guestDetails, setGuestDetails] = useState('')
+  const [participantFee, setParticipantFee] = useState<number | ''>('')
+  const [totalFees, setTotalFees] = useState<number | ''>('')
+  const [paymentDocument, setPaymentDocument] = useState<File | null>(null)
+  const [notes, setNotes] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
   const [photoViewerSrc, setPhotoViewerSrc] = useState<string | null>(null)
@@ -133,6 +139,12 @@ export function UpcomingEventsSection({ events, loading }: UpcomingEventsSection
         phone: phone.trim(),
         address: address.trim(),
         ssc_jsc: sscJsc.trim() || undefined,
+        guest_count: guestCount || undefined,
+        guest_details: guestDetails.trim() || undefined,
+        participant_fee: guestModalEvent.fee ?? (participantFee === '' ? undefined : Number(participantFee)),
+        total_fees: guestModalEvent.fee != null ? guestModalEvent.fee * (1 + guestCount) : (totalFees === '' ? undefined : Number(totalFees)),
+        payment_document: paymentDocument ?? undefined,
+        notes: notes.trim() || undefined,
       })
       toast.success('Registered successfully.')
       closeGuestModal()
@@ -151,6 +163,12 @@ export function UpcomingEventsSection({ events, loading }: UpcomingEventsSection
     setPhone('')
     setAddress('')
     setSscJsc('')
+    setGuestCount(0)
+    setGuestDetails('')
+    setParticipantFee('')
+    setTotalFees('')
+    setPaymentDocument(null)
+    setNotes('')
   }
 
   return (
@@ -158,9 +176,9 @@ export function UpcomingEventsSection({ events, loading }: UpcomingEventsSection
       {/* Guest registration modal (homepage) */}
       {guestModalEvent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold text-black mb-2">{guestModalEvent.title}</h3>
-            <p className="text-sm text-black-600 mb-4">Register as a guest. Fill in your details below.</p>
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold text-black mb-1">Event registration</h3>
+            <p className="text-sm text-black-600 mb-4 font-medium">{guestModalEvent.title}</p>
             <form onSubmit={handleGuestRegisterSubmit} className="space-y-4">
               <div>
                 <label htmlFor="guest_name_modal" className="block text-sm font-medium text-black-700 mb-1">
@@ -171,22 +189,35 @@ export function UpcomingEventsSection({ events, loading }: UpcomingEventsSection
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Your full name"
+                  placeholder="Full name"
                   required
                   className="w-full"
                 />
               </div>
               <div>
                 <label htmlFor="guest_phone_modal" className="block text-sm font-medium text-black-700 mb-1">
-                  Phone <span className="text-red-600">*</span>
+                  Mobile number <span className="text-red-600">*</span>
                 </label>
                 <Input
                   id="guest_phone_modal"
                   type="text"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Phone number"
+                  placeholder="Mobile number"
                   required
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="guest_ssc_jsc_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  SSC Batch
+                </label>
+                <Input
+                  id="guest_ssc_jsc_modal"
+                  type="text"
+                  value={sscJsc}
+                  onChange={(e) => setSscJsc(e.target.value)}
+                  placeholder="e.g. SSC 2010"
                   className="w-full"
                 />
               </div>
@@ -199,22 +230,99 @@ export function UpcomingEventsSection({ events, loading }: UpcomingEventsSection
                   rows={2}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Your address"
+                  placeholder="Address"
                   required
                   className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
               </div>
               <div>
-                <label htmlFor="guest_ssc_jsc_modal" className="block text-sm font-medium text-black-700 mb-1">
-                  SSC / JSC (optional)
+                <label htmlFor="guest_count_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  Guest numbers
                 </label>
                 <Input
-                  id="guest_ssc_jsc_modal"
-                  type="text"
-                  value={sscJsc}
-                  onChange={(e) => setSscJsc(e.target.value)}
-                  placeholder="e.g. SSC 2010, JSC 2012"
+                  id="guest_count_modal"
+                  type="number"
+                  min={0}
+                  max={50}
+                  value={guestCount || ''}
+                  onChange={(e) => setGuestCount(parseInt(e.target.value, 10) || 0)}
+                  className="max-w-[120px]"
+                />
+              </div>
+              <div>
+                <label htmlFor="guest_details_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  Guest details
+                </label>
+                <textarea
+                  id="guest_details_modal"
+                  rows={2}
+                  value={guestDetails}
+                  onChange={(e) => setGuestDetails(e.target.value)}
+                  placeholder="Names or details of guests (optional)"
+                  className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-black-700 mb-1">
+                  Event fee (per person)
+                </label>
+                {guestModalEvent.fee != null ? (
+                  <p className="text-sm text-black-600 bg-muted/50 rounded-md px-3 py-2 max-w-[200px]">{guestModalEvent.fee} (same for you and each guest)</p>
+                ) : (
+                  <Input
+                    id="participant_fee_modal"
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    value={participantFee === '' ? '' : participantFee}
+                    onChange={(e) => setParticipantFee(e.target.value === '' ? '' : Number(e.target.value))}
+                    placeholder="Optional"
+                    className="max-w-[160px]"
+                  />
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-black-700 mb-1">
+                  Total fees
+                </label>
+                {guestModalEvent.fee != null ? (
+                  <p className="text-sm text-black-600 bg-muted/50 rounded-md px-3 py-2 max-w-[200px]">{guestModalEvent.fee * (1 + guestCount)} ({guestModalEvent.fee} × {1 + guestCount} person(s))</p>
+                ) : (
+                  <Input
+                    id="total_fees_modal"
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    value={totalFees === '' ? '' : totalFees}
+                    onChange={(e) => setTotalFees(e.target.value === '' ? '' : Number(e.target.value))}
+                    placeholder="Optional total amount"
+                    className="max-w-[160px]"
+                  />
+                )}
+              </div>
+              <div>
+                <label htmlFor="payment_document_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  Upload payment documents
+                </label>
+                <Input
+                  id="payment_document_modal"
+                  type="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(e) => setPaymentDocument(e.target.files?.[0] ?? null)}
                   className="w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="notes_modal" className="block text-sm font-medium text-black-700 mb-1">
+                  Notes (optional)
+                </label>
+                <textarea
+                  id="notes_modal"
+                  rows={2}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Dietary requirements, special requests..."
+                  className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
               </div>
               <div className="flex gap-2 pt-2">

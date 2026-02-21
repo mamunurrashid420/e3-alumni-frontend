@@ -311,11 +311,52 @@ class ApiClient {
   /** Register current user for event (auth required, member only). */
   async registerForEvent(
     id: number,
-    data?: { notes?: string | null; guest_count?: number }
+    data?: {
+      name?: string | null;
+      phone?: string | null;
+      address?: string | null;
+      ssc_jsc?: string | null;
+      notes?: string | null;
+      guest_count?: number;
+      guest_details?: string | null;
+      participant_fee?: number | null;
+      total_fees?: number | null;
+      payment_document?: File | null;
+    }
   ): Promise<{ message: string }> {
+    const payload = data ?? {};
+    const hasFile = payload.payment_document != null;
+    if (hasFile) {
+      const formData = new FormData();
+      if (payload.name != null) formData.append('name', payload.name);
+      if (payload.phone != null) formData.append('phone', payload.phone);
+      if (payload.address != null) formData.append('address', payload.address);
+      if (payload.ssc_jsc != null) formData.append('ssc_jsc', payload.ssc_jsc);
+      if (payload.notes != null) formData.append('notes', payload.notes);
+      if (payload.guest_count != null) formData.append('guest_count', String(payload.guest_count));
+      if (payload.guest_details != null) formData.append('guest_details', payload.guest_details);
+      if (payload.participant_fee != null) formData.append('participant_fee', String(payload.participant_fee));
+      if (payload.total_fees != null) formData.append('total_fees', String(payload.total_fees));
+      formData.append('payment_document', payload.payment_document!);
+      const response = await this.client.post<{ message: string }>(
+        endpoints.eventRegister(id),
+        formData
+      );
+      return response.data;
+    }
     const response = await this.client.post<{ message: string }>(
       endpoints.eventRegister(id),
-      data ?? {}
+      {
+        name: payload.name ?? undefined,
+        phone: payload.phone ?? undefined,
+        address: payload.address ?? undefined,
+        ssc_jsc: payload.ssc_jsc ?? undefined,
+        notes: payload.notes ?? undefined,
+        guest_count: payload.guest_count ?? undefined,
+        guest_details: payload.guest_details ?? undefined,
+        participant_fee: payload.participant_fee ?? undefined,
+        total_fees: payload.total_fees ?? undefined,
+      }
     );
     return response.data;
   }
@@ -328,11 +369,51 @@ class ApiClient {
   /** Register guest for event (no auth). */
   async registerGuestForEvent(
     id: number,
-    data: { name: string; phone: string; address: string; ssc_jsc?: string | null }
+    data: {
+      name: string;
+      phone: string;
+      address: string;
+      ssc_jsc?: string | null;
+      notes?: string | null;
+      guest_count?: number;
+      guest_details?: string | null;
+      participant_fee?: number | null;
+      total_fees?: number | null;
+      payment_document?: File | null;
+    }
   ): Promise<{ message: string }> {
+    const hasFile = data.payment_document != null;
+    if (hasFile) {
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('phone', data.phone);
+      formData.append('address', data.address);
+      if (data.ssc_jsc != null) formData.append('ssc_jsc', data.ssc_jsc);
+      if (data.notes != null) formData.append('notes', data.notes);
+      if (data.guest_count != null) formData.append('guest_count', String(data.guest_count));
+      if (data.guest_details != null) formData.append('guest_details', data.guest_details);
+      if (data.participant_fee != null) formData.append('participant_fee', String(data.participant_fee));
+      if (data.total_fees != null) formData.append('total_fees', String(data.total_fees));
+      formData.append('payment_document', data.payment_document!);
+      const response = await this.client.post<{ message: string }>(
+        endpoints.eventRegisterGuest(id),
+        formData
+      );
+      return response.data;
+    }
     const response = await this.client.post<{ message: string }>(
       endpoints.eventRegisterGuest(id),
-      { name: data.name, phone: data.phone, address: data.address, ssc_jsc: data.ssc_jsc ?? null }
+      {
+        name: data.name,
+        phone: data.phone,
+        address: data.address,
+        ssc_jsc: data.ssc_jsc ?? undefined,
+        notes: data.notes ?? undefined,
+        guest_count: data.guest_count ?? undefined,
+        guest_details: data.guest_details ?? undefined,
+        participant_fee: data.participant_fee ?? undefined,
+        total_fees: data.total_fees ?? undefined,
+      }
     );
     return response.data;
   }

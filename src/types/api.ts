@@ -276,6 +276,7 @@ export interface Event {
   registration_closes_at: string;
   status: EventStatus;
   cover_photo: string | null;
+  fee: number | null;
   photos?: EventPhoto[];
   registration_count?: number;
   is_registered?: boolean;

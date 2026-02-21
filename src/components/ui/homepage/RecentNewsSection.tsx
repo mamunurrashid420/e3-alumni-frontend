@@ -119,8 +119,8 @@ function NewsCard({ slug, image, date, title, description, author }: NewsCardPro
   )
 }
 
-export function RecentNewsSection({ news, loading }: RecentNewsSectionProps) {
-  const cardItems = news.slice(0, 3).map((item) => ({
+export function RecentNewsSection({ news = [], loading }: RecentNewsSectionProps) {
+  const cardItems = (news ?? []).slice(0, 3).map((item) => ({
     slug: item.slug,
     image: item.image ?? '',
     date: formatNewsDate(item.published_at ?? item.created_at),
