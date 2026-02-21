@@ -385,3 +385,13 @@ export interface JobListing {
 export interface JobListResponse {
   data: JobListing[];
 }
+
+/** Combined response for GET /api/homepage (all data needed for the public homepage). */
+export interface HomepageResponse {
+  notices: NoticeListResponse;
+  events: EventListResponse;
+  gallery_photos: GalleryPhotoListResponse;
+  jobs: JobListResponse;
+  news: NewsListResponse;
+  stats: HomepageStats;
+}

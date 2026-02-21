@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
-import { apiClient } from '@/api/client'
 import type { JobListing } from '@/types/api'
 
 const PLACEHOLDER_LOGO = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect fill="%23eee" width="100" height="100"/%3E%3Ctext x="50" y="55" font-size="40" fill="%23999" text-anchor="middle"%3E?%3C/text%3E%3C/svg%3E'
+
+interface RecentJobsSectionProps {
+  jobs: JobListing[]
+  loading: boolean
+}
 
 interface JobCardProps {
   id: number
@@ -75,18 +78,7 @@ function JobCard({ id, logo, title, description, status }: JobCardProps) {
   )
 }
 
-export function RecentJobsSection() {
-  const [jobs, setJobs] = useState<JobListing[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    apiClient
-      .getJobs()
-      .then((res) => setJobs(res.data))
-      .catch(() => setJobs([]))
-      .finally(() => setLoading(false))
-  }, [])
-
+export function RecentJobsSection({ jobs, loading }: RecentJobsSectionProps) {
   const displayJobs = jobs.slice(0, 6)
   const cardItems = displayJobs.map((job) => ({
     id: job.id,

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { NoticeBar } from '@/components/ui/homepage/NoticeBar'
 import { HeroSection } from '@/components/ui/homepage/HeroSection'
 import { GetTogetherBanner } from '@/components/ui/homepage/GetTogetherBanner'
@@ -12,26 +13,37 @@ import { HealthSection } from '@/components/ui/homepage/HealthSection'
 import { RecentNewsSection } from '@/components/ui/homepage/RecentNewsSection'
 import { UpcomingEventsSection } from '@/components/ui/homepage/UpcomingEventsSection'
 import { ProgramsSection } from '@/components/ui/homepage/ProgramsSection'
+import { apiClient } from '@/api/client'
+import type { HomepageResponse } from '@/types/api'
 
 export function Homepage() {
+  const [data, setData] = useState<HomepageResponse | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    apiClient
+      .getHomepage()
+      .then(setData)
+      .catch(() => setData(null))
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <div className="relative w-full overflow-x-hidden">
-      <NoticeBar />
+      <NoticeBar notices={data?.notices.data ?? []} loading={loading} />
       <HeroSection />
-      <GetTogetherBanner />
-      {/* Spacer to account for overlapping GetTogetherBanner */}
-      {/* <div className="h-[200px] md:h-[250px] lg:h-[300px]" /> */}
+      <GetTogetherBanner events={data?.events.data ?? []} loading={loading} />
       <AboutUsSection />
       <OurResponsibilitySection />
-      <StatisticsSection />
+      <StatisticsSection stats={data?.stats ?? null} loading={loading} />
       <ProgramsSection />
-      <GallerySection />
+      <GallerySection photos={data?.gallery_photos.data ?? []} loading={loading} />
       <ScholarshipSection />
       <CommunitySection />
       <HealthSection />
-      <RecentNewsSection />
-      <UpcomingEventsSection />
-      <RecentJobsSection />
+      <RecentNewsSection news={data?.news.data ?? []} loading={loading} />
+      <UpcomingEventsSection events={data?.events.data ?? []} loading={loading} />
+      <RecentJobsSection jobs={data?.jobs.data ?? []} loading={loading} />
     </div>
   )
 }

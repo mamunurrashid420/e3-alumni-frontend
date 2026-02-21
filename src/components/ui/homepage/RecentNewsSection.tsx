@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Calendar, User, ArrowRight } from 'lucide-react'
-import { apiClient } from '@/api/client'
 import type { NewsItem } from '@/types/api'
+
+interface RecentNewsSectionProps {
+  news: NewsItem[]
+  loading: boolean
+}
 
 interface NewsCardProps {
   slug: string
@@ -116,19 +119,8 @@ function NewsCard({ slug, image, date, title, description, author }: NewsCardPro
   )
 }
 
-export function RecentNewsSection() {
-  const [news, setNews] = useState<NewsItem[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    apiClient
-      .getNews({ per_page: 10 })
-      .then((res) => setNews(res.data.slice(0, 3)))
-      .catch(() => setNews([]))
-      .finally(() => setLoading(false))
-  }, [])
-
-  const cardItems = news.map((item) => ({
+export function RecentNewsSection({ news, loading }: RecentNewsSectionProps) {
+  const cardItems = news.slice(0, 3).map((item) => ({
     slug: item.slug,
     image: item.image ?? '',
     date: formatNewsDate(item.published_at ?? item.created_at),
@@ -157,7 +149,7 @@ export function RecentNewsSection() {
       ) : (
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full justify-center">
           {cardItems.map((item, index) => (
-            <NewsCard key={news[index].id} {...item} />
+            <NewsCard key={news[index]?.id ?? index} {...item} />
           ))}
         </div>
       )}

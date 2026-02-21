@@ -1,21 +1,13 @@
-import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Megaphone } from 'lucide-react'
-import { apiClient } from '@/api/client'
 import type { NoticeItem } from '@/types/api'
 
-export function NoticeBar() {
-  const [notices, setNotices] = useState<NoticeItem[]>([])
-  const [loading, setLoading] = useState(true)
+interface NoticeBarProps {
+  notices: NoticeItem[]
+  loading: boolean
+}
 
-  useEffect(() => {
-    apiClient
-      .getNotices()
-      .then((res) => setNotices(res.data))
-      .catch(() => setNotices([]))
-      .finally(() => setLoading(false))
-  }, [])
-
+export function NoticeBar({ notices, loading }: NoticeBarProps) {
   if (loading || notices.length === 0) {
     return null
   }

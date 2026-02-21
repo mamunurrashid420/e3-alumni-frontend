@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Clock, MapPin } from 'lucide-react'
 import { apiClient } from '@/api/client'
@@ -8,6 +8,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { PhotoViewer } from '@/components/PhotoViewer'
+
+interface UpcomingEventsSectionProps {
+  events: Event[]
+  loading: boolean
+}
 
 function formatEventDate(iso: string) {
   const d = new Date(iso)
@@ -106,10 +111,8 @@ function EventItem({ event, isAuthenticated, onGuestRegister }: EventItemProps) 
   )
 }
 
-export function UpcomingEventsSection() {
+export function UpcomingEventsSection({ events, loading }: UpcomingEventsSectionProps) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
-  const [events, setEvents] = useState<Event[]>([])
-  const [loading, setLoading] = useState(true)
   const [guestModalEvent, setGuestModalEvent] = useState<Event | null>(null)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -119,14 +122,6 @@ export function UpcomingEventsSection() {
   const [photoViewerOpen, setPhotoViewerOpen] = useState(false)
   const [photoViewerSrc, setPhotoViewerSrc] = useState<string | null>(null)
   const [photoViewerAlt, setPhotoViewerAlt] = useState('')
-
-  useEffect(() => {
-    apiClient
-      .getEvents({ status: 'open', upcoming: true })
-      .then((res) => setEvents(res.data))
-      .catch(() => setEvents([]))
-      .finally(() => setLoading(false))
-  }, [])
 
   const handleGuestRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

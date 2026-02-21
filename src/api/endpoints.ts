@@ -44,7 +44,8 @@ export const endpoints = {
   scholarships: `${API_BASE}/scholarships`,
   scholarshipApplications: `${API_BASE}/scholarship-applications`,
 
-  // Homepage (public)
+  // Homepage (public) – combined data for homepage
+  homepage: `${API_BASE}/homepage`,
   stats: `${API_BASE}/stats`,
   galleryPhotos: `${API_BASE}/gallery-photos`,
   notices: `${API_BASE}/notices`,

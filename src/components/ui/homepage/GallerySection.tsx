@@ -1,23 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { apiClient } from '@/api/client'
 import type { GalleryPhoto } from '@/types/api'
 
 const DISPLAY_LIMIT = 8
 
-export function GallerySection() {
-  const [photos, setPhotos] = useState<GalleryPhoto[]>([])
-  const [loading, setLoading] = useState(true)
+interface GallerySectionProps {
+  photos: GalleryPhoto[]
+  loading: boolean
+}
+
+export function GallerySection({ photos, loading }: GallerySectionProps) {
   const [activeFilter, setActiveFilter] = useState('All')
   const [currentPage, setCurrentPage] = useState(0)
   const [previewPhoto, setPreviewPhoto] = useState<GalleryPhoto | null>(null)
-
-  useEffect(() => {
-    apiClient
-      .getGalleryPhotos()
-      .then((res) => setPhotos(res.data))
-      .catch(() => setPhotos([]))
-      .finally(() => setLoading(false))
-  }, [])
 
   const categories = useMemo(() => {
     const set = new Set(photos.map((p) => p.category).filter(Boolean))

@@ -1,21 +1,15 @@
 import { useState, useEffect } from 'react'
 import { GetTogetherSection } from './GetTogetherSection'
-import { apiClient } from '@/api/client'
 import type { Event } from '@/types/api'
 import oldCoachingImage from '../../../assets/alumni/old-coaching.jpeg'
 
-export function GetTogetherBanner() {
-  const [events, setEvents] = useState<Event[]>([])
-  const [loading, setLoading] = useState(true)
-  const [currentIndex, setCurrentIndex] = useState(0)
+interface GetTogetherBannerProps {
+  events: Event[]
+  loading: boolean
+}
 
-  useEffect(() => {
-    apiClient
-      .getEvents({ status: 'open', upcoming: true })
-      .then((res) => setEvents(res.data))
-      .catch(() => setEvents([]))
-      .finally(() => setLoading(false))
-  }, [])
+export function GetTogetherBanner({ events, loading }: GetTogetherBannerProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     if (events.length > 0 && currentIndex >= events.length) {

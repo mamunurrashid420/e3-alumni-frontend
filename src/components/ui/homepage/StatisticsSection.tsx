@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
 import { Users, Image as ImageIcon, Calendar, Award } from 'lucide-react'
-import { apiClient } from '@/api/client'
+import type { HomepageStats } from '@/types/api'
 
 interface StatBlockProps {
   icon: React.ReactNode
@@ -36,23 +35,13 @@ function formatStat(value: number): string {
   return value >= 100 ? `${value}+` : String(value)
 }
 
-export function StatisticsSection() {
-  const [stats, setStats] = useState<{
-    members: number
-    events: number
-    photos: number
-    awards: number
-  } | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+interface StatisticsSectionProps {
+  stats: HomepageStats | null
+  loading: boolean
+}
 
-  useEffect(() => {
-    apiClient
-      .getStats()
-      .then((data) => setStats(data))
-      .catch(() => setError(true))
-      .finally(() => setLoading(false))
-  }, [])
+export function StatisticsSection({ stats, loading }: StatisticsSectionProps) {
+  const error = !loading && !stats
 
   const statBlocks = stats
     ? [

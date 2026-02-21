@@ -30,6 +30,7 @@ import type {
   NewsListResponse,
   JobListResponse,
   JobListing,
+  HomepageResponse,
 } from '@/types/api';
 import { endpoints } from './endpoints';
 import { getCookie, setCookie, removeCookie } from '@/lib/cookie';
@@ -368,6 +369,12 @@ class ApiClient {
       endpoints.scholarshipApplications,
       formData
     );
+    return response.data;
+  }
+
+  /** Combined homepage data (public). Single request for notices, events, gallery, jobs, news, stats. */
+  async getHomepage(): Promise<HomepageResponse> {
+    const response = await this.client.get<HomepageResponse>(endpoints.homepage);
     return response.data;
   }
 
