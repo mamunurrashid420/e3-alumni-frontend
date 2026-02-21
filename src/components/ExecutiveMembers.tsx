@@ -72,6 +72,9 @@ export function ExecutiveMembers() {
                       {member.profession && (
                         <p className="text-sm text-black">{member.profession}</p>
                       )}
+                      {member.institute_name && (
+                        <p className="text-sm text-black">{member.institute_name}</p>
+                      )}
                       {member.member_id && (
                         <p className="text-sm text-black">Member ID: {member.member_id}</p>
                       )}

@@ -137,6 +137,9 @@ export function Membership() {
                   <p className="text-sm sm:text-base text-[#021E40] mb-2">
                     {member.designation ?? member.profession ?? '—'}
                   </p>
+                  {member.institute_name && (
+                    <p className="text-sm text-[#021E40] mb-2">{member.institute_name}</p>
+                  )}
                   <div className="space-y-1 mb-3">
                     <p className="text-xs sm:text-sm text-[#021E40]">
                       <span className="text-[#021E40]">Membership No :</span>{' '}

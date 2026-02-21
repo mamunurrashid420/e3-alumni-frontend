@@ -309,5 +309,6 @@ export interface PublicMember {
   secondary_member_type?: MemberType | null;
   designation: string | null;
   profession: string | null;
+  institute_name: string | null;
   photo: string | null;
 }
