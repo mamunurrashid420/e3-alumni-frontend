@@ -1,20 +1,11 @@
-import { useMemo } from 'react'
-import { Calendar, MessageCircle, User, ArrowRight } from 'lucide-react'
-import event1 from '@/assets/alumni/event/1.jpg'
-import event2 from '@/assets/alumni/event/2.jpg'
-import event3 from '@/assets/alumni/event/3.jpeg'
-import event4 from '@/assets/alumni/event/4.jpeg'
-import gallery1 from '@/assets/alumni/gallery/1.jpg'
-import gallery2 from '@/assets/alumni/gallery/2.jpg'
-import gallery3 from '@/assets/alumni/gallery/3.jpeg'
-import gallery4 from '@/assets/alumni/gallery/4.jpeg'
-import galleryBatch2005 from '@/assets/alumni/gallery/Batch-2005.jpg'
-import oldCoaching from '@/assets/alumni/old-coaching.jpeg'
-
-// Array of all available images (excluding logo)
-const alumniImages = [event1, event2, event3, event4, gallery1, gallery2, gallery3, gallery4, galleryBatch2005, oldCoaching]
+import { useEffect, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { Calendar, User, ArrowRight } from 'lucide-react'
+import { apiClient } from '@/api/client'
+import type { NewsItem } from '@/types/api'
 
 interface NewsCardProps {
+  slug: string
   image: string
   date: string
   title: string
@@ -22,22 +13,34 @@ interface NewsCardProps {
   author: string
 }
 
-function NewsCard({ image, date, title, description, author }: NewsCardProps) {
+function formatNewsDate(iso: string | null): string {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+function NewsCard({ slug, image, date, title, description, author }: NewsCardProps) {
   return (
-    <div 
-      className="flex flex-col rounded-[9.26px] overflow-hidden w-full max-w-[411px] mx-auto"
+    <Link
+      to="/news-events/$slug"
+      params={{ slug }}
+      className="flex flex-col rounded-[9.26px] overflow-hidden w-full max-w-[411px] mx-auto no-underline transition-shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       style={{
         background: '#FFFFFF',
         boxShadow: '0px 9.26px 13.89px rgba(8, 14, 28, 0.06)',
       }}
     >
       {/* Image */}
-      <div 
-        className="w-full h-[263px] relative"
+      <div
+        className="w-full h-[263px] relative bg-[#E0E0E0]"
         style={{
-          backgroundImage: `url(${image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          ...(image
+            ? {
+                backgroundImage: `url(${image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }
+            : {}),
         }}
       />
 
@@ -74,7 +77,7 @@ function NewsCard({ image, date, title, description, author }: NewsCardProps) {
 
         {/* Divider */}
         <div 
-          className="w-full h-[1px]"
+          className="w-full h-px"
           style={{ background: '#E0E0E0' }}
         />
 
@@ -103,57 +106,61 @@ function NewsCard({ image, date, title, description, author }: NewsCardProps) {
               <ArrowRight className="w-4 h-4" style={{ color: '#737887' }} />
             </div>
             <div 
-              className="w-full h-[1px]"
+              className="w-full h-px"
               style={{ background: '#737887' }}
             />
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
 export function RecentNewsSection() {
-  const news = useMemo(() => [
-    {
-      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
-      date: '13 Feb, 2023',
-      title: 'Unsatiable entreaties may collecting Power.',
-      description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
-      author: 'By Author'
-    },
-    {
-      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
-      date: '13 Feb, 2023',
-      title: 'Regional Manager limited time management.',
-      description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
-      author: 'By Author'
-    },
-    {
-      image: alumniImages[Math.floor(Math.random() * alumniImages.length)],
-      date: '13 Feb, 2023',
-      title: "What's the Holding Back It Solution Industry?",
-      description: 'Rapidiously repurpose leading edge growth strategies with just in time web readiness service Objectively communicate',
-      author: 'By Author'
-    }
-  ], [])
+  const [news, setNews] = useState<NewsItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    apiClient
+      .getNews({ per_page: 10 })
+      .then((res) => setNews(res.data.slice(0, 3)))
+      .catch(() => setNews([]))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const cardItems = news.map((item) => ({
+    slug: item.slug,
+    image: item.image ?? '',
+    date: formatNewsDate(item.published_at ?? item.created_at),
+    title: item.title,
+    description: item.description ?? '',
+    author: item.author ?? 'By Author',
+  }))
 
   return (
-    <section 
-      className="w-full py-12 md:py-16 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px] flex flex-col items-center gap-6 md:gap-8"
-    >
-      <h2 
+    <section className="w-full py-12 md:py-16 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px] flex flex-col items-center gap-6 md:gap-8">
+      <h2
         className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
         style={{ color: '#021E40' }}
       >
         News & Events
       </h2>
 
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full justify-center">
-        {news.map((item, index) => (
-          <NewsCard key={index} {...item} />
-        ))}
-      </div>
+      {loading ? (
+        <p className="text-center" style={{ color: '#737887' }}>
+          Loading...
+        </p>
+      ) : cardItems.length === 0 ? (
+        <p className="text-center" style={{ color: '#737887' }}>
+          No news at the moment.
+        </p>
+      ) : (
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full justify-center">
+          {cardItems.map((item, index) => (
+            <NewsCard key={news[index].id} {...item} />
+          ))}
+        </div>
+      )}
     </section>
   )
 }

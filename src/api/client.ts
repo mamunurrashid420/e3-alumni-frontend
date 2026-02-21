@@ -22,6 +22,12 @@ import type {
   EventDetailResponse,
   ScholarshipListResponse,
   ScholarshipApplicationSubmitResponse,
+  HomepageStats,
+  GalleryPhotoListResponse,
+  NewsItem,
+  NewsListResponse,
+  JobListResponse,
+  JobListing,
 } from '@/types/api';
 import { endpoints } from './endpoints';
 import { getCookie, setCookie, removeCookie } from '@/lib/cookie';
@@ -359,6 +365,53 @@ class ApiClient {
     const response = await this.client.post<ScholarshipApplicationSubmitResponse>(
       endpoints.scholarshipApplications,
       formData
+    );
+    return response.data;
+  }
+
+  /** Homepage stats (public). */
+  async getStats(): Promise<HomepageStats> {
+    const response = await this.client.get<HomepageStats>(endpoints.stats);
+    return response.data;
+  }
+
+  /** Gallery photos (public). */
+  async getGalleryPhotos(params?: { category?: string }): Promise<GalleryPhotoListResponse> {
+    const response = await this.client.get<GalleryPhotoListResponse>(
+      endpoints.galleryPhotos,
+      { params }
+    );
+    return response.data;
+  }
+
+  /** News list, published only (public). */
+  async getNews(params?: { per_page?: number }): Promise<NewsListResponse> {
+    const response = await this.client.get<NewsListResponse>(endpoints.news, {
+      params: params ?? {},
+    });
+    return response.data;
+  }
+
+  /** Single news by slug (public: published only). */
+  async getNewsBySlug(slug: string): Promise<{ data: NewsItem }> {
+    const response = await this.client.get<{ data: NewsItem }>(
+      endpoints.newsBySlug(slug)
+    );
+    return response.data;
+  }
+
+  /** Job listings (public). */
+  async getJobs(params?: { status?: 'active' | 'expired' }): Promise<JobListResponse> {
+    const response = await this.client.get<JobListResponse>(endpoints.jobs, {
+      params,
+    });
+    return response.data;
+  }
+
+  /** Single job by id (public). */
+  async getJob(id: number): Promise<{ data: JobListing }> {
+    const response = await this.client.get<{ data: JobListing }>(
+      endpoints.job(id)
     );
     return response.data;
   }

@@ -28,8 +28,9 @@ export function HealthSection() {
   const collaborationImage = useMemo(() => alumniImages[Math.floor(Math.random() * alumniImages.length)], [])
   
   return (
-    <section className="w-full py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:max-w-[1920px] 2xl:mx-auto 2xl:px-20">
-      <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12 lg:gap-[62px]">
+    <section className="w-full py-12 md:py-16 lg:py-20 flex flex-col items-center">
+      <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 box-border">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 md:gap-12 lg:gap-[62px]">
         {/* Left Side - Image Collage with Stats */}
         <div 
           className="relative shrink-0 w-full lg:w-[684px] h-[500px] md:h-[600px] lg:h-[760px]"
@@ -188,6 +189,7 @@ export function HealthSection() {
             >
               Discover More
             </Button>
+        </div>
         </div>
       </div>
     </section>

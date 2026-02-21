@@ -14,6 +14,8 @@ import { MessageFromGeneralSecretary } from '@/components/MessageFromGeneralSecr
 import { History } from '@/components/History'
 import { MissionAndVision } from '@/components/MissionAndVision'
 import { NewsAndEvents } from '@/components/NewsAndEvents'
+import { NewsDetail } from '@/components/NewsDetail'
+import { JobDetail } from '@/components/JobDetail'
 import { Contact } from '@/components/Contact'
 import { Membership } from '@/components/Membership'
 import { ExecutiveMembers } from '@/components/ExecutiveMembers'
@@ -358,6 +360,28 @@ const newsEventsRoute = createRoute({
   ),
 })
 
+// News detail by slug
+const newsDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/news-events/$slug',
+  component: () => (
+    <HomepageLayout>
+      <NewsDetail />
+    </HomepageLayout>
+  ),
+})
+
+// Job detail by id
+const jobDetailRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/jobs/$id',
+  component: () => (
+    <HomepageLayout>
+      <JobDetail />
+    </HomepageLayout>
+  ),
+})
+
 // Events list route
 const eventsRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -444,6 +468,8 @@ const routeTree = rootRoute.addChildren([
   constitutionRoute,
   scholarshipRoute,
   newsEventsRoute,
+  newsDetailRoute,
+  jobDetailRoute,
   eventsRoute,
   eventDetailRoute,
   membershipRoute,

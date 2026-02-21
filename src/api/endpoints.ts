@@ -43,4 +43,12 @@ export const endpoints = {
   // Scholarships (public)
   scholarships: `${API_BASE}/scholarships`,
   scholarshipApplications: `${API_BASE}/scholarship-applications`,
+
+  // Homepage (public)
+  stats: `${API_BASE}/stats`,
+  galleryPhotos: `${API_BASE}/gallery-photos`,
+  news: `${API_BASE}/news`,
+  newsBySlug: (slug: string) => `${API_BASE}/news/slug/${encodeURIComponent(slug)}`,
+  jobs: `${API_BASE}/jobs`,
+  job: (id: number) => `${API_BASE}/jobs/${id}`,
 } as const;
