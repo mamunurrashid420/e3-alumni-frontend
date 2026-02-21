@@ -36,8 +36,7 @@ export function ScholarshipSection() {
             className="text-2xl md:text-3xl lg:text-[40px] font-medium leading-tight md:leading-[44px] lg:leading-[52px] text-center px-4"
             style={{ color: '#000000' }}
           >
-            We Provide Scholarship For <br className="hidden sm:block" />
-            <span style={{ color: '#3B60C9' }}>Talented Students!</span>
+            <span style={{ color: '#3B60C9' }}>Scholarship</span>
           </h2>
           <p 
             className="text-base md:text-lg lg:text-xl leading-relaxed md:leading-[23px] text-center max-w-[1097px] px-4"

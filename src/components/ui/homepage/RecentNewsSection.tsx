@@ -146,7 +146,7 @@ export function RecentNewsSection() {
         className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
         style={{ color: '#021E40' }}
       >
-        Recent News
+        News & Events
       </h2>
 
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full justify-center">

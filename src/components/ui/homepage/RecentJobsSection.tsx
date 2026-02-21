@@ -115,7 +115,7 @@ export function RecentJobsSection() {
           className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
           style={{ color: '#021E40' }}
         >
-          Recent Jobs
+          Job Opportunity
         </h2>
 
         <div className="flex flex-col gap-4 md:gap-6 w-full mt-6 md:mt-8">

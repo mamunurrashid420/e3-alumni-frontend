@@ -34,7 +34,7 @@ export function GallerySection() {
           className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"
           style={{ color: '#021E40' }}
         >
-          Our Gallery
+          Gallery
         </h2>
 
         {/* Filter Tabs */}

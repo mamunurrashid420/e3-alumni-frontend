@@ -22,7 +22,6 @@ export function Homepage() {
       <AboutUsSection />
       <OurResponsibilitySection />
       <StatisticsSection />
-      <RecentJobsSection />
       <ProgramsSection />
       <GallerySection />
       <ScholarshipSection />
@@ -30,6 +29,7 @@ export function Homepage() {
       <HealthSection />
       <RecentNewsSection />
       <UpcomingEventsSection />
+      <RecentJobsSection />
     </div>
   )
 }
