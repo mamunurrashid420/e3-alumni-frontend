@@ -109,7 +109,7 @@ export function Header() {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="hidden sm:block">
+          <div className="block">
             <h1 className="text-[#3B60C9] font-bold text-xs sm:text-sm md:text-base lg:text-lg leading-tight">
               JAHAPUR SECONDARY SCHOOL
             </h1>
