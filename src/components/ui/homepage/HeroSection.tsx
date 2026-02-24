@@ -1,4 +1,5 @@
 import { Linkedin, Youtube, Twitter, Facebook } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import heroImage from '@/assets/alumni/gallery/1.jpg'
 
@@ -74,17 +75,21 @@ export function HeroSection() {
             Join our vibrant alumni community and strengthen lifelong bonds. Through mentorship programs, networking events, and collaborative initiatives, we support each other's growth while contributing to the development of our school and community.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
-            <Button 
-              className="bg-[#3B60C9] hover:bg-[#2d4fa8] text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg w-full sm:w-auto"
-            >
-              Our Mission
-            </Button>
-            <Button 
-              variant="outline"
-              className="bg-white/10 border-white text-white hover:bg-white/20 px-6 md:px-8 py-4 md:py-6 text-base md:text-lg w-full sm:w-auto"
-            >
-              Our Story
-            </Button>
+            <Link to="/about/mission-vision" className="w-full sm:w-auto">
+              <Button 
+                className="bg-[#3B60C9] hover:bg-[#2d4fa8] text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg w-full sm:w-auto"
+              >
+                Our Mission
+              </Button>
+            </Link>
+            <Link to="/about/history" className="w-full sm:w-auto">
+              <Button 
+                variant="outline"
+                className="bg-white/10 border-white text-white hover:bg-white/20 px-6 md:px-8 py-4 md:py-6 text-base md:text-lg w-full sm:w-auto"
+              >
+                Our Story
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
