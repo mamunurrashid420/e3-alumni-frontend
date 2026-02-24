@@ -29,7 +29,7 @@ export function Homepage() {
   }, [])
 
   return (
-    <div className="relative w-full overflow-x-hidden">
+    <div className="relative w-full">
       <NoticeBar notices={data?.notices.data ?? []} loading={loading} />
       <HeroSection />
       <GetTogetherBanner events={data?.events.data ?? []} loading={loading} />

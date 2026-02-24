@@ -42,7 +42,7 @@ export function Header() {
   ]
 
   return (
-    <header className="relative w-full">
+    <header className="sticky top-0 z-50 w-full bg-white">
       {/* Top Blue Bar */}
       <div className="h-7 sm:h-8 bg-[#3B60C9] w-full flex items-center justify-end gap-2 px-3 sm:px-4 md:px-8 lg:px-12 xl:px-20 2xl:px-80">
         {!isAuthenticated && (
