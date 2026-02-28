@@ -987,7 +987,7 @@ export function Registration() {
                                 <SelectValue placeholder="Select SSC year" />
                               </SelectTrigger>
                               <SelectContent>
-                                {Array.from({ length: 50 }, (_, i) => {
+                                {Array.from({ length: 100 }, (_, i) => {
                                   const year = new Date().getFullYear() - i
                                   return (
                                     <SelectItem key={year} value={year.toString()}>
