@@ -89,7 +89,7 @@ export function RecentJobsSection({ jobs, loading }: RecentJobsSectionProps) {
   }))
 
   return (
-    <section className="w-full py-12 md:py-16 flex flex-col items-center gap-6 md:gap-8">
+    <section id="jobs" className="w-full py-12 md:py-16 flex flex-col items-center gap-6 md:gap-8">
       <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-[320px] box-border">
         <h2
           className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight md:leading-[56px] lg:leading-[72px] text-center"

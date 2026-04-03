@@ -19,6 +19,8 @@ import { cn } from '@/lib/utils'
 import axios from 'axios'
 import { toast } from 'sonner'
 
+const MIN_PASSING_YEAR = 1969
+
 // Zod schema for form validation
 const registrationSchema = z.object({
   membershipType: z.union([z.string(), z.undefined()]).refine((val) => val && val.trim() !== '' && ['general', 'lifetime', 'associate'].includes(val), {
@@ -949,14 +951,17 @@ export function Registration() {
                                 <SelectValue placeholder="Select JSC year" />
                               </SelectTrigger>
                               <SelectContent>
-                                {Array.from({ length: 50 }, (_, i) => {
-                                  const year = new Date().getFullYear() - i
-                                  return (
-                                    <SelectItem key={year} value={year.toString()}>
-                                      {year}
-                                    </SelectItem>
-                                  )
-                                })}
+                                {Array.from(
+                                  { length: new Date().getFullYear() - MIN_PASSING_YEAR + 1 },
+                                  (_, i) => {
+                                    const year = new Date().getFullYear() - i
+                                    return (
+                                      <SelectItem key={year} value={year.toString()}>
+                                        {year}
+                                      </SelectItem>
+                                    )
+                                  },
+                                )}
                               </SelectContent>
                             </Select>
                           )}
@@ -987,14 +992,17 @@ export function Registration() {
                                 <SelectValue placeholder="Select SSC year" />
                               </SelectTrigger>
                               <SelectContent>
-                                {Array.from({ length: 100 }, (_, i) => {
-                                  const year = new Date().getFullYear() - i
-                                  return (
-                                    <SelectItem key={year} value={year.toString()}>
-                                      {year}
-                                    </SelectItem>
-                                  )
-                                })}
+                                {Array.from(
+                                  { length: new Date().getFullYear() - MIN_PASSING_YEAR + 1 },
+                                  (_, i) => {
+                                    const year = new Date().getFullYear() - i
+                                    return (
+                                      <SelectItem key={year} value={year.toString()}>
+                                        {year}
+                                      </SelectItem>
+                                    )
+                                  },
+                                )}
                               </SelectContent>
                             </Select>
                           )}

@@ -10,26 +10,52 @@ export function Footer() {
         <div className="flex flex-col">
           <div className="flex flex-col gap-6 max-md:gap-5">
             <div className="mb-3">
-              <img 
-                src={logoImage} 
-                alt="Jahapur Secondary School Alumni Association Logo" 
-                className="w-[120px] h-[120px] rounded-full object-cover mb-5 max-[1280px]:w-[100px] max-[1280px]:h-[100px] max-[1024px]:w-[90px] max-[1024px]:h-[90px] max-md:w-[80px] max-md:h-[80px] max-md:mb-4 max-[640px]:w-[70px] max-[640px]:h-[70px]"
-              />
+              <Link to="/" className="inline-block no-underline">
+                <img 
+                  src={logoImage} 
+                  alt="Jahapur Secondary School Alumni Association Logo" 
+                  className="w-[120px] h-[120px] rounded-full object-cover mb-5 max-[1280px]:w-[100px] max-[1280px]:h-[100px] max-[1024px]:w-[90px] max-[1024px]:h-[90px] max-md:w-[80px] max-md:h-[80px] max-md:mb-4 max-[640px]:w-[70px] max-[640px]:h-[70px]"
+                />
+              </Link>
             </div>
             <p className="font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-w-full max-[1024px]:text-sm max-[640px]:text-xs max-[640px]:leading-5">
               Jahapur Secondary School Alumni Association (JSSAA) .
             </p>
             <div className="flex gap-3 mt-3 max-md:gap-2 max-[640px]:gap-2">
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8" aria-label="Facebook">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8"
+                aria-label="Facebook"
+              >
                 <Facebook className="w-5 h-5 max-[640px]:w-4 max-[640px]:h-4" />
               </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8" aria-label="LinkedIn">
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8"
+                aria-label="LinkedIn"
+              >
                 <Linkedin className="w-5 h-5 max-[640px]:w-4 max-[640px]:h-4" />
               </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8" aria-label="YouTube">
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8"
+                aria-label="YouTube"
+              >
                 <Youtube className="w-5 h-5 max-[640px]:w-4 max-[640px]:h-4" />
               </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8" aria-label="Twitter">
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-sm flex items-center justify-center text-white transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 no-underline max-[640px]:w-8 max-[640px]:h-8"
+                aria-label="Twitter"
+              >
                 <Twitter className="w-5 h-5 max-[640px]:w-4 max-[640px]:h-4" />
               </a>
             </div>
@@ -47,7 +73,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/news-events" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
+              <Link to="/events" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
                 <ChevronsRight className="w-4 h-4 text-white max-[640px]:w-3.5 max-[640px]:h-3.5" />
                 Upcoming Events
               </Link>
@@ -59,10 +85,10 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <a href="#" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
+              <Link to="/contact" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
                 <ChevronsRight className="w-4 h-4 text-white max-[640px]:w-3.5 max-[640px]:h-3.5" />
-                FAQ Question
-              </a>
+                FAQ
+              </Link>
             </li>
             <li>
               <Link to="/privacy-policy" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
@@ -84,22 +110,30 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <a href="#" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
+              <Link
+                to="/"
+                hash="jobs"
+                className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1"
+              >
                 <ChevronsRight className="w-4 h-4 text-white max-[640px]:w-3.5 max-[640px]:h-3.5" />
                 Job Opportunity
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
+              <Link
+                to="/"
+                hash="gallery"
+                className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1"
+              >
                 <ChevronsRight className="w-4 h-4 text-white max-[640px]:w-3.5 max-[640px]:h-3.5" />
                 Gallery
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
+              <Link to="/about/mission-vision" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
                 <ChevronsRight className="w-4 h-4 text-white max-[640px]:w-3.5 max-[640px]:h-3.5" />
                 Our Mission
-              </a>
+              </Link>
             </li>
             <li>
               <Link to="/scholarship" className="flex items-center gap-2 font-['Roboto'] font-normal text-base leading-6 text-white no-underline transition-all duration-200 opacity-90 hover:opacity-100 hover:translate-x-1">
@@ -120,11 +154,34 @@ export function Footer() {
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Phone className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1">01686787972, 01832133397, 01707431497</span>
+              <span className="flex-1 flex flex-wrap gap-x-1 gap-y-0.5">
+                <a href="tel:01686787972" className="text-white no-underline hover:underline">
+                  01686787972
+                </a>
+                <span aria-hidden="true">,</span>
+                <a href="tel:01832133397" className="text-white no-underline hover:underline">
+                  01832133397
+                </a>
+                <span aria-hidden="true">,</span>
+                <a href="tel:01707431497" className="text-white no-underline hover:underline">
+                  01707431497
+                </a>
+              </span>
             </li>
             <li className="flex items-start gap-3 font-['Roboto'] font-normal text-base leading-6 text-white opacity-90 max-[1024px]:text-sm max-[640px]:text-xs">
               <Mail className="w-5 h-5 text-white shrink-0 mt-0.5 max-[640px]:w-3.5 max-[640px]:h-3.5" />
-              <span className="flex-1"> jssaa2025@gmail.com & info@jssalumni.org</span>
+              <span className="flex-1 flex flex-wrap gap-x-1 gap-y-0.5 items-center">
+                <a href="mailto:jssaa2025@gmail.com" className="text-white no-underline hover:underline break-all">
+                  jssaa2025@gmail.com
+                </a>
+                <span className="opacity-80" aria-hidden="true">
+                  {' '}
+                  &{' '}
+                </span>
+                <a href="mailto:info@jssalumni.org" className="text-white no-underline hover:underline break-all">
+                  info@jssalumni.org
+                </a>
+              </span>
             </li>
           </ul>
         </div>
